@@ -2,15 +2,13 @@ import pyglet
 
 window = pyglet.window.Window()
 
-label = pyglet.text.Label('Hello, world',
-    font_name='Times New Roman',
-    font_size=36,
-    x=window.width//2, y=window.height//2,
-    anchor_x='center', anchor_y='center')
+img = pyglet.image.load('images/splash-mg.png')
+sprite = pyglet.sprite.Sprite(img, x = (window.width - img.width) // 2,
+    y = (window.height - img.height) // 2)
 
 @window.event
 def on_draw():
     window.clear()
-    label.draw()
+    sprite.draw()
 
 pyglet.app.run()
