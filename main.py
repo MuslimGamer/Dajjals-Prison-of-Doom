@@ -10,6 +10,8 @@ class Main:
         sprite.x = (window.width - sprite.width) // 2
         sprite.y = (window.height - sprite.height) // 2
 
+        #sprite = self.create_image('images/splash-mg.png')
+
         @window.event
         def on_draw():
             window.clear()
@@ -22,9 +24,10 @@ class Main:
         img = pyglet.image.SolidColorImagePattern(color_tuple).create_image(32, 32)
         sprite = pyglet.sprite.Sprite(img)
         return sprite
+    
+    def create_image(self, image_filename):
+        img = pyglet.image.load(image_filename)
+        sprite = pyglet.sprite.Sprite(img)
+        return sprite
 
 Main().run()
-
-#img = pyglet.image.load('images/splash-mg.png')
-#sprite = pyglet.sprite.Sprite(img, x = (window.width - img.width) // 2,
-#    y = (window.height - img.height) // 2)
