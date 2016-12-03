@@ -1,0 +1,7 @@
+0	player	3	images/blue.png	10	NULL
+0	enemy	1	images/red.png	10	agro
+1	enemy	1	images/red.png	5	coward
+2	enemy	3	images/red.png	20	slow
+0	bullet	0	images/shot.png	2	shot
+0	misc	100	images/shot.png	5	NULL
+1	misc	300	images/splash-mg.png	300	NULL
