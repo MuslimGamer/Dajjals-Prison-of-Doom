@@ -59,13 +59,13 @@ def frame_callback(dt):
 def splash(dt):
     for item in misc_list:
         misc_list.remove(item)
-    obj.spawn(player_list,'player',0,(window.width)/2, (window.height)/2)
-    obj.spawn(enemy_list,'enemy',0,100,100)
-    obj.spawn(enemy_list,'enemy',1,200,200)
+    obj.spawn(player_list,'Player',0,(window.width)/2, (window.height)/2)
+    obj.spawn(enemy_list,'Enemy',0,100,100)
+    obj.spawn(enemy_list,'Enemy',1,200,200)
     pyglet.clock.schedule(frame_callback)
     pyglet.clock.schedule_interval(frame_callback, 1/30)
 
-obj.spawn(misc_list,'misc',1,0,0)
+obj.spawn(misc_list,'Misc',0,0,0)
 pyglet.clock.schedule_once(splash, 5)
 
 pyglet.app.run()
