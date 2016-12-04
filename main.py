@@ -1,5 +1,6 @@
 import pyglet
 
+
 COLOR_RED = (255, 0, 0, 255)
 
 class Main:
