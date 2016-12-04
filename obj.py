@@ -34,7 +34,6 @@ def init_obj():
 
 
 def spawn(obj_list,obj_proto,obj_id,x,y):	#References object from object list, copies object-prototype into active objects lists.
-    print(obj_type)
     spawned = copy.copy(obj_type[obj_proto][obj_id])		#Make copy of object from prototype lists
     spawned.x = x					#Set gameworld co-ord specifed
     spawned.y = y

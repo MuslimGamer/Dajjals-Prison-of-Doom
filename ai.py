@@ -31,6 +31,6 @@ def init_ai():
         "slow": slow_ai,
         "NULL": NULL_ai}
 
-def ai_update():
+def update(obj):
     pass
 
