@@ -20,13 +20,13 @@ def obj_misc ():
 class objtype:
     def __init__ (self, obj_id, health, img, size, behaviour):
 	if not (obj_id in obj_list):
-            self.id = obj_id
+        self.id = obj_id
 	    self.health = health	#Hits to remove || frames until timeout
 	    self.img = pyglet.image.load(img)
-            self.ai = behaviour		#AI reference
-        else:
-            print('Error: Duplicate object-ID')
-            return -1
+        self.ai = behaviour		#AI reference
+    else:
+        raise(Exception('Error: Duplicate object-ID {0}'.format(obj_id)))
+        return -1
 
 def object_init():
     obfile = open('objlist','r');

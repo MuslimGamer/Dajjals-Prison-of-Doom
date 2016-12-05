@@ -22,6 +22,8 @@ obj.init_obj()
 
 @window.event
 def on_mouse_motion(x,y,dx,dy):
+    # print('Mouse moved to {0}, {1}'.format(x, y))
+    # Note: pyglet uses a cartesian plane; positive y moves upward
     pass
 
 @window.event
@@ -60,11 +62,13 @@ def frame_callback(dt):
 def splash(dt):
     for item in misc_list:
         misc_list.remove(item)
+
     obj.spawn(player_list,'Player',0,(window.width)/2, (window.height)/2)
-    obj.spawn(enemy_list,'Enemy',0,100,100)
-    obj.spawn(enemy_list,'Enemy',1,200,200)
+    e1 = obj.spawn(enemy_list,'Enemy',0,100,100)
+    e2 = obj.spawn(enemy_list,'Enemy',1,200,200)
     pyglet.clock.schedule(frame_callback)
     pyglet.clock.schedule_interval(frame_callback, 1/30)
+    print("I got me E1={0} and E2={1}".format(e1.ai, e2.ai))
 
 obj.spawn(misc_list,'Misc',0,0,0)
 pyglet.clock.schedule_once(splash, 1)

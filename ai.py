@@ -21,7 +21,7 @@ def NULL_ai():
 
 	#Undefined behavior referenced.
 def error_ai():
-    print('Error: AI has gone rouge\n')
+    raise(Exception('Error: AI has gone rouge!'))
 
 
 def init_ai():

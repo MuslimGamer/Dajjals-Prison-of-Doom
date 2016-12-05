@@ -16,7 +16,7 @@ obj_type={				#Define object_type dictionary. Used to parse objects into correct
 
 class game_object:
     def __init__ (self, data,otype):	#on object creation (Loading), object details loaded.
-        print(data['ID'])
+        #print(data['ID'])
         self.id = data['ID']					#Todo: Check list on generation of conflicting IDs and throw error.
         self.type = otype
         self.health = data['Health']				#Hits to remove || frames until timeout
@@ -26,18 +26,17 @@ class game_object:
         self.mx = 0						#Current Movement
         self.my = 0		
         self.sprite = pyglet.sprite.Sprite(self.img,self.x,self.y)
-        print(data['Size'])
+        #print(data['Size'])
         #self.sprite.scale = data['Size']
         #self.sprite.width = data['Size'][1]
         self.ai = data['Behavior']				#AI reference	- See ai.py
-        print(data['Behavior'])
+        #print(data['Behavior'])
 
 def init_obj():
     obfile = open('data/object.json','r')
     obj = json.load(obfile)
     for obj_import_type in obj:
         for instance in obj[obj_import_type]:
-
             import_object = game_object(obj[obj_import_type][instance],obj_import_type)
             obj_type[obj_import_type].append(import_object)
 
@@ -48,3 +47,4 @@ def spawn(obj_list,obj_proto,obj_id,x,y):	#References object from object list, c
     spawned.y = y
     spawned.sprite.set_position(x,y)
     obj_list.append(spawned)				#Append object to active lists so it is processed and rendered in game.
+    return spawned

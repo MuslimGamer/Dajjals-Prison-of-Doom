@@ -13,7 +13,7 @@ def update(obj_list):
         obj.sprite.set_position(obj.x,obj.y)
         if (obj.health == 0):
             obj_list.remove(obj)
-            print('Killing object: '+obj.id)
+            #print('Killing object: '+obj.id)
     pass
         
 
@@ -23,7 +23,7 @@ def agro_ai(obj):
     obj.mx = 1
     if (obj.x > 300):
         obj.health = 0
-        print('Time to close')
+        #print('Time to close')
     pass
 
 	#Coward behavior, maintain distance, attack location
