@@ -4,30 +4,21 @@
       "ID": "E1",
       "Health": 1,
       "Img": "images/red.png",
-      "Size": [
-        10,
-        10
-      ],
+      "Size": 1,
       "Behavior": "agro"
     },
     "Coward": {
       "ID": "E2",
       "Health": 1,
       "Img": "images/red.png",
-      "Size": [
-        5,
-        5
-      ],
+      "Size": 0.5,
       "Behavior": "coward"
     },
     "Slow": {
       "ID": "E3",
       "Health": 3,
       "Img": "images/red.png",
-      "Size": [
-        20,
-        20
-      ],
+      "Size": 2,
       "Behavior": "slow"
     }
   },
@@ -36,22 +27,16 @@
       "ID": "P1",
       "Health": 3,
       "Img": "images/blue.png",
-      "Size": [
-        10,
-        10
-      ],
+      "Size": 1,
       "Behavior": "NULL"
     }
   },
   "Bullet": {
     "Basic": {
-      "ID": "P1",
-      "Health": 3,
+      "ID": "B1",
+      "Health": 300,
       "Img": "images/shot.png",
-      "Size": [
-        1,
-        1
-      ],
+      "Size": 1,
       "Behavior": "NULL"
     }
   },
@@ -60,10 +45,7 @@
       "ID": "Splash",
       "Health": 100,
       "Img": "images/splash-mg.png",
-      "Size": [
-        1,
-        1
-      ],
+      "Size": 1,
       "Behavior": "NULL"
     }
   }

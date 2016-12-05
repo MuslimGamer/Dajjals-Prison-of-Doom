@@ -3,8 +3,7 @@
 import pyglet
 import copy	#Used to copy object prototypes to spawn active objects.
 import obj	#Object module	-Severok
-import ai	#AI	module	-Severok
-import proc	#Processing related functions (May merge with ai.py?)
+import proc	#Processing related functions
 
 player_list = []	#List of objects in active play.
 enemy_list = []			#List of object prototypes in obj.py
@@ -44,16 +43,20 @@ def frame_callback(dt):
 
     #Check user input
     #Update player position 
-    for player in player_list:
-        proc.collision(player)
-    for enemy in enemy_list:
-        ai.update(enemy)		#Make decision for movement/attack
-        proc.collision(enemy)		#Check if enemy overlap with player
-    for bullet in bullet_list:		
-        ai.update(bullet)		#Progress Bullet position
-        proc.collision(bullet)		#Scan for collision with other objects.
-    for misc in misc_list:
-        ai.update(misc)
+
+    proc.input(player_list)
+    proc.update(player_list)
+    proc.collision(player_list)
+
+    proc.ai(enemy_list)			#Make decision for movement/attack
+    proc.update(enemy_list)
+    proc.collision(enemy_list)		#Check if enemy overlap with player
+			
+    proc.update(bullet_list)		#Progress Bullet position
+    proc.collision(bullet_list)		#Scan for collision with other objects.
+
+    proc.ai(misc_list)
+    proc.update(misc_list)
 					#Misc objects intended as cosmetic. No need to check collisions at this time.
 
 def splash(dt):
@@ -66,6 +69,6 @@ def splash(dt):
     pyglet.clock.schedule_interval(frame_callback, 1/30)
 
 obj.spawn(misc_list,'Misc',0,0,0)
-pyglet.clock.schedule_once(splash, 5)
+pyglet.clock.schedule_once(splash, 1)
 
 pyglet.app.run()
