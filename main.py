@@ -15,10 +15,16 @@ window = pyglet.window.Window()
 obj.load_prototype_data()
 #collision_map[window.width][window.height]
 
-#img = pyglet.image.load('images/splash-mg.png')
-#sprite = pyglet.sprite.Sprite(img, x = (window.width - img.width) // 2,
-#    y = (window.height - img.height) // 2)
-#objectlist.append sprite
+# color_tuple is a four-colour tuple (R, G, B, A).
+def create_color(self, width, height, color_tuple):
+    img = pyglet.image.SolidColorImagePattern(color_tuple).create_image(32, 32)
+    sprite = pyglet.sprite.Sprite(img)
+    return sprite
+
+def create_image(self, image_filename):
+    img = pyglet.image.load(image_filename)
+    sprite = pyglet.sprite.Sprite(img)
+    return sprite
 
 @window.event
 def on_mouse_motion(x,y,dx,dy):
