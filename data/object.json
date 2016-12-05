@@ -1,0 +1,52 @@
+{
+  "Enemy": {
+    "Basic": {
+      "ID": "E1",
+      "Health": 1,
+      "Img": "images/red.png",
+      "Size": 1,
+      "Behavior": "agro"
+    },
+    "Coward": {
+      "ID": "E2",
+      "Health": 1,
+      "Img": "images/red.png",
+      "Size": 0.5,
+      "Behavior": "coward"
+    },
+    "Slow": {
+      "ID": "E3",
+      "Health": 3,
+      "Img": "images/red.png",
+      "Size": 2,
+      "Behavior": "slow"
+    }
+  },
+  "Player": {
+    "Basic": {
+      "ID": "P1",
+      "Health": 3,
+      "Img": "images/blue.png",
+      "Size": 1,
+      "Behavior": "NULL"
+    }
+  },
+  "Bullet": {
+    "Basic": {
+      "ID": "B1",
+      "Health": 300,
+      "Img": "images/shot.png",
+      "Size": 1,
+      "Behavior": "NULL"
+    }
+  },
+  "Misc": {
+    "Splash": {
+      "ID": "Splash",
+      "Health": 100,
+      "Img": "images/splash-mg.png",
+      "Size": 1,
+      "Behavior": "NULL"
+    }
+  }
+}
