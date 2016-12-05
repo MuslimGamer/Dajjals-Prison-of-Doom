@@ -12,7 +12,7 @@ misc_list = []
 
 window = pyglet.window.Window()
 
-obj.init_obj()
+obj.load_prototype_data()
 #collision_map[window.width][window.height]
 
 #img = pyglet.image.load('images/splash-mg.png')
@@ -60,17 +60,14 @@ def frame_callback(dt):
 					#Misc objects intended as cosmetic. No need to check collisions at this time.
 
 def splash(dt):
-    for item in misc_list:
-        misc_list.remove(item)
-
-    obj.spawn(player_list,'Player',0,(window.width)/2, (window.height)/2)
-    e1 = obj.spawn(enemy_list,'Enemy',0,100,100)
-    e2 = obj.spawn(enemy_list,'Enemy',1,200,200)
+    obj.spawn(player_list,'Player', "Basic",(window.width)/2, (window.height)/2)
+    e1 = obj.spawn(enemy_list,'Enemy',"Basic",100,100)
+    e2 = obj.spawn(enemy_list,'Enemy',"Coward",200,200)
     pyglet.clock.schedule(frame_callback)
     pyglet.clock.schedule_interval(frame_callback, 1/30)
     print("I got me E1={0} and E2={1}".format(e1.ai, e2.ai))
 
-obj.spawn(misc_list,'Misc',0,0,0)
+obj.spawn(misc_list,'Misc',"Splash",0,0)
 pyglet.clock.schedule_once(splash, 1)
 
 pyglet.app.run()

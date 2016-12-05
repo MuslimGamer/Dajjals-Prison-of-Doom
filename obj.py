@@ -2,8 +2,9 @@ import copy
 import json
 import pyglet
 
+# Prototypes of enemies, the player, bullets, and misc stuff (splash screens, explosions, etc.)
 obj_enemy=[]	#Lists of object prototypes
-obj_player=[]		#Lists of objects in play in main.py  - Likely subject to clean up later.
+obj_player=[]	#The one and only player prototype
 obj_bullet=[]
 obj_misc=[]
 
@@ -15,10 +16,9 @@ obj_type={				#Define object_type dictionary. Used to parse objects into correct
 
 
 class game_object:
-    def __init__ (self, data,otype):	#on object creation (Loading), object details loaded.
+    def __init__ (self, data):	#on object creation (Loading), object details loaded.
         #print(data['ID'])
         self.id = data['ID']					#Todo: Check list on generation of conflicting IDs and throw error.
-        self.type = otype
         self.health = data['Health']				#Hits to remove || frames until timeout
         self.img = pyglet.image.load(data['Img'])		#Load image for object, Todo: Construct list of images, check/skip if image already loaded by previous object.
         self.x = 0						#Current Positions
@@ -32,17 +32,19 @@ class game_object:
         self.ai = data['Behavior']				#AI reference	- See ai.py
         #print(data['Behavior'])
 
-def init_obj():
+def load_prototype_data():
     obfile = open('data/object.json','r')
     obj = json.load(obfile)
-    for obj_import_type in obj:
-        for instance in obj[obj_import_type]:
-            import_object = game_object(obj[obj_import_type][instance],obj_import_type)
-            obj_type[obj_import_type].append(import_object)
+    obj_type["Enemy"] = obj["Enemies"]
+    obj_type["Player"] = obj["Player"]
+    obj_type["Bullet"] = obj["Bullets"]
+    obj_type["Misc"] = obj["Misc"]
 
-
-def spawn(obj_list,obj_proto,obj_id,x,y):	#References object from object list, copies object-prototype into active objects lists.
-    spawned = copy.copy(obj_type[obj_proto][obj_id])		#Make copy of object from prototype lists
+def spawn(obj_list, obj_proto, id, x, y):	#References object from object list, copies object-prototype into active objects lists.
+    list_of_prototypes = obj_type[obj_proto]
+    prototype = next((x for x in list_of_prototypes if x['ID'] == id), None)
+    #spawned = copy.copy(obj_type[obj_proto])		#Make copy of object from prototype lists
+    spawned = game_object(prototype)
     spawned.x = x					#Set gameworld co-ord specifed
     spawned.y = y
     spawned.sprite.set_position(x,y)

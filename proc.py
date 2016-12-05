@@ -13,39 +13,37 @@ def update(obj_list):
         obj.sprite.set_position(obj.x,obj.y)
         if (obj.health == 0):
             obj_list.remove(obj)
-            #print('Killing object: '+obj.id)
     pass
         
 
 
-	#Standard behavior, rush player, attack location
+#Standard behavior, rush player, attack location
 def agro_ai(obj):
     obj.mx = 1
     if (obj.x > 300):
         obj.health = 0
-        #print('Time to close')
     pass
 
-	#Coward behavior, maintain distance, attack location
+#Coward behavior, maintain distance, attack location
 def coward_ai(obj):
     obj.my = 1
     pass
 
-	#Tank behavoir, Slower agro.
+#Tank behavoir, Slower agro.
 def slow_ai(obj):
     pass
 
-	#Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
+#Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
 def misc_ai(obj):
-    obj.health=obj.health -1
+    obj.health = obj.health - 1
 
-	#No AI attached to this object
+#No AI attached to this object
 def NULL_ai(obj):
     pass
 
-	#Undefined behavior referenced.
+#Undefined behavior referenced.
 def error_ai(obj):
-    print('Error: AI has gone rouge\n')
+    raise(Exception('Error: AI has gone rouge'))
 
 
 def ai(obj_list):			#Generic AI handler
@@ -56,4 +54,5 @@ ai_action={
     "agro": agro_ai,
     "coward": coward_ai,
     "slow": slow_ai,
-    "NULL": NULL_ai}
+    "NULL": NULL_ai,
+    "misc": misc_ai}
