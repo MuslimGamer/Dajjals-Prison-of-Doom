@@ -41,7 +41,7 @@ class GameObject:
 
     @health.setter
     def health(self, value):
-        self._health = value
+        self._health = value        
         if self._health <= 0 and self.on_death != None:
             self.on_death()
 

@@ -61,26 +61,24 @@ def frame_callback(dt):
     proc.update(bullet_list)		#Progress Bullet position
     proc.collision(bullet_list)		#Scan for collision with other objects.
 
-    proc.ai(misc_list)
+    proc.ai(misc_list)              #Misc objects intended as cosmetic. No need to check collisions at this time.
     proc.update(misc_list)
-					#Misc objects intended as cosmetic. No need to check collisions at this time.
+					
 
-def start_game(dt):
-    player = obj.spawn('Player', "Basic",(window.width)/2, (window.height)/2)
+def start_game():
+    player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
     player_list.append(player)
 
-    e1 = obj.spawn('Enemy',"Basic",100,100)
-    e2 = obj.spawn('Enemy',"Coward",200,200)
+    e1 = obj.spawn('Enemy', "Basic", 100, 100)
+    e2 = obj.spawn('Enemy', "Coward", 200, 200)
     enemy_list.append(e1)
     enemy_list.append(e2)
 
-    pyglet.clock.schedule(frame_callback)
-    pyglet.clock.schedule_interval(frame_callback, 1/30) # run at 30FPS
-
-dg_splash_screen = obj.spawn('Misc',"Splash",0,0)
-dg_splash_screen.on_death = lambda: print("Hello, lambda!!!")
+dg_splash_screen = obj.spawn('Misc',"Splash", 0, 0)
+dg_splash_screen.on_death = lambda: start_game()
 misc_list.append(dg_splash_screen)
 
-pyglet.clock.schedule_once(start_game, 1)
+pyglet.clock.schedule(frame_callback)
+pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # run at 30FPS
 
 pyglet.app.run()
