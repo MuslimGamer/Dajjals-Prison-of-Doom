@@ -19,7 +19,7 @@ class GameObject:
     def __init__ (self, json_data):	#on object creation (Loading), object details loaded.
         #print(data['ID'])
         self.id = json_data['ID']					#Todo: Check list on generation of conflicting IDs and throw error.
-        self.health = json_data['Health']				#Hits to remove || frames until timeout
+        self._health = json_data['Health']				#Hits to remove || frames until timeout
         self.img = pyglet.image.load(json_data['Img'])		#Load image for object, Todo: Construct list of images, check/skip if image already loaded by previous object.
         self.x = 0						#Current Positions
         self.y = 0
@@ -31,6 +31,19 @@ class GameObject:
         #self.sprite.width = data['Size'][1]
         self.ai = json_data['Behavior']				#AI reference	- See proc.py
         #print(data['Behavior'])
+
+        # Event handlers you can override
+        self.on_death = None
+
+    @property
+    def health(self):
+        return self._health
+
+    @health.setter
+    def health(self, value):
+        self._health = value
+        if self._health <= 0 and self.on_death != None:
+            self.on_death()
 
 def load_prototype_data():
     with open('data/object.json','r') as f:

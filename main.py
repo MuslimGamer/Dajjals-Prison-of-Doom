@@ -75,10 +75,10 @@ def start_game(dt):
     enemy_list.append(e2)
 
     pyglet.clock.schedule(frame_callback)
-    pyglet.clock.schedule_interval(frame_callback, 1/30)
-    print("I got me E1={0} and E2={1}".format(e1.ai, e2.ai))
+    pyglet.clock.schedule_interval(frame_callback, 1/30) # run at 30FPS
 
 dg_splash_screen = obj.spawn('Misc',"Splash",0,0)
+dg_splash_screen.on_death = lambda: print("Hello, lambda!!!")
 misc_list.append(dg_splash_screen)
 
 pyglet.clock.schedule_once(start_game, 1)
