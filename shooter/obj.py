@@ -52,11 +52,15 @@ def load_prototype_data():
         prototypes_json["Bullet"] = raw_json["Bullets"]
         prototypes_json["Misc"] = raw_json["Misc"]
 
-def spawn(object_type, id, x, y):	#References object from object list, copies object-prototype into active objects lists.
+def spawn(object_type, id, x, y, as_type = None):	#References object from object list, copies object-prototype into active objects lists.
     list_of_prototypes = prototypes_json[object_type]
     # Find an object x in the collection that matches the specified ID; defaults to None
     prototype = next((x for x in list_of_prototypes if x['ID'] == id), None)
-    spawned = GameObject(prototype)
+    if as_type == None:
+        spawned = GameObject(prototype)
+    else:
+        spawned = as_type(prototype)
+    
     spawned.x = x					#Set gameworld co-ord specifed
     spawned.y = y
     spawned.sprite.set_position(x,y)

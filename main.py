@@ -3,6 +3,7 @@
 import pyglet
 from shooter import obj	#Object module	-Severok
 from shooter import proc	#Processing related functions
+from shooter import splash_screen
 
 player_list = []	#List of objects in active play.
 enemy_list = []			#List of object prototypes in obj.py
@@ -21,9 +22,9 @@ def create_image(image_filename):
     return sprite
 
 def show_dg_splash():
-    splash_screen = obj.spawn('Misc', "DG Splash", 0, 0)
-    splash_screen.on_death = lambda: start_game()
-    misc_list.append(splash_screen)
+    splash = obj.spawn('Misc', "DG Splash", 0, 0, splash_screen.SplashScreen)
+    splash.on_death = lambda: start_game()
+    misc_list.append(splash)
 
 def start_game():
     player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
@@ -79,7 +80,7 @@ def on_draw():				#Kept seperate from processing callback, Frame rate not tied t
 obj.load_prototype_data()
 #collision_map[window.width][window.height]
 
-dg_splash_screen = obj.spawn('Misc', "MG Splash", 0, 0)
+dg_splash_screen = obj.spawn('Misc', "MG Splash", 0, 0, splash_screen.SplashScreen)
 dg_splash_screen.on_death = lambda: show_dg_splash()
 misc_list.append(dg_splash_screen)
 
