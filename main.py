@@ -65,15 +65,22 @@ def frame_callback(dt):
     proc.update(misc_list)
 					#Misc objects intended as cosmetic. No need to check collisions at this time.
 
-def splash(dt):
-    obj.spawn(player_list,'Player', "Basic",(window.width)/2, (window.height)/2)
-    e1 = obj.spawn(enemy_list,'Enemy',"Basic",100,100)
-    e2 = obj.spawn(enemy_list,'Enemy',"Coward",200,200)
+def start_game(dt):
+    player = obj.spawn('Player', "Basic",(window.width)/2, (window.height)/2)
+    player_list.append(player)
+
+    e1 = obj.spawn('Enemy',"Basic",100,100)
+    e2 = obj.spawn('Enemy',"Coward",200,200)
+    enemy_list.append(e1)
+    enemy_list.append(e2)
+
     pyglet.clock.schedule(frame_callback)
     pyglet.clock.schedule_interval(frame_callback, 1/30)
     print("I got me E1={0} and E2={1}".format(e1.ai, e2.ai))
 
-obj.spawn(misc_list,'Misc',"Splash",0,0)
-pyglet.clock.schedule_once(splash, 1)
+dg_splash_screen = obj.spawn('Misc',"Splash",0,0)
+misc_list.append(dg_splash_screen)
+
+pyglet.clock.schedule_once(start_game, 1)
 
 pyglet.app.run()
