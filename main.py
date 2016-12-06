@@ -1,9 +1,8 @@
 #!/bin/python
 
 import pyglet
-import copy	#Used to copy object prototypes to spawn active objects.
-import obj	#Object module	-Severok
-import proc	#Processing related functions
+from shooter import obj	#Object module	-Severok
+from shooter import proc	#Processing related functions
 
 player_list = []	#List of objects in active play.
 enemy_list = []			#List of object prototypes in obj.py
