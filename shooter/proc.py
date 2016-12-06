@@ -10,9 +10,15 @@ def update(obj_list):
     for obj in obj_list:
         obj.x = obj.x + obj.mx
         obj.y = obj.y + obj.my
+
         obj.sprite.set_position(obj.x,obj.y)
-        if (obj.health == 0):
+        
+        if obj.health == 0:
             obj_list.remove(obj)
+
+        # Call your update method, if you have one
+        if hasattr(object, "update") and callable(getattr(obj, "update")):
+            obj.update()
     pass
         
 

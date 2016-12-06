@@ -52,7 +52,14 @@ def load_prototype_data():
         prototypes_json["Bullet"] = raw_json["Bullets"]
         prototypes_json["Misc"] = raw_json["Misc"]
 
-def spawn(object_type, id, x, y, as_type = None):	#References object from object list, copies object-prototype into active objects lists.
+###
+# Spawns an object of type object_type (from prototypes_json, eg. "Enemy"), using
+# data for the item with ID=id. It moves the object to (x, y).
+# If as_type is not None, creates the object as an instance of the specified class (eg. SplashScreen)
+# NOTE: as_type must be a subclass of GameObject with a constructor that takes 
+# a single parameter "prototype" (JSON) data and passes it to the base class.
+###
+def spawn(object_type, id, x, y, as_type = None):
     list_of_prototypes = prototypes_json[object_type]
     # Find an object x in the collection that matches the specified ID; defaults to None
     prototype = next((x for x in list_of_prototypes if x['ID'] == id), None)
@@ -61,7 +68,7 @@ def spawn(object_type, id, x, y, as_type = None):	#References object from object
     else:
         spawned = as_type(prototype)
     
-    spawned.x = x					#Set gameworld co-ord specifed
+    spawned.x = x
     spawned.y = y
     spawned.sprite.set_position(x,y)
     return spawned
