@@ -27,6 +27,7 @@ class GameObject:
         self.sprite = pyglet.sprite.Sprite(self.img,self.x,self.y)
         self.ai = json_data['Behavior']				#AI reference	- See proc.py
         self.cooldown = 0
+
         # Event handlers you can override
         self.on_death = None
 
