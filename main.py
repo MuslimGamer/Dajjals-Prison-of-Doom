@@ -81,7 +81,7 @@ def on_mouse_release(x,y,button, modifiers):
 
 @window.event
 def on_mouse_drag(x,y,dx,dy, buttons, modifiers):
-    input_handle.mouse_moved(x, y)
+    input_handle.mouse_dragged(x, y)
 
 @window.event
 def on_draw():				#Kept seperate from processing callback, Frame rate not tied to simulation speed.
