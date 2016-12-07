@@ -53,7 +53,7 @@ def ai(obj_list):			#Generic AI handler
         ai_action[obj.ai](obj)		#Reference dictionary against object AI variable, Vector to specific function for AI type.
 
 ai_action={
-    "agro": agro_ai,
-    "coward": coward_ai,
-    "slow": slow_ai,
-    "NULL": NULL_ai}
+    "agro": agro_ai,			#Default AI
+    "coward": coward_ai,		#Ranged AI
+    "slow": slow_ai,			#Tank AI
+    "NULL": NULL_ai}			#No AI

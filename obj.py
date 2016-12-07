@@ -26,11 +26,9 @@ class game_object:
         self.mx = 0						#Current Movement
         self.my = 0		
         self.sprite = pyglet.sprite.Sprite(self.img,self.x,self.y)
-        print(data['Size'])
-        #self.sprite.scale = data['Size']
-        #self.sprite.width = data['Size'][1]
-        self.ai = data['Behavior']				#AI reference	- See ai.py
-        print(data['Behavior'])
+        self.ai = data['Behavior']		
+        self.cooldown = 0		
+
 
 def init_obj():
     obfile = open('data/object.json','r')
