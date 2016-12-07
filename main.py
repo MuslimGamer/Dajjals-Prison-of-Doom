@@ -1,14 +1,21 @@
 #!/bin/python
 
 import pyglet
+
 from shooter import obj	#Object module	-Severok
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 
+main_list = []
 player_list = []	#List of objects in active play.
 enemy_list = []			#List of object prototypes in obj.py
 bullet_list = []
 misc_list = []
+
+main_list.append(player_list)
+main_list.append(enemy_list)
+main_list.append(bullet_list)
+main_list.append(misc_list)
 
 # color_tuple is a four-colour tuple (R, G, B, A).
 def create_color(width, height, color_tuple):
@@ -41,14 +48,17 @@ def frame_callback(dt):
     #Check user input
     #Update player position 
 
-    proc.input(player_list)
+
+    proc.input(main_list,input_handle)
+
     proc.update(player_list)
     proc.collision(player_list)
 
     proc.ai(enemy_list)			#Make decision for movement/attack
     proc.update(enemy_list)
     proc.collision(enemy_list)		#Check if enemy overlap with player
-			
+
+    proc.ai(bullet_list)
     proc.update(bullet_list)		#Progress Bullet position
     proc.collision(bullet_list)		#Scan for collision with other objects.
 
@@ -57,6 +67,17 @@ def frame_callback(dt):
 
 
 window = pyglet.window.Window()
+input_handle = proc.input_handler(window)
+
+@window.event
+def on_mouse_press(x, y, button, modifiers):
+    input_handle.mouse_update(x,y,button)
+
+def on_mouse_release(x,y,button, modifiers):
+    input_handle.mouse_update(x,y,button)
+    #Todo - Load variables into handler for passing into proc.py input function. 
+    #       Migrate code below into function with keyboard processing.
+
 
 @window.event
 def on_mouse_motion(x,y,dx,dy):
@@ -88,3 +109,4 @@ pyglet.clock.schedule(frame_callback)
 pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # call frame_callback at 30FPS
 
 pyglet.app.run()
+

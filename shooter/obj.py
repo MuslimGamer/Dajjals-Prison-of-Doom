@@ -25,11 +25,8 @@ class GameObject:
         self.mx = 0						#Current Movement
         self.my = 0		
         self.sprite = pyglet.sprite.Sprite(self.img,self.x,self.y)
-        #print(data['Size'])
-        #self.sprite.scale = data['Size']
-        #self.sprite.width = data['Size'][1]
         self.ai = json_data['Behavior']				#AI reference	- See proc.py
-        #print(data['Behavior'])
+        self.cooldown = 0
 
         # Event handlers you can override
         self.on_death = None

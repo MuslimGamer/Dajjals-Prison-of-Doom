@@ -34,10 +34,17 @@
   "Bullets": [
     {
       "ID": "Basic",
-      "Health": 300,
+      "Health": 100,
       "Img": "images/shot.png",
       "Size": 1,
-      "Behavior": "NULL"
+      "Behavior": "misc"
+    },
+    {
+      "ID": "Melee",
+      "Health": 5,
+      "Img": "images/shot.png",
+      "Size": 1,
+      "Behavior": "misc"
     }
   ],
   "Misc": [
