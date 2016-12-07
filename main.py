@@ -71,19 +71,17 @@ input_handle = proc.InputHandler(window)
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):
-    input_handle.mouse_update(x,y,button)
+    input_handle.mouse_pressed(x,y,button)
 
+@window.event
 def on_mouse_release(x,y,button, modifiers):
-    input_handle.mouse_update(x,y,button)
+    input_handle.mouse_released(button)
     #Todo - Load variables into handler for passing into proc.py input function. 
     #       Migrate code below into function with keyboard processing.
 
-
 @window.event
-def on_mouse_motion(x,y,dx,dy):
-    # print('Mouse moved to {0}, {1}'.format(x, y))
-    # Note: pyglet uses a cartesian plane; positive y moves upward
-    pass
+def on_mouse_drag(x,y,dx,dy, buttons, modifiers):
+    input_handle.mouse_moved(x, y)
 
 @window.event
 def on_draw():				#Kept seperate from processing callback, Frame rate not tied to simulation speed.
