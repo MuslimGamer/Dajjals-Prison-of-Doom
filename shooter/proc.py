@@ -5,7 +5,7 @@ from shooter import obj
 
 from math import atan2,sin,cos, degrees, pi
 
-class input_handler:
+class InputHandler:
     def __init__(self,window):
         self.mouse_x = 0
         self.mouse_y = 0
@@ -17,9 +17,6 @@ class input_handler:
         self.mouse_x = x
         self.mouse_y = y
         self.mouse_button = button
-
-
-
 
 def input(main_list, input_handle): 
     for player in main_list[0]:
@@ -49,9 +46,6 @@ def input(main_list, input_handle):
         main_list[2].append(b1)
     pass
 
-
-    pass
-
 def collision(obj_check):
     pass
 
@@ -67,7 +61,6 @@ def update(obj_list):
         print(obj.id)
         print(obj.ai)
         print(obj.health)
-
 
         if obj.health <= 0:
             obj_list.remove(obj)

@@ -67,7 +67,7 @@ def frame_callback(dt):
 
 
 window = pyglet.window.Window()
-input_handle = proc.input_handler(window)
+input_handle = proc.InputHandler(window)
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):
