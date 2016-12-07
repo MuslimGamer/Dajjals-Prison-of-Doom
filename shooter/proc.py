@@ -1,9 +1,8 @@
 import pyglet
-from pyglet.window import key
+from pyglet.window import key, mouse
 from shooter import obj
 
-
-from math import atan2,sin,cos, degrees, pi
+from math import atan2, sin, cos, degrees, pi
 
 class InputHandler:
     def __init__(self,window):
@@ -20,29 +19,33 @@ class InputHandler:
 
 def input(main_list, input_handle): 
     for player in main_list[0]:
-        player.mx = input_handle.keyboard[key.A]*-1 + input_handle.keyboard[key.D]*1
-        player.my = input_handle.keyboard[key.S]*-1 + input_handle.keyboard[key.W]*1
+        player.mx = input_handle.keyboard[key.A] * -1 + input_handle.keyboard[key.D] * 1
+        player.my = input_handle.keyboard[key.S] * -1 + input_handle.keyboard[key.W] * 1
         if not (abs(player.mx) + abs(player.my) == 1):
+            # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
             player.mx = player.mx * 0.707
             player.my = player.my * 0.707
 
         if not (player.cooldown):
-            if (input_handle.mouse_button == 1):
+            if (input_handle.mouse_button == mouse.LEFT):
                 b1 = obj.spawn('Bullet','Melee',player.x,player.y)  #Short range attack. Todo: Short cooldown
                 player.cooldown = 10   #Todo: Add attribute to object
-            elif (input_handle.mouse_button == 4):
+            elif (input_handle.mouse_button == mouse.RIGHT):
                 b1 = obj.spawn('Bullet','Basic',player.x,player.y)  #Long range attack. Todo: Long cooldown
                 player.cooldown = 50   #Todo: Add attribute to object
             else:
                 return
         else:
             return
-        input_handle.mouse_button = 0  #Bug Experienced - Button state sticks, Stopgap fix: Clear button after processing once. 
-        dx = input_handle.mouse_x-b1.x
-        dy = input_handle.mouse_y-b1.y
+        input_handle.mouse_button = 0  #Bug Experienced - Button state sticks, Stopgap fix: Clear button after processing once.
+        
+        # Calculate the angle of the shot by using trig
+        # This gives us consistent bullet speed regardless of angle
+        dx = input_handle.mouse_x - b1.x
+        dy = input_handle.mouse_y - b1.y
         theta = atan2(dx,dy)
-        b1.mx = 10*sin(theta)
-        b1.my = 10*cos(theta)
+        b1.mx = 10 * sin(theta)
+        b1.my = 10 * cos(theta)
         main_list[2].append(b1)
     pass
 
