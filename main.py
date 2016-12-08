@@ -6,6 +6,8 @@ from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 
+import random
+
 main_list = []
 player_list = []		#List of objects in active play.
 enemy_list = []			#List of object prototypes in obj.py
@@ -37,12 +39,11 @@ def start_game():
     player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
     player_list.append(player)
 
-    e1 = obj.spawn('Enemy', "Basic", 100, 100)
-    e2 = obj.spawn('Enemy', "Coward", 200, 200)
-    e3 = obj.spawn('Enemy', "Slow", 200, 300)
-    enemy_list.append(e1)
-    enemy_list.append(e2)
-    enemy_list.append(e3)
+    pyglet.clock.schedule_interval(spawn_random, 1)
+
+    spawn_enemy("Basic", 100, 100)
+    spawn_enemy("Coward", 200, 200)
+    spawn_enemy("Slow", 200, 300)
 
 def frame_callback(dt):
     #Clear collision matrix
@@ -67,6 +68,13 @@ def frame_callback(dt):
     
     proc.collision(main_list)
 
+def spawn_random(dt):
+    spawn_enemy("Slow", range(640), range(480))
+
+def spawn_enemy(id, x, y):
+    e = obj.spawn("Enemy", id, random.randrange(640), random.randrange(480))
+    enemy_list.append(e)
+    return e
 
 window = pyglet.window.Window()
 input_handle = proc.InputHandler(window)
