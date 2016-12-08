@@ -2,6 +2,7 @@
 
 import pyglet
 
+from shooter.config import Config
 from shooter import file_watcher
 from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
@@ -111,6 +112,7 @@ def on_close():
     file_watcher.stop()
 
 file_watcher.watch('data/object.json', obj.load_prototype_data)
+file_watcher.watch('data/config.json', lambda raw_json: Config.instance.load(raw_json))
 #collision_map[window.width][window.height]
 
 dg_splash_screen = obj.spawn('Misc', "MG Splash", 0, 0, splash_screen.SplashScreen)

@@ -47,4 +47,4 @@ class Watch:
             with open(self.filename) as f:
                 contents = f.read()
             self._callback(contents)
-            print("{0} updated, callback. now is {1}".format(self.filename, now))
+            print("{0} updated".format(self.filename, now))

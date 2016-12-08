@@ -1,6 +1,7 @@
 import pyglet
 from pyglet.window import key, mouse
 from shooter import obj
+from shooter.config import Config
 
 from math import atan2, sin, cos, degrees, pi
 
@@ -43,8 +44,12 @@ def input(main_list, input_handle):
 
         if not (player.cooldown):
             if (input_handle.is_pressed(mouse.LEFT)):
-                b1 = obj.spawn('Bullet','Melee',player.x,player.y)  #Short range attack. Todo: Short cooldown
-                player.cooldown = 10   #Todo: Add attribute to object
+                if Config.instance.get('melee_enabled'):
+                    b1 = obj.spawn('Bullet','Melee',player.x,player.y)  #Short range attack. Todo: Short cooldown
+                    player.cooldown = 10   #Todo: Add attribute to object
+                else:
+                    b1 = obj.spawn('Bullet','Basic',player.x,player.y)  #Long range attack. Todo: Long cooldown
+                    player.cooldown = 50   #Todo: Add attribute to object    
             elif (input_handle.is_pressed(mouse.RIGHT)):
                 b1 = obj.spawn('Bullet','Basic',player.x,player.y)  #Long range attack. Todo: Long cooldown
                 player.cooldown = 50   #Todo: Add attribute to object
