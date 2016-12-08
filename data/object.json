@@ -36,28 +36,28 @@
       "ID": "Basic",
       "Health": 100,
       "Img": "images/shot.png",
-      "Size": 1,
+      "Size": 0.5,
       "Behavior": "misc"
     },
     {
       "ID": "Melee",
       "Health": 5,
       "Img": "images/shot.png",
-      "Size": 1,
+      "Size": 0.2,
       "Behavior": "misc"
     }
   ],
   "Misc": [
     {
       "ID": "MG Splash",
-      "Health": 0,
+      "Health": 1,
       "Img": "images/splash-mg.png",
       "Size": 1,
       "Behavior": "misc"
     },
     {
       "ID": "DG Splash",
-      "Health": 0,
+      "Health": 1,
       "Img": "images/splash-dg.png",
       "Size": 1,
       "Behavior": "misc"

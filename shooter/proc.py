@@ -63,8 +63,26 @@ def input(main_list, input_handle):
         main_list[2].append(b1)
     pass
 
-def collision(obj_check):
-    pass
+def collision(obj_list):
+    for player in obj_list[0]:
+        for bullet in obj_list[2]:
+            AABB_Collision_Test(player, bullet)
+    for enemy in obj_list[1]:
+        for bullet in obj_list[2]:
+            AABB_Collision_Test(enemy, bullet)
+
+def AABB_Collision_Test(obj1, obj2):	#Simple collision detection. TODO: Attempt other methods later if time.
+					#Sprites tested against 4 conditions, if all pass collision detected. 
+					#Nesting conditionals to skip if failure detected.
+					#On detection, Obj1.health--, obj2.health = 0. (Despawn obj2 to prevent collision on next frame)
+
+    if (obj1.sprite.x < obj2.sprite.x + obj2.sprite.width):
+        if(obj1.sprite.x + obj1.sprite.width > obj2.sprite.x):
+            if(obj1.sprite.y < obj2.sprite.y + obj2.sprite.width):
+                if(obj1.sprite.y + obj1.sprite.height > obj2.sprite.y):
+                    obj1.health = obj1.health -1    #Todo if time: Knockback on collision? object requires attribute:mass
+                    obj2.health = 0
+
 
 def update(obj_list):
     for obj in obj_list:

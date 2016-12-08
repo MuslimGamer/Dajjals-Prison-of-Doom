@@ -2,12 +2,12 @@
 
 import pyglet
 
-from shooter import obj	#Object module	-Severok
+from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 
 main_list = []
-player_list = []	#List of objects in active play.
+player_list = []		#List of objects in active play.
 enemy_list = []			#List of object prototypes in obj.py
 bullet_list = []
 misc_list = []
@@ -34,36 +34,47 @@ def show_dg_splash():
     misc_list.append(splash)
 
 def start_game():
-    player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
-    player_list.append(player)
+    if len(player_list) == 0:
+        while len(misc_list) > 0 : misc_list.pop()
 
-    e1 = obj.spawn('Enemy', "Basic", 100, 100)
-    e2 = obj.spawn('Enemy', "Coward", 200, 200)
-    enemy_list.append(e1)
-    enemy_list.append(e2)
+        player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
+        player_list.append(player)
+
+        e1 = obj.spawn('Enemy', "Basic", 100, 100)
+        e2 = obj.spawn('Enemy', "Coward", 200, 200)
+        e3 = obj.spawn('Enemy', "Slow", 200, 300)
+        enemy_list.append(e1)
+        enemy_list.append(e2)
+        enemy_list.append(e3)
+    else:
+        return
 
 def frame_callback(dt):
     #Clear collision matrix
 
     #Check user input
     #Update player position 
+    print(main_list)
 
 
     proc.input(main_list,input_handle)
 
     proc.update(player_list)
-    proc.collision(player_list)
+    #proc.collision(player_list)
 
     proc.ai(enemy_list)			#Make decision for movement/attack
     proc.update(enemy_list)
-    proc.collision(enemy_list)		#Check if enemy overlap with player
+    #proc.collision(enemy_list)		#Check if enemy overlap with player
 
     proc.ai(bullet_list)
     proc.update(bullet_list)		#Progress Bullet position
-    proc.collision(bullet_list)		#Scan for collision with other objects.
+    #proc.collision(bullet_list)		#Scan for collision with other objects.
 
     proc.ai(misc_list)              #Misc objects intended as cosmetic. No need to check collisions at this time.
-    proc.update(misc_list)
+    #proc.update(misc_list)
+
+    #proc.update(main_list)
+    proc.collision(main_list)
 
 
 window = pyglet.window.Window()
