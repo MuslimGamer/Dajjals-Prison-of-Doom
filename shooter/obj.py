@@ -42,13 +42,12 @@ class GameObject:
         if self._health <= 0 and self.on_death != None:
             self.on_death()
 
-def load_prototype_data():
-    with open('data/object.json','r') as f:
-        raw_json = json.load(f)
-        prototypes_json["Enemy"] = raw_json["Enemies"]
-        prototypes_json["Player"] = raw_json["Player"]
-        prototypes_json["Bullet"] = raw_json["Bullets"]
-        prototypes_json["Misc"] = raw_json["Misc"]
+def load_prototype_data(raw_json):
+    json_object = json.loads(raw_json)
+    prototypes_json["Enemy"] = json_object["Enemies"]
+    prototypes_json["Player"] = json_object["Player"]
+    prototypes_json["Bullet"] = json_object["Bullets"]
+    prototypes_json["Misc"] = json_object["Misc"]
 
 ###
 # Spawns an object of type object_type (from prototypes_json, eg. "Enemy"), using

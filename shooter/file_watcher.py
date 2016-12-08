@@ -6,6 +6,10 @@ import time
 # If this is just a boolean, we pass by value, so updating it does nothing
 is_running = { "run": True }
 
+###
+# Watch a file. The callback must accept a single argument, which is
+# the contents of the file once it's updated. 
+###
 def watch(filename_to_watch, callback):
     if (not os.path.isfile(filename_to_watch)):
         raise(Exception("{0} doesn't exist".format(filename_to_watch)))
@@ -40,5 +44,7 @@ class Watch:
     def notify(self, now):
         self._last_updated = now
         if self._callback != None:
-            self._callback()
+            with open(self.filename) as f:
+                contents = f.read()
+            self._callback(contents)
             print("{0} updated, callback. now is {1}".format(self.filename, now))
