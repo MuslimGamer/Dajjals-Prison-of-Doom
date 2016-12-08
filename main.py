@@ -34,29 +34,21 @@ def show_dg_splash():
     misc_list.append(splash)
 
 def start_game():
-    if len(player_list) == 0:
-        while len(misc_list) > 0 : misc_list.pop()
+    player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
+    player_list.append(player)
 
-        player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
-        player_list.append(player)
-
-        e1 = obj.spawn('Enemy', "Basic", 100, 100)
-        e2 = obj.spawn('Enemy', "Coward", 200, 200)
-        e3 = obj.spawn('Enemy', "Slow", 200, 300)
-        enemy_list.append(e1)
-        enemy_list.append(e2)
-        enemy_list.append(e3)
-    else:
-        return
+    e1 = obj.spawn('Enemy', "Basic", 100, 100)
+    e2 = obj.spawn('Enemy', "Coward", 200, 200)
+    e3 = obj.spawn('Enemy', "Slow", 200, 300)
+    enemy_list.append(e1)
+    enemy_list.append(e2)
+    enemy_list.append(e3)
 
 def frame_callback(dt):
     #Clear collision matrix
 
     #Check user input
     #Update player position 
-    print(main_list)
-
-
     proc.input(main_list,input_handle)
 
     proc.update(player_list)
@@ -71,9 +63,8 @@ def frame_callback(dt):
     #proc.collision(bullet_list)		#Scan for collision with other objects.
 
     proc.ai(misc_list)              #Misc objects intended as cosmetic. No need to check collisions at this time.
-    #proc.update(misc_list)
-
-    #proc.update(main_list)
+    proc.update(misc_list)
+    
     proc.collision(main_list)
 
 

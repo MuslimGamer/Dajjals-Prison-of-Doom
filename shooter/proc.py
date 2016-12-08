@@ -64,24 +64,26 @@ def input(main_list, input_handle):
     pass
 
 def collision(obj_list):
-    for player in obj_list[0]:
-        for bullet in obj_list[2]:
-            AABB_Collision_Test(player, bullet)
+    # TODO: introduce a quadtree if we have too many objects to check collisions for
+    # With AABB, we should be okay, as the performance impact is fairly minimal
+    #for player in obj_list[0]:
+    #    for bullet in obj_list[2]:
+    #        AABB_Collision_Test(player, bullet)
     for enemy in obj_list[1]:
         for bullet in obj_list[2]:
             AABB_Collision_Test(enemy, bullet)
 
-def AABB_Collision_Test(obj1, obj2):	#Simple collision detection. TODO: Attempt other methods later if time.
-					#Sprites tested against 4 conditions, if all pass collision detected. 
-					#Nesting conditionals to skip if failure detected.
-					#On detection, Obj1.health--, obj2.health = 0. (Despawn obj2 to prevent collision on next frame)
+def AABB_Collision_Test(obj1, obj2):
+    #Simple collision detection for on-rotated rectangles. TODO: Attempt other methods later if time.
+    #Sprites tested against 4 conditions, if all pass collision detected. 
+    #And conditionals short-circuit (skip if failure detected).
+    #On detection, Obj1.health--, obj2.health = 0. (Despawn obj2 to prevent collision on next frame)
 
-    if (obj1.sprite.x < obj2.sprite.x + obj2.sprite.width):
-        if(obj1.sprite.x + obj1.sprite.width > obj2.sprite.x):
-            if(obj1.sprite.y < obj2.sprite.y + obj2.sprite.width):
-                if(obj1.sprite.y + obj1.sprite.height > obj2.sprite.y):
-                    obj1.health = obj1.health -1    #Todo if time: Knockback on collision? object requires attribute:mass
-                    obj2.health = 0
+    if (obj1.sprite.x < obj2.sprite.x + obj2.sprite.width) and (obj1.sprite.x + obj1.sprite.width > obj2.sprite.x) and (obj1.sprite.y < obj2.sprite.y + obj2.sprite.width) and (obj1.sprite.y + obj1.sprite.height > obj2.sprite.y):
+        #Todo if time: Knockback on collision? object requires attribute:mass.
+        #Alternatively: use image scale as an indicator of mass?
+        obj1.health = obj1.health - 1
+        obj2.health = 0
 
 
 def update(obj_list):
@@ -91,17 +93,17 @@ def update(obj_list):
         obj.sprite.set_position(obj.x,obj.y)
 
         if obj.cooldown:
-            obj.cooldown = obj.cooldown -1
+            obj.cooldown = obj.cooldown - 1
         
-        print(obj.id)
-        print(obj.ai)
-        print(obj.health)
+        #print(obj.id)
+        #print(obj.ai)
+        #print(obj.health)
 
         if obj.health <= 0:
             obj_list.remove(obj)
 
         # Call your update method, if you have one
-        if hasattr(object, "update") and callable(getattr(obj, "update")):
+        if hasattr(obj, "update") and callable(getattr(obj, "update")):
             obj.update()
     pass
         
@@ -125,7 +127,8 @@ def slow_ai(obj):
 
 #Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
 def misc_ai(obj):
-    obj.health = obj.health - 1
+    if (obj.health > 0):
+        obj.health = obj.health - 1
 
 #No AI attached to this object
 def NULL_ai(obj):
