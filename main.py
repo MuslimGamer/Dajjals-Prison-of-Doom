@@ -40,7 +40,6 @@ def start_game():
     player_list.append(player)
 
     pyglet.clock.schedule_interval(spawn_random, 1)
-    pyglet.clock.schedule_interval(lambda dt: obj.load_prototype_data(), 1)
 
     spawn_enemy("Basic", 100, 100)
     spawn_enemy("Coward", 200, 200)
