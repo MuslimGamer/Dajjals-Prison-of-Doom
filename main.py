@@ -2,6 +2,7 @@
 
 import pyglet
 
+from shooter import file_watcher
 from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
@@ -105,8 +106,11 @@ def on_draw():				#Kept seperate from processing callback, Frame rate not tied t
     for misc in misc_list:		#Render Misc sprites
         misc.sprite.draw()
 
+@window.event
+def on_close():
+    file_watcher.stop()
 
-obj.load_prototype_data()
+file_watcher.watch('data/object.json', obj.load_prototype_data)
 #collision_map[window.width][window.height]
 
 dg_splash_screen = obj.spawn('Misc', "MG Splash", 0, 0, splash_screen.SplashScreen)
