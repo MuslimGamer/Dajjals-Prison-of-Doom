@@ -37,14 +37,17 @@ def show_dg_splash():
     misc_list.append(splash)
 
 def start_game():
+    for obj_list in main_list:
+        obj_list[:] = []
     player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
+    player.on_death = lambda: start_game()
     player_list.append(player)
 
     pyglet.clock.schedule_interval(spawn_random, 1)
 
-    spawn_enemy("Basic", 100, 100)
-    spawn_enemy("Coward", 200, 200)
-    spawn_enemy("Slow", 200, 300)
+    #spawn_enemy("Basic", 100, 100)
+    #spawn_enemy("Coward", 200, 200)
+    #spawn_enemy("Slow", 200, 300)
 
 def frame_callback(dt):
     #Clear collision matrix
@@ -56,24 +59,49 @@ def frame_callback(dt):
     proc.update(player_list)
     #proc.collision(player_list)
 
-    proc.ai(enemy_list)			#Make decision for movement/attack
+    proc.ai(enemy_list,main_list)			#Make decision for movement/attack
     proc.update(enemy_list)
     #proc.collision(enemy_list)		#Check if enemy overlap with player
 
-    proc.ai(bullet_list)
+    proc.ai(bullet_list,main_list)
     proc.update(bullet_list)		#Progress Bullet position
     #proc.collision(bullet_list)		#Scan for collision with other objects.
 
-    proc.ai(misc_list)              #Misc objects intended as cosmetic. No need to check collisions at this time.
+    proc.ai(misc_list,main_list)              #Misc objects intended as cosmetic. No need to check collisions at this time.
     proc.update(misc_list)
     
     proc.collision(main_list)
 
 def spawn_random(dt):
-    spawn_enemy("Slow", range(640), range(480))
+    type_select = random.randrange(3)
+    side = random.randrange(4)
+    rand_x = random.randrange(640)
+    rand_y = random.randrange(480)
+
+    type_select_result={
+        0: "Basic",
+        1: "Coward",
+        2: "Slow"}
+
+    position_generate_x={
+        0: 740,
+        1: -100,
+        2: rand_x,
+        3: rand_x}
+    position_generate_y={
+        0: rand_y,
+        1: rand_y,
+        2: -100,
+        3: 580}
+
+    spawn_enemy(type_select_result[type_select], position_generate_x[side],position_generate_y[side])
+  
+
+
+    #spawn_enemy("Coward", range(640), range(480))
 
 def spawn_enemy(id, x, y):
-    e = obj.spawn("Enemy", id, random.randrange(640), random.randrange(480))
+    e = obj.spawn("Enemy", id, x, y)
     enemy_list.append(e)
     return e
 

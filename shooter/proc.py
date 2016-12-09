@@ -1,8 +1,11 @@
 import pyglet
+import random
+
+
 from pyglet.window import key, mouse
 from shooter import obj
 
-from math import atan2, sin, cos, degrees, pi
+from math import atan2, sin, cos, degrees, pi, sqrt
 
 class InputHandler:
     def __init__(self,window):
@@ -43,32 +46,41 @@ def input(main_list, input_handle):
 
         if not (player.cooldown):
             if (input_handle.is_pressed(mouse.LEFT)):
-                b1 = obj.spawn('Bullet','Melee',player.x,player.y)  #Short range attack. Todo: Short cooldown
-                player.cooldown = 10   #Todo: Add attribute to object
+                attack(player,"Melee",input_handle.mouse_x,input_handle.mouse_y,main_list[2])
             elif (input_handle.is_pressed(mouse.RIGHT)):
-                b1 = obj.spawn('Bullet','Basic',player.x,player.y)  #Long range attack. Todo: Long cooldown
-                player.cooldown = 50   #Todo: Add attribute to object
-            else:
-                return
-        else:
-            return
-        
+                attack(player,"Basic",input_handle.mouse_x,input_handle.mouse_y,main_list[2])
+        return
+
+
+def attack(source_obj,attack_type,target_x,target_y,bullet_list):
+    if not (source_obj.cooldown):	#Previous cooldown timer has expired, ready to attack again.
+
         # Calculate the angle of the shot by using trig
         # This gives us consistent bullet speed regardless of angle
-        dx = input_handle.mouse_x - b1.x
-        dy = input_handle.mouse_y - b1.y
-        theta = atan2(dx,dy)
-        b1.mx = 10 * sin(theta)
-        b1.my = 10 * cos(theta)
-        main_list[2].append(b1)
-    pass
+        dx = target_x - source_obj.x    
+        dy = target_y - source_obj.y
+        theta = atan2(dx,dy)			#Mathy goodness.
+        mx = 10 * sin(theta)
+        my = 10 * cos(theta)
+
+
+        b = obj.spawn('Bullet',"Basic",source_obj.x+mx*source_obj.sprite.scale,source_obj.y+my*source_obj.sprite.scale)	#Spawn attack object
+        b.mx = mx										#Apply motion to object
+        b.my = my
+
+        source_obj.cooldown = b.cost     	#Apply cooldown from attack.
+
+        bullet_list.append(b)			#Enter bullet object into active list for processing
+    
+
+
 
 def collision(obj_list):
     # TODO: introduce a quadtree if we have too many objects to check collisions for
     # With AABB, we should be okay, as the performance impact is fairly minimal
-    #for player in obj_list[0]:
-    #    for bullet in obj_list[2]:
-    #        AABB_Collision_Test(player, bullet)
+    for player in obj_list[0]:				#Note: This check is intended for collision with bullets spawned by enemies. 
+        for bullet in obj_list[2]:			#Attempting alternate fix by spawning bullet ahead of player in direction of shot
+            AABB_Collision_Test(player, bullet)		#Spawn displacement scaled by object size.
     for enemy in obj_list[1]:
         for bullet in obj_list[2]:
             AABB_Collision_Test(enemy, bullet)
@@ -76,7 +88,10 @@ def collision(obj_list):
 def AABB_Collision_Test(obj1, obj2):
     #Simple collision detection for on-rotated rectangles. TODO: Attempt other methods later if time.
     #Sprites tested against 4 conditions, if all pass collision detected. 
-    #And conditionals short-circuit (skip if failure detected).
+    #And conditionals short-circuit (skip if failure detected). 
+    
+    #Question: Does python continue processing conditionals with 'and' logic if one of the conditionals has already failed?
+
     #On detection, Obj1.health--, obj2.health = 0. (Despawn obj2 to prevent collision on next frame)
 
     if (obj1.sprite.x < obj2.sprite.x + obj2.sprite.width) and (obj1.sprite.x + obj1.sprite.width > obj2.sprite.x) and (obj1.sprite.y < obj2.sprite.y + obj2.sprite.width) and (obj1.sprite.y + obj1.sprite.height > obj2.sprite.y):
@@ -94,10 +109,6 @@ def update(obj_list):
 
         if obj.cooldown:
             obj.cooldown = obj.cooldown - 1
-        
-        #print(obj.id)
-        #print(obj.ai)
-        #print(obj.health)
 
         if obj.health <= 0:
             obj_list.remove(obj)
@@ -110,23 +121,54 @@ def update(obj_list):
 
 
 #Standard behavior, rush player, attack location
-def agro_ai(obj):
-    obj.mx = 1
-    if (obj.x > 300):
-        obj.health = 0
-    pass
+def agro_ai(obj, main_list):
+    for player in main_list[0]:
+        dx = obj.x - player.x
+        dy = obj.y - player.y
+        distance_from_player = sqrt(dx*dx + dy*dy)
+        if (distance_from_player > 10):				#Get in close
+            theta = atan2(dx,dy)		#Mathy goodness.
+            obj.mx = -1 * sin(theta)
+            obj.my = -1 * cos(theta)
+        else:
+            attack(obj,"Melee",player.x,player.y,main_list[2])	#And Punch
+
 
 #Coward behavior, maintain distance, attack location
-def coward_ai(obj):
-    obj.my = 1
-    pass
+def coward_ai(obj, main_list):
+    for player in main_list[0]:
+        dx = obj.x - player.x
+        dy = obj.y - player.y
+        theta = atan2(dx,dy)			#Mathy goodness.
+ 
+        distance_from_player = sqrt(dx*dx + dy*dy)
+        if (distance_from_player < 150+random.randrange(100)):				#Get in kind of close.
+            theta = theta *-0.9								#Jittery holding pattern
+            attack(obj,"basic",player.x,player.y,main_list[2])	#And Punch
+
+        obj.mx = -1 * sin(theta)
+        obj.my = -1 * cos(theta)
+
+  
+   
+        return
 
 #Tank behavoir, Slower agro.
-def slow_ai(obj):
-    pass
+def slow_ai(obj, main_list):
+    for player in main_list[0]:
+        dx = obj.x - player.x
+        dy = obj.y - player.y
+        distance_from_player = sqrt(dx*dx + dy*dy)
+        if (distance_from_player > 10):				#Get in close
+            theta = atan2(dx,dy)		#Mathy goodness.
+            obj.mx = -0.3 * sin(theta)
+            obj.my = -0.3 * cos(theta)
+        else:
+            attack(obj,"Melee",player.x,player.y,main_list[2])	#And Punch
+        pass
 
 #Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
-def misc_ai(obj):
+def misc_ai(obj, main_list):
     if (obj.health > 0):
         obj.health = obj.health - 1
 
@@ -139,9 +181,9 @@ def error_ai(obj):
     raise(Exception('Error: AI has gone rouge'))
 
 
-def ai(obj_list):			#Generic AI handler
+def ai(obj_list, main_list):			#Generic AI handler
     for obj in obj_list:
-        ai_action[obj.ai](obj)		#Reference dictionary against object AI variable, Vector to specific function for AI type.
+        ai_action[obj.ai](obj, main_list)		#Reference dictionary against object AI variable, Vector to specific function for AI type.
 
 ai_action={
     "agro": agro_ai,

@@ -28,6 +28,7 @@ class GameObject:
         self.sprite.scale = json_data['Size']
         self.ai = json_data['Behavior']				#AI reference	- See proc.py
         self.cooldown = 0
+        self.cost = json_data['Cost']
 
         # Event handlers you can override
         self.on_death = None
