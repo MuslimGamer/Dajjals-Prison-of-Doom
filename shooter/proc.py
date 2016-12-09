@@ -69,35 +69,31 @@ def attack(source_obj,attack_type,target_x,target_y,bullet_list):
         mx = 10 * sin(theta)
         my = 10 * cos(theta)
 
-
         b = obj.spawn('Bullet',"Basic",source_obj.x+mx*source_obj.sprite.scale,source_obj.y+my*source_obj.sprite.scale)	#Spawn attack object
         b.mx = mx										#Apply motion to object
         b.my = my
 
         source_obj.cooldown = b.cost     	#Apply cooldown from attack.
-
         bullet_list.append(b)			#Enter bullet object into active list for processing
-    
-
-
 
 def collision(obj_list):
     # TODO: introduce a quadtree if we have too many objects to check collisions for
     # With AABB, we should be okay, as the performance impact is fairly minimal
-    for player in obj_list[0]:				#Note: This check is intended for collision with bullets spawned by enemies. 
-        for bullet in obj_list[2]:			#Attempting alternate fix by spawning bullet ahead of player in direction of shot
-            AABB_Collision_Test(player, bullet)		#Spawn displacement scaled by object size.
-    for enemy in obj_list[1]:
-        for bullet in obj_list[2]:
+    players = obj_list[0]
+    enemies = obj_list[1]
+    bullets = obj_list[2]
+    for player in players:				#Note: This check is intended for collision with bullets spawned by enemies. 
+        for bullet in bullets:			#Attempting alternate fix by spawning bullet ahead of player in direction of shot
+            AABB_Collision_Test(player, bullet)
+        for enemy in enemies:
+            AABB_Collision_Test(player, enemy)
+    for enemy in enemies:
+        for bullet in bullets:
             AABB_Collision_Test(enemy, bullet)
 
+# obj1 gets hurt. obj2 dies.
 def AABB_Collision_Test(obj1, obj2):
     #Simple collision detection for on-rotated rectangles. TODO: Attempt other methods later if time.
-    #Sprites tested against 4 conditions, if all pass collision detected. 
-    #And conditionals short-circuit (skip if failure detected). 
-    
-    #Question: Does python continue processing conditionals with 'and' logic if one of the conditionals has already failed?
-
     #On detection, Obj1.health--, obj2.health = 0. (Despawn obj2 to prevent collision on next frame)
 
     if (obj1.sprite.x < obj2.sprite.x + obj2.sprite.width) and (obj1.sprite.x + obj1.sprite.width > obj2.sprite.x) and (obj1.sprite.y < obj2.sprite.y + obj2.sprite.width) and (obj1.sprite.y + obj1.sprite.height > obj2.sprite.y):

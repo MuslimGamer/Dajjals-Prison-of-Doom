@@ -1,6 +1,7 @@
 #!/bin/python
 
 import pyglet
+import random
 
 from shooter.config import Config
 from shooter import file_watcher
@@ -8,18 +9,8 @@ from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 
-import random
-
-main_list = []
-player_list = []		#List of objects in active play.
-enemy_list = []			#List of object prototypes in obj.py
-bullet_list = []
-misc_list = []
-
-main_list.append(player_list)
-main_list.append(enemy_list)
-main_list.append(bullet_list)
-main_list.append(misc_list)
+window = pyglet.window.Window()
+input_handle = proc.InputHandler(window)
 
 # color_tuple is a four-colour tuple (R, G, B, A).
 def create_color(width, height, color_tuple):
@@ -46,10 +37,6 @@ def start_game():
 
     pyglet.clock.schedule_interval(spawn_random, 1)
 
-    #spawn_enemy("Basic", 100, 100)
-    #spawn_enemy("Coward", 200, 200)
-    #spawn_enemy("Slow", 200, 300)
-
 def frame_callback(dt):
     #Clear collision matrix
 
@@ -58,12 +45,11 @@ def frame_callback(dt):
     proc.input(main_list,input_handle)
 
     proc.update(player_list)
-    #proc.collision(player_list)
 
     proc.ai(enemy_list,main_list)			#Make decision for movement/attack
     proc.update(enemy_list)
     #proc.collision(enemy_list)		#Check if enemy overlap with player
-
+    
     proc.ai(bullet_list,main_list)
     proc.update(bullet_list)		#Progress Bullet position
     #proc.collision(bullet_list)		#Scan for collision with other objects.
@@ -79,35 +65,32 @@ def spawn_random(dt):
     rand_x = random.randrange(640)
     rand_y = random.randrange(480)
 
-    type_select_result={
+    type_select_result = {
         0: "Basic",
         1: "Coward",
-        2: "Slow"}
+        2: "Slow"
+    }
 
-    position_generate_x={
+    position_generate_x = {
         0: 740,
         1: -100,
         2: rand_x,
-        3: rand_x}
-    position_generate_y={
+        3: rand_x
+    }
+
+    position_generate_y = {
         0: rand_y,
         1: rand_y,
         2: -100,
-        3: 580}
+        3: 580
+    }
 
     spawn_enemy(type_select_result[type_select], position_generate_x[side],position_generate_y[side])
   
-
-
-    #spawn_enemy("Coward", range(640), range(480))
-
 def spawn_enemy(id, x, y):
     e = obj.spawn("Enemy", id, x, y)
     enemy_list.append(e)
     return e
-
-window = pyglet.window.Window()
-input_handle = proc.InputHandler(window)
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):
@@ -139,9 +122,19 @@ def on_draw():				#Kept seperate from processing callback, Frame rate not tied t
 def on_close():
     file_watcher.stop()
 
+main_list = []
+player_list = []		#List of objects in active play.
+enemy_list = []			#List of object prototypes in obj.py
+bullet_list = []
+misc_list = []
+
+main_list.append(player_list)
+main_list.append(enemy_list)
+main_list.append(bullet_list)
+main_list.append(misc_list)
+
 file_watcher.watch('data/object.json', obj.load_prototype_data)
 file_watcher.watch('data/config.json', lambda raw_json: Config.instance.load(raw_json))
-#collision_map[window.width][window.height]
 
 dg_splash_screen = obj.spawn('Misc', "MG Splash", 0, 0, splash_screen.SplashScreen)
 dg_splash_screen.on_death = lambda: show_dg_splash()
