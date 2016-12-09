@@ -45,16 +45,17 @@ def input(main_list, input_handle):
             player.mx = player.mx * 0.707
             player.my = player.my * 0.707
 
+        bullets = main_list[2]
         if not (player.cooldown):
             if (input_handle.is_pressed(mouse.LEFT)):
                 if config.get('melee_enabled'):
-                    attack(player,"Melee",input_handle.mouse_x,input_handle.mouse_y,main_list[2])
+                    attack(player,"Melee",input_handle.mouse_x,input_handle.mouse_y,bullets)
                     player.cooldown = 10   #Todo: Add attribute to object
                 else:
-                    attack(player,"Basic",input_handle.mouse_x,input_handle.mouse_y,main_list[2])
+                    attack(player,"Basic",input_handle.mouse_x,input_handle.mouse_y,bullets)
                     player.cooldown = 50   #Todo: Add attribute to object    
             elif (input_handle.is_pressed(mouse.RIGHT)):
-                attack(player,"Basic",input_handle.mouse_x,input_handle.mouse_y,main_list[2])
+                attack(player,"Basic",input_handle.mouse_x,input_handle.mouse_y,bullets)
         return
 
 
