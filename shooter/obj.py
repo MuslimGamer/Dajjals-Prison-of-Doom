@@ -31,7 +31,7 @@ class GameObject:
         self.cost = json_data['Cost']
 
         # Event handlers you can override
-        self.on_death = None
+        self.on_death = lambda: None
 
     @property
     def health(self):
@@ -69,7 +69,7 @@ def spawn(object_type, id, x, y, as_type = None):
     list_of_prototypes = prototypes_json[object_type]
     # Find an object x in the collection that matches the specified ID; defaults to None
     prototype = next((x for x in list_of_prototypes if x['ID'] == id), None)
-    if as_type == None:
+    if as_type is None:
         spawned = GameObject(prototype)
     else:
         spawned = as_type(prototype)

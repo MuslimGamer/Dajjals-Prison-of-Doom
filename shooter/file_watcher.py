@@ -15,7 +15,7 @@ def watch(filename_to_watch, callback):
         raise(Exception("{0} doesn't exist".format(filename_to_watch)))
 
     w = Watch(filename_to_watch, callback)
-    t = Timer(1, check_and_notify, [w]) # trigger in 1s
+    t = Timer(1, check_and_notify, [w]) # trigger after 1s
     w.notify(w.get_modified_time()) # trigger immediately
     t.start()
 
@@ -27,7 +27,7 @@ def check_and_notify(watch):
         now = watch.get_modified_time()
         if watch.is_updated(now):
             watch.notify(now)
-        time.sleep(1)
+        time.sleep(0.5)
 
 class Watch:
     def __init__(self, filename, callback):
@@ -39,7 +39,7 @@ class Watch:
         return os.path.getmtime(self.filename)
 
     def is_updated(self, now):
-        return self._last_updated == None or self._last_updated != now
+        return self._last_updated is None or self._last_updated != now
 
     def notify(self, now):
         self._last_updated = now
@@ -47,4 +47,4 @@ class Watch:
             with open(self.filename) as f:
                 contents = f.read()
             self._callback(contents)
-            print("{0} updated".format(self.filename, now))
+            print("{0} updated".format(self.filename))

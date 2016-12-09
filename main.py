@@ -3,7 +3,7 @@
 import pyglet
 import random
 
-from shooter.config import Config
+from shooter import config
 from shooter import file_watcher
 from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
@@ -163,11 +163,13 @@ main_list.append(misc_list)
 main_list.append(backgrounds_list)
 
 file_watcher.watch('data/object.json', obj.load_prototype_data)
-file_watcher.watch('data/config.json', lambda raw_json: Config.instance.load(raw_json))
 
-dg_splash_screen = obj.spawn('Misc', "MG Splash", 0, 0, splash_screen.SplashScreen)
-dg_splash_screen.on_death = lambda: show_dg_splash()
-misc_list.append(dg_splash_screen)
+if config.get("skip_splash_screens") != True:
+    dg_splash_screen = obj.spawn('Misc', "MG Splash", 0, 0, splash_screen.SplashScreen)
+    dg_splash_screen.on_death = lambda: show_dg_splash()
+    misc_list.append(dg_splash_screen)
+else:
+    start_game()
 
 pyglet.clock.schedule(frame_callback)
 pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # call frame_callback at 30FPS

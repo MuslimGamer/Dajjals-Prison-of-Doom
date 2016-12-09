@@ -1,22 +1,20 @@
 import json
+from shooter import file_watcher
 
-class Config:
-    instance = None
-    
-    def __init__(self):
-        # Global configuration flags. Derived from config.json
-        self._data = {}
-        Config.instance = self    
+# Global key/value pairs intended as global config. Reloads automatically.
 
-    def load(self, raw_json):
-        # TODO: remove comments (JSON doesn't officially support comments)    
-        self._data = json.loads(raw_json)
+__data = {}
 
-    def get(self, key):
-        if not key in self._data:
-            raise(Exception("There's no config key called '{0}'. Keys: {1}".format(key, self._data.items())))
-        else:
-            return self._data[key]
+def load(raw_json):
+    # TODO: remove comments (JSON doesn't officially support comments)
+    global __data
+    __data = json.loads(raw_json)
 
-# Create first (singleton) instance
-Config()
+def get(key):
+    global __data
+    if not key in __data:
+        raise(Exception("There's no key called '{0}'. Keys: {1}".format(key, __data.items())))
+    else:
+        return __data[key]
+
+file_watcher.watch('data/config.json', lambda raw_json: load(raw_json))
