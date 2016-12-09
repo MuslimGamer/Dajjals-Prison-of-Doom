@@ -102,7 +102,6 @@ def AABB_Collision_Test(obj1, obj2):
         obj1.health = obj1.health - 1
         obj2.health = 0
 
-
 def update(obj_list):
     for obj in obj_list:
         obj.x = obj.x + obj.mx
@@ -150,8 +149,6 @@ def coward_ai(obj, main_list):
 
         obj.mx = -1 * sin(theta)
         obj.my = -1 * cos(theta)
-
-  
    
         return
 

@@ -69,6 +69,14 @@
       "Size": 1,
       "Behavior": "misc",
       "Cost": 0
+    },
+    {
+      "ID": "Game Over",
+      "Health": 300,
+      "Img": "images/game-over.png",
+      "Size": 1,
+      "Behavior": "misc",
+      "Cost": 0
     }
   ]
 }

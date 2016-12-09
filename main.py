@@ -32,10 +32,17 @@ def start_game():
     for obj_list in main_list:
         obj_list[:] = []
     player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
-    player.on_death = lambda: start_game()
+    player.on_death = lambda: game_over()
     player_list.append(player)
 
     pyglet.clock.schedule_interval(spawn_random, 1)
+
+def game_over():
+    over = obj.spawn("Misc", "Game Over", 0, 0)
+    over.x = (window.width - over.img.width) / 2
+    over.y = (window.height - over.img.height) / 2
+    over.on_death = lambda: start_game()
+    misc_list.append(over)
 
 def frame_callback(dt):
     #Clear collision matrix
@@ -122,12 +129,13 @@ def on_draw():				#Kept seperate from processing callback, Frame rate not tied t
 def on_close():
     file_watcher.stop()
 
-main_list = []
+main_list = [] # TODO: convert to a hash
 player_list = []		#List of objects in active play.
 enemy_list = []			#List of object prototypes in obj.py
 bullet_list = []
 misc_list = []
 
+# We keep things in a specific order. This is fragile, but okay for now.
 main_list.append(player_list)
 main_list.append(enemy_list)
 main_list.append(bullet_list)
