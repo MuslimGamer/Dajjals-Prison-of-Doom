@@ -5,21 +5,24 @@
       "Health": 1,
       "Img": "images/red.png",
       "Size": 1,
-      "Behavior": "agro"
+      "Behavior": "agro",
+      "Cost": 1
     },
     {
       "ID": "Coward",
       "Health": 1,
       "Img": "images/red.png",
       "Size": 0.5,
-      "Behavior": "coward"
+      "Behavior": "coward",
+      "Cost": 2
     },
     {
       "ID": "Slow",
       "Health": 3,
       "Img": "images/red.png",
       "Size": 2,
-      "Behavior": "slow"
+      "Behavior": "slow",
+      "Cost": 3
     }
   ],
   "Player": [
@@ -28,7 +31,8 @@
       "Health": 3,
       "Img": "images/blue.png",
       "Size": 1,
-      "Behavior": "NULL"
+      "Behavior": "NULL",
+      "Cost": 0
     }
   ],
   "Bullets": [
@@ -37,14 +41,16 @@
       "Health": 100,
       "Img": "images/shot.png",
       "Size": 0.5,
-      "Behavior": "misc"
+      "Behavior": "misc",
+      "Cost": 50
     },
     {
       "ID": "Melee",
       "Health": 5,
       "Img": "images/shot.png",
       "Size": 0.2,
-      "Behavior": "misc"
+      "Behavior": "misc",
+      "Cost": 10
     }
   ],
   "Misc": [
@@ -53,14 +59,16 @@
       "Health": 60,
       "Img": "images/splash-mg.png",
       "Size": 1,
-      "Behavior": "misc"
+      "Behavior": "misc",
+      "Cost": 0
     },
     {
       "ID": "DG Splash",
       "Health": 60,
       "Img": "images/splash-dg.png",
       "Size": 1,
-      "Behavior": "misc"
+      "Behavior": "misc",
+      "Cost": 0
     }
   ]
 }
