@@ -171,6 +171,8 @@ if config.get("skip_splash_screens") != True:
 else:
     start_game()
 
+obj.GameObject.note_screen_size(WINDOW_WIDTH, WINDOW_HEIGHT)
+
 pyglet.clock.schedule(frame_callback)
 pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # call frame_callback at 30FPS
 

@@ -59,7 +59,7 @@ def input(main_list, input_handle):
 
 
 def attack(source_obj,attack_type,target_x,target_y,bullet_list):
-    if not (source_obj.cooldown):	#Previous cooldown timer has expired, ready to attack again.
+    if source_obj.is_on_screen() and not (source_obj.cooldown):	#Previous cooldown timer has expired, ready to attack again.
 
         # Calculate the angle of the shot by using trig
         # This gives us consistent bullet speed regardless of angle
@@ -132,7 +132,8 @@ def agro_ai(obj, main_list):
             obj.mx = -1 * sin(theta)
             obj.my = -1 * cos(theta)
         else:
-            attack(obj,"Melee",player.x,player.y,main_list[2])	#And Punch
+            bullet_list = main_list[2]
+            attack(obj,"Melee",player.x,player.y,bullet_list)	#And Punch
 
 
 #Coward behavior, maintain distance, attack location
@@ -143,9 +144,13 @@ def coward_ai(obj, main_list):
         theta = atan2(dx,dy)			#Mathy goodness.
  
         distance_from_player = sqrt(dx*dx + dy*dy)
-        if (distance_from_player < 150+random.randrange(100)):				#Get in kind of close.
+        # NOTE: ranodm here means sporadic firing when we're within d=150-250 of the player
+        # This extra value should be persisted with the object somewhere for consistency
+        # But, I doubt anyone will notice :)
+        if (distance_from_player < 150 + random.randrange(100)):				#Get in kind of close.
             theta = theta *-0.9								#Jittery holding pattern
-            attack(obj,"basic",player.x,player.y,main_list[2])	#And Punch
+            bullet_list = main_list[2]
+            attack(obj,"basic",player.x,player.y,bullet_list)	#And Punch
 
         obj.mx = -1 * sin(theta)
         obj.my = -1 * cos(theta)
@@ -163,7 +168,8 @@ def slow_ai(obj, main_list):
             obj.mx = -0.3 * sin(theta)
             obj.my = -0.3 * cos(theta)
         else:
-            attack(obj,"Melee",player.x,player.y,main_list[2])	#And Punch
+            bullet_list = main_list[2]
+            attack(obj,"Melee",player.x,player.y, bullet_list)	#And Punch
         pass
 
 #Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.

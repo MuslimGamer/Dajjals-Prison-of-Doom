@@ -15,6 +15,16 @@ prototypes_json = {				#Define object_type dictionary. Used to parse objects int
 }
 
 class GameObject:
+    __screen_width = 0
+    __screen_height = 0
+
+    def note_screen_size(width, height):
+        global __screen_width
+        global __screen_height
+
+        __screen_width = width
+        __screen_height = height 
+        
     def __init__ (self, json_data):	#on object creation (Loading), object details loaded.
         #print(data['ID'])
         self.id = json_data['ID']					#Todo: Check list on generation of conflicting IDs and throw error.
@@ -50,6 +60,12 @@ class GameObject:
     @size.setter
     def size(self, value):
         self.sprite.scale = value
+
+    def is_on_screen(self):
+        global __screen_width
+        global __screen_height
+
+        return self.x >= 0 and self.x <= __screen_width - self.sprite.width and self.y >= 0 and self.y <= __screen_height - self.sprite.width
 
 def load_prototype_data(raw_json):
     json_object = json.loads(raw_json)
