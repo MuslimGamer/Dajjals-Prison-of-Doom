@@ -48,10 +48,10 @@ def input(main_list, input_handle):
         if not (player.cooldown):
             if (input_handle.is_pressed(mouse.LEFT)):
                 if Config.instance.get('melee_enabled'):
-                    b1 = obj.spawn('Bullet','Melee',player.x,player.y)  #Short range attack. Todo: Short cooldown
+                    attack(player,"Melee",input_handle.mouse_x,input_handle.mouse_y,main_list[2])
                     player.cooldown = 10   #Todo: Add attribute to object
                 else:
-                    b1 = obj.spawn('Bullet','Basic',player.x,player.y)  #Long range attack. Todo: Long cooldown
+                    attack(player,"Basic",input_handle.mouse_x,input_handle.mouse_y,main_list[2])
                     player.cooldown = 50   #Todo: Add attribute to object    
             elif (input_handle.is_pressed(mouse.RIGHT)):
                 attack(player,"Basic",input_handle.mouse_x,input_handle.mouse_y,main_list[2])
