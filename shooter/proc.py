@@ -172,11 +172,11 @@ def misc_ai(obj, main_list):
         obj.health = obj.health - 1
 
 #No AI attached to this object
-def NULL_ai(obj):
+def NULL_ai(obj, main_list):
     pass
 
 #Undefined behavior referenced.
-def error_ai(obj):
+def error_ai(obj, main_list):
     raise(Exception('Error: AI has gone rouge'))
 
 

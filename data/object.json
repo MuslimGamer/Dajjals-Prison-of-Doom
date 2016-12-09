@@ -77,6 +77,22 @@
       "Size": 1,
       "Behavior": "misc",
       "Cost": 0
+    },
+    {
+      "ID": "Background",
+      "Health": 1,
+      "Img": "images/background.jpg",
+      "Size": 1,
+      "Behavior": "NULL",
+      "Cost": 0
+    },
+    {
+      "ID": "Crater",
+      "Health": 1,
+      "Img": "images/crater.png",
+      "Size": 1,
+      "Behavior": "NULL",
+      "Cost": 0
     }
   ]
 }

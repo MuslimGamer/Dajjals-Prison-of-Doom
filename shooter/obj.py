@@ -25,7 +25,7 @@ class GameObject:
         self.mx = 0						#Current Movement
         self.my = 0		
         self.sprite = pyglet.sprite.Sprite(self.img,self.x,self.y)
-        self.sprite.scale = json_data['Size']
+        self.size = json_data['Size']
         self.ai = json_data['Behavior']				#AI reference	- See proc.py
         self.cooldown = 0
         self.cost = json_data['Cost']
@@ -42,6 +42,14 @@ class GameObject:
         self._health = value
         if self._health <= 0 and self.on_death != None:
             self.on_death()
+
+    @property
+    def size(self):
+        return self.sprite.scale
+
+    @size.setter
+    def size(self, value):
+        self.sprite.scale = value
 
 def load_prototype_data(raw_json):
     json_object = json.loads(raw_json)
