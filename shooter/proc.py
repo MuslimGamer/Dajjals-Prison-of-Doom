@@ -103,21 +103,23 @@ def AABB_Collision_Test(obj1, obj2):
         obj1.health = obj1.health - 1
         obj2.health = 0
 
-def update(obj_list):
-    for obj in obj_list:
-        obj.x = obj.x + obj.mx
-        obj.y = obj.y + obj.my
-        obj.sprite.set_position(obj.x,obj.y)
+def update(main_list):
+    for obj_type_list in main_list:
+        for obj in obj_type_list:
+            obj.x = obj.x + obj.mx
+            obj.y = obj.y + obj.my
+            for player in main_list[0]:
+                obj.sprite.set_position(obj.x-player.x+320,obj.y - player.y+240)
 
-        if obj.cooldown:
-            obj.cooldown = obj.cooldown - 1
+            if obj.cooldown:
+                obj.cooldown = obj.cooldown - 1
 
-        if obj.health <= 0:
-            obj_list.remove(obj)
+            if obj.health <= 0:
+                obj_type_list.remove(obj)
 
         # Call your update method, if you have one
-        if hasattr(obj, "update") and callable(getattr(obj, "update")):
-            obj.update()
+            if hasattr(obj, "update") and callable(getattr(obj, "update")):
+                obj.update()
     pass
         
 

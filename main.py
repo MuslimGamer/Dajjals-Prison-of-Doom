@@ -67,18 +67,20 @@ def frame_callback(dt):
     #Update player position 
     proc.input(main_list,input_handle)
 
-    proc.update(player_list)
+    #proc.update(player_list)
 
     proc.ai(enemy_list,main_list)			#Make decision for movement/attack
-    proc.update(enemy_list)
+    #proc.update(enemy_list)
     #proc.collision(enemy_list)		#Check if enemy overlap with player
     
     proc.ai(bullet_list,main_list)
-    proc.update(bullet_list)		#Progress Bullet position
+    #proc.update(bullet_list)		#Progress Bullet position
     #proc.collision(bullet_list)		#Scan for collision with other objects.
 
     proc.ai(misc_list,main_list)              #Misc objects intended as cosmetic. No need to check collisions at this time.
-    proc.update(misc_list)
+    #proc.update(misc_list)
+
+    proc.update(main_list)
     
     proc.collision(main_list)
 
