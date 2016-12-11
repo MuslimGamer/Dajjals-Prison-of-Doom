@@ -178,7 +178,7 @@ def coward_ai(obj, main_list):
         if (distance_from_player < 150 + random.randrange(100)):				#Get in kind of close.
             theta = theta *-0.9								#Jittery holding pattern
             bullet_list = main_list[2]
-            attack(obj,"Basic",player.x,player.y,bullet_list)	#And Punch
+            attack(obj,"Basic",player.x-50+random.randrange(100),player.y-50+random.randrange(100),bullet_list)	#Added inaccuracy
 
         obj.mx = -1 * sin(theta)
         obj.my = -1 * cos(theta)

@@ -52,7 +52,7 @@ def start_game():
     player.on_death = lambda: game_over()
     player_list.append(player)
 
-    #pyglet.clock.schedule_interval(spawn_random, 1)
+    pyglet.clock.schedule_interval(spawn_random, 1)
 
 def game_over():
     over = obj.spawn("Misc", "Game Over", 0, 0)
