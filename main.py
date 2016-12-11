@@ -8,6 +8,7 @@ from shooter import file_watcher
 from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
+from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
@@ -51,7 +52,7 @@ def start_game():
     player.on_death = lambda: game_over()
     player_list.append(player)
 
-    pyglet.clock.schedule_interval(spawn_random, 1)
+    #pyglet.clock.schedule_interval(spawn_random, 1)
 
 def game_over():
     over = obj.spawn("Misc", "Game Over", 0, 0)
@@ -81,6 +82,11 @@ def frame_callback(dt):
     #proc.update(misc_list)
 
     proc.update(main_list)
+    for player in player_list:                 			#If player reaches boundry of screen
+        if player.x > window.width-100: player.x = window.width-100#Push them back by previous movement.
+        if player.x < 100: player.x = 100
+        if player.y > window.height-100: player.y = window.height - 100
+        if player.y < 100: player.y = 100
     
     proc.collision(main_list)
 

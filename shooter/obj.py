@@ -1,5 +1,6 @@
 import json
 import pyglet
+from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
 # Prototypes of enemies, the player, bullets, and misc stuff (splash screens, explosions, etc.)
 obj_enemy=[]	#Lists of object prototypes
@@ -39,6 +40,14 @@ class GameObject:
         self.ai = json_data['Behavior']				#AI reference	- See proc.py
         self.cooldown = 0
         self.cost = json_data['Cost']
+        self.parent = 0
+
+        #Pre-calculating numbers for centering sprites after rotation. Maths is expensive, space is not.
+        #Better to pre calculate constant trig functions than re-calculate when required.
+            #Calculate 'radius' of sprite - Hyp component for finding sprite centroid following rotation.
+        self.radius = sqrt(self.sprite.height*self.sprite.height + self.sprite.width * self.sprite.width)/2
+            #Theta offset - Rotation offset for centroid location from sprite base rotation
+        self.theta_offset = atan2(self.sprite.height,self.sprite.width)
 
         # Event handlers you can override
         self.on_death = lambda: None

@@ -3,7 +3,7 @@
     {
       "ID": "Basic",
       "Health": 1,
-      "Img": "images/red.png",
+      "Img": "images/redbug.png",
       "Size": 1,
       "Behavior": "agro",
       "Cost": 1
@@ -11,7 +11,7 @@
     {
       "ID": "Coward",
       "Health": 1,
-      "Img": "images/red.png",
+      "Img": "images/fly.png",
       "Size": 0.5,
       "Behavior": "coward",
       "Cost": 2
@@ -19,7 +19,7 @@
     {
       "ID": "Slow",
       "Health": 3,
-      "Img": "images/red.png",
+      "Img": "images/crab.png",
       "Size": 2,
       "Behavior": "slow",
       "Cost": 3
@@ -29,7 +29,7 @@
     {
       "ID": "Basic",
       "Health": 3,
-      "Img": "images/blue.png",
+      "Img": "images/triangle.png",
       "Size": 1,
       "Behavior": "NULL",
       "Cost": 0
@@ -46,9 +46,9 @@
     },
     {
       "ID": "Melee",
-      "Health": 5,
-      "Img": "images/shot.png",
-      "Size": 0.2,
+      "Health": 10,
+      "Img": "images/sword.png",
+      "Size": 1,
       "Behavior": "misc",
       "Cost": 10
     }
@@ -93,6 +93,22 @@
       "Size": 1,
       "Behavior": "NULL",
       "Cost": 0
-    }
+    },
+    {
+      "ID": "Splat",
+      "Health": 100,
+      "Img": "images/crater.png",
+      "Size": 1,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+    {
+      "ID": "Sword",
+      "Health": 10,
+      "Img": "images/sword.png",
+      "Size": 1,
+      "Behavior": "misc",
+      "Cost": 0
+    }          
   ]
 }

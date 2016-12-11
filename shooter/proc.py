@@ -6,7 +6,7 @@ from pyglet.window import key, mouse
 from shooter import obj
 from shooter import config
 
-from math import atan2, sin, cos, degrees, pi, sqrt
+from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
 class InputHandler:
     def __init__(self,window):
@@ -70,9 +70,18 @@ def attack(source_obj,attack_type,target_x,target_y,bullet_list):
         mx = 10 * sin(theta)
         my = 10 * cos(theta)
 
-        b = obj.spawn('Bullet',"Basic",source_obj.x+mx*source_obj.sprite.scale,source_obj.y+my*source_obj.sprite.scale)	#Spawn attack object
-        b.mx = mx										#Apply motion to object
-        b.my = my
+        b = obj.spawn('Bullet',attack_type,source_obj.x+mx*source_obj.sprite.scale,source_obj.y+my*source_obj.sprite.scale)	#Spawn attack object
+        b.parent = source_obj.id
+
+        if attack_type == "Basic":
+            b.mx = mx										#Apply motion to object if bullet
+            b.my = my
+        if attack_type == "Melee":
+            b.x = b.x - mx*200
+            b.y = b.y - my*200
+            b.sprite.rotation = theta * 180/pi - 90
+      
+
 
         source_obj.cooldown = b.cost     	#Apply cooldown from attack.
         bullet_list.append(b)			#Enter bullet object into active list for processing
@@ -94,6 +103,8 @@ def collision(obj_list):
 
 # obj1 gets hurt. obj2 dies.
 def AABB_Collision_Test(obj1, obj2):
+    if (obj2.parent == obj1.id):return	#Object2 was spawned by object 1. 'Stop hitting yourself'
+
     #Simple collision detection for on-rotated rectangles. TODO: Attempt other methods later if time.
     #On detection, Obj1.health--, obj2.health = 0. (Despawn obj2 to prevent collision on next frame)
 
@@ -106,11 +117,25 @@ def AABB_Collision_Test(obj1, obj2):
 def update(main_list):
     for obj_type_list in main_list:
         for obj in obj_type_list:
-            obj.x = obj.x + obj.mx
-            obj.y = obj.y + obj.my
-            for player in main_list[0]:
-                obj.sprite.set_position(obj.x-player.x+320,obj.y - player.y+240)
 
+            if(obj.mx!= 0)or(obj.my != 0):			#If object is moving
+                obj.x = obj.x + obj.mx				#Update object position for calculated movement
+                obj.y = obj.y + obj.my
+
+            #Calculate sprite rotation + position(Sprite centroid, not datum) and update sprite
+
+
+                theta = atan2(-obj.my,obj.mx)		#Sprite face direction of movement.
+                obj.sprite.rotation = theta*180/pi	#Sprite rotation in degrees, while trig functions return radians (Like real maths)
+
+                
+
+                sprite_centroid_x = obj.x - obj.radius * sin(theta+obj.theta_offset)	#Calculate centroid position given:
+                sprite_centroid_y = obj.y - obj.radius * cos(theta+obj.theta_offset)	# Sprite Datum position/Rotation &
+           										# Calculated centroid offsets from sprite aspects
+                
+                obj.sprite.set_position(sprite_centroid_x,sprite_centroid_y)
+            
             if obj.cooldown:
                 obj.cooldown = obj.cooldown - 1
 
@@ -153,7 +178,7 @@ def coward_ai(obj, main_list):
         if (distance_from_player < 150 + random.randrange(100)):				#Get in kind of close.
             theta = theta *-0.9								#Jittery holding pattern
             bullet_list = main_list[2]
-            attack(obj,"basic",player.x,player.y,bullet_list)	#And Punch
+            attack(obj,"Basic",player.x,player.y,bullet_list)	#And Punch
 
         obj.mx = -1 * sin(theta)
         obj.my = -1 * cos(theta)
