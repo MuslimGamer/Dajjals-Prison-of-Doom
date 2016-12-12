@@ -33,9 +33,6 @@ prototypes_json = {				#Define object_type dictionary. Used to parse objects int
     'Misc': obj_misc			#Object type Misc.	(Intended for graphical effects, Eg enemy dies spawn Explosion object)
 }
 
-
-
-
 def load_prototype_data(raw_json):
     json_object = json.loads(raw_json)
     prototypes_json["Enemy"] = json_object["Enemies"]
@@ -132,16 +129,6 @@ class Object_handler:
         self.collision()
 
 class GameObject:
-    __screen_width = 0
-    __screen_height = 0
-
-    def note_screen_size(width, height):
-        global __screen_width
-        global __screen_height
-
-        __screen_width = width
-        __screen_height = height 
-        
 
     #on object creation (Loading), object details loaded.
     def __init__ (self,owner,object_type,json_data):
@@ -264,12 +251,7 @@ class GameObject:
 
 
     def is_on_screen(self):
-        global __screen_width
-        global __screen_height
         return self.x >= 0 and self.x <= Game_WIDTH - self.sprite.width and self.y >= 0 and self.y <= Game_HEIGHT - self.sprite.width
-
-
-
 
     #AI functions:
     #Standard behavior, rush player, attack location
