@@ -1,5 +1,9 @@
 #!/bin/python
 
+###############################################################
+## Main.py  -  Initialisation calls & Higher level functions ##
+###############################################################
+
 import pyglet
 import random
 
@@ -10,10 +14,19 @@ from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
+
+Game_WIDTH = 640
+Game_HEIGHT = 480
+
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 
-window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT)
+game = Game_Window()
+
+
+window = pyglet.window.Window(fullscreen = True)
+print(window.height/Game_HEIGHT)
+print(window.width/Game_WIDTH)
 input_handle = proc.InputHandler(window)
 
 # color_tuple is a four-colour tuple (R, G, B, A).
@@ -48,7 +61,7 @@ def start_game():
         c.size = 0.5 if random.randrange(100) <= 75 else 1
         backgrounds_list.append(c)
 
-    player = obj.spawn('Player', "Basic", window.width / 2, window.height / 2)
+    player = obj.spawn('Player', "Player_Basic", window.width / 2, window.height / 2)
     player.on_death = lambda: game_over()
     player_list.append(player)
 
@@ -62,24 +75,15 @@ def game_over():
     misc_list.append(over)
 
 def frame_callback(dt):
-    #Clear collision matrix
 
     #Check user input
-    #Update player position 
-    proc.input(main_list,input_handle)
-
-    #proc.update(player_list)
+    proc.input(main_list,input_handle)    
 
     proc.ai(enemy_list,main_list)			#Make decision for movement/attack
-    #proc.update(enemy_list)
-    #proc.collision(enemy_list)		#Check if enemy overlap with player
-    
+
     proc.ai(bullet_list,main_list)
-    #proc.update(bullet_list)		#Progress Bullet position
-    #proc.collision(bullet_list)		#Scan for collision with other objects.
 
     proc.ai(misc_list,main_list)              #Misc objects intended as cosmetic. No need to check collisions at this time.
-    #proc.update(misc_list)
 
     proc.update(main_list)
     for player in player_list:                 			#If player reaches boundry of screen
@@ -97,9 +101,9 @@ def spawn_random(dt):
     rand_y = random.randrange(WINDOW_HEIGHT)
 
     type_select_result = {
-        0: "Basic",
-        1: "Coward",
-        2: "Slow"
+        0: "Enemy_Basic",
+        1: "Enemy_Coward",
+        2: "Enemy_Slow"
     }
 
     position_generate_x = {
@@ -123,52 +127,10 @@ def spawn_enemy(id, x, y):
     enemy_list.append(e)
     return e
 
-@window.event
-def on_mouse_press(x, y, button, modifiers):
-    input_handle.mouse_pressed(x,y,button)
 
-@window.event
-def on_mouse_release(x,y,button, modifiers):
-    input_handle.mouse_released(button)
-    #Todo - Load variables into handler for passing into proc.py input function. 
-    #       Migrate code below into function with keyboard processing.
+Object_handler = obj.Object_handler()
+Screen_handler = proc.Screen()
 
-@window.event
-def on_mouse_drag(x,y,dx,dy, buttons, modifiers):
-    input_handle.mouse_dragged(x, y)
-
-@window.event
-def on_draw():				#Kept seperate from processing callback, Frame rate not tied to simulation speed.
-    window.clear()
-
-    for bg in backgrounds_list:
-        bg.sprite.draw()
-    for player in player_list:		#Render player sprite
-        player.sprite.draw()
-    for enemy in enemy_list:		#Render enemy sprites
-        enemy.sprite.draw()
-    for bullet in bullet_list:		#Render bullet sprites
-        bullet.sprite.draw()
-    for misc in misc_list:		#Render Misc sprites
-        misc.sprite.draw()
-
-@window.event
-def on_close():
-    file_watcher.stop()
-
-main_list = [] # TODO: convert to a hash or a class
-player_list = []		#List of objects in active play.
-enemy_list = []			#List of object prototypes in obj.py
-bullet_list = []
-misc_list = []
-backgrounds_list = []   # Stuff that makes up our background
-
-# We keep things in a specific order. This is fragile, but okay for now.
-main_list.append(player_list)
-main_list.append(enemy_list)
-main_list.append(bullet_list)
-main_list.append(misc_list)
-main_list.append(backgrounds_list)
 
 file_watcher.watch('data/object.json', obj.load_prototype_data)
 
@@ -180,9 +142,4 @@ else:
     start_game()
 
 obj.GameObject.note_screen_size(WINDOW_WIDTH, WINDOW_HEIGHT)
-
-pyglet.clock.schedule(frame_callback)
-pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # call frame_callback at 30FPS
-
-pyglet.app.run()
 

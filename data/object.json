@@ -1,56 +1,62 @@
 {
   "Enemies": [
     {
-      "ID": "Basic",
+      "ID": "Enemy_Basic",
       "Health": 1,
       "Img": "images/redbug.png",
       "Size": 1,
+      "Speed": 1,
       "Behavior": "agro",
       "Cost": 1
     },
     {
-      "ID": "Coward",
+      "ID": "Enemy_Coward",
       "Health": 1,
       "Img": "images/fly.png",
       "Size": 0.5,
+      "Speed": 1,
       "Behavior": "coward",
       "Cost": 2
     },
     {
-      "ID": "Slow",
+      "ID": "Enemy_Slow",
       "Health": 3,
       "Img": "images/crab.png",
       "Size": 2,
-      "Behavior": "slow",
+      "Speed": 0.3,
+      "Behavior": "agro",
       "Cost": 3
     }
   ],
   "Player": [
     {
-      "ID": "Basic",
+      "ID": "Player_Basic",
       "Health": 3,
       "Img": "images/triangle.png",
       "Size": 1,
+      "Speed": 1.5,
       "Behavior": "NULL",
       "Cost": 0
     }
   ],
   "Bullets": [
     {
-      "ID": "Basic",
+      "ID": "Bullet_Basic",
       "Health": 100,
       "Img": "images/shot.png",
       "Size": 0.5,
-      "Behavior": "misc",
+      "Speed": 10,
+      "Behavior": "bullet",
       "Cost": 50
     },
     {
-      "ID": "Melee",
-      "Health": 10,
+      "ID": "Bullet_Melee",
+      "Health": 5,
       "Img": "images/sword.png",
       "Size": 1,
-      "Behavior": "misc",
-      "Cost": 10
+      "Speed": 0,
+      "Behavior": "sword",
+      "Cost": 5
     }
   ],
   "Misc": [
@@ -59,6 +65,7 @@
       "Health": 60,
       "Img": "images/splash-mg.png",
       "Size": 1,
+      "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
     },
@@ -67,6 +74,7 @@
       "Health": 60,
       "Img": "images/splash-dg.png",
       "Size": 1,
+      "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
     },
@@ -75,6 +83,7 @@
       "Health": 300,
       "Img": "images/game-over.png",
       "Size": 1,
+      "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
     },
@@ -83,6 +92,7 @@
       "Health": 1,
       "Img": "images/background.jpg",
       "Size": 1,
+      "Speed": 0,
       "Behavior": "NULL",
       "Cost": 0
     },
@@ -91,6 +101,7 @@
       "Health": 1,
       "Img": "images/crater.png",
       "Size": 1,
+      "Speed": 0,
       "Behavior": "NULL",
       "Cost": 0
     },
@@ -99,16 +110,9 @@
       "Health": 100,
       "Img": "images/crater.png",
       "Size": 1,
+      "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
-    },
-    {
-      "ID": "Sword",
-      "Health": 10,
-      "Img": "images/sword.png",
-      "Size": 1,
-      "Behavior": "misc",
-      "Cost": 0
-    }          
+    }        
   ]
 }
