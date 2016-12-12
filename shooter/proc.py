@@ -18,18 +18,17 @@ from math import atan2,atan, sin, cos, degrees, pi, sqrt
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 
-
 class Screen:			#Class handling window and window related functions (Draw, Events, Input)
     def __init__(self):
-        self.window = pyglet.window.Window(width=640, height=480)
+        self.__window = pyglet.window.Window(width=640, height=480)
         self.mouse_x = 0
         self.mouse_y = 0
         self.mouse_button = 0
         self.keyboard = pyglet.window.key.KeyStateHandler()
         self._currently_pressed = []
-        self.Window_Scale = self.window.height / WINDOW_HEIGHT
-        print(self.Window_Scale)
-
+        # TODO: scale when we have time!
+        # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
+        #print(self.__window_Scale)
 
         def on_mouse_press(x, y, button, modifiers):
             self.mouse_pressed(x,y,button)
@@ -44,7 +43,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             print("Mouse dragged")
 
         def on_draw():		#Kept seperate from processing callback, Frame rate not tied to simulation speed.
-            self.window.clear()
+            self.__window.clear()
 
             for bg in obj.Backgrounds_list:
                 bg.sprite.draw()
@@ -60,7 +59,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         def on_close():
             file_watcher.stop()
 
-        self.window.push_handlers(on_mouse_press,on_mouse_release,on_mouse_drag,on_draw,on_close, self.keyboard)
+        self.__window.push_handlers(on_mouse_press,on_mouse_release,on_mouse_drag,on_draw,on_close, self.keyboard)
 
 
     def mouse_pressed(self,x,y,button):
@@ -105,7 +104,13 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
             return
 
+    @property
+    def width(self):
+        return self.__window.width
 
+    @property
+    def height(self):
+        return self.__window.height
 
 
 

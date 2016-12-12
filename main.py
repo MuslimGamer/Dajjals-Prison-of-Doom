@@ -27,7 +27,7 @@ def create_image(image_filename):
     return sprite
 
 def show_dg_splash():
-    splash = obj.spawn('Misc', "DG Splash", 0, 0, splash_screen.SplashScreen)
+    splash = Object_handler.spawn('Misc', "DG Splash", 0, 0, splash_screen.SplashScreen)
     splash.on_death = lambda: start_game()
 
 def start_game():
@@ -37,7 +37,7 @@ def start_game():
     obj.Misc_list[:]=[]
     obj.Backgrounds_list[:]=[]
 
-    #background = Object_handler.spawn('Misc', 'Background', 0, 0)
+    background = Object_handler.spawn('Misc', 'Background', 0, 0)
 
     CRATER_WIDTH = 128
     CRATER_HEIGHT = 64
@@ -45,19 +45,19 @@ def start_game():
     # 2-4 craters
     num_craters = random.randrange(3) + 2
     for i in range(num_craters):
-        c = Object_handler.spawn("Misc", "Crater", random.randrange(Screen_handler.window.width - CRATER_WIDTH), random.randrange(Screen_handler.window.height - CRATER_HEIGHT))        
+        c = Object_handler.spawn("Misc", "Crater", random.randrange(Screen_handler.width - CRATER_WIDTH), random.randrange(Screen_handler.height - CRATER_HEIGHT))        
         c.size = 0.5 if random.randrange(100) <= 75 else 1 # mostly small craters
         obj.Backgrounds_list.append(c)
 
-    player = Object_handler.spawn('Player', "Player_Basic", Screen_handler.window.width / 2, Screen_handler.window.height / 2)
+    player = Object_handler.spawn('Player', "Player_Basic", Screen_handler.width / 2, Screen_handler.height / 2)
     player.on_death = lambda: game_over()
 
     pyglet.clock.schedule_interval(Object_handler.spawn_random, 1)
 
 def game_over():
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
-    over.x = (Screen_handler.window.width - over.img.width) / 2
-    over.y = (Screen_handler.window.height - over.img.height) / 2
+    over.x = (Screen_handler.width - over.img.width) / 2
+    over.y = (Screen_handler.height - over.img.height) / 2
     over.on_death = lambda: start_game()
 
 def frame_callback(dt):
@@ -68,12 +68,12 @@ def frame_callback(dt):
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
         # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
-        if player.x > Screen_handler.window.width - 100:
-            player.x = Screen_handler.window.width - 100    #Push them back by previous movement.
+        if player.x > Screen_handler.width - 100:
+            player.x = Screen_handler.width - 100    #Push them back by previous movement.
         if player.x < 100:
             player.x = 100
-        if player.y > Screen_handler.window.height - 100:
-            player.y = Screen_handler.window.height - 100
+        if player.y > Screen_handler.height - 100:
+            player.y = Screen_handler.height - 100
         if player.y < 100:
             player.y = 100
 
