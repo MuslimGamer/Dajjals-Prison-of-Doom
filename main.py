@@ -42,10 +42,11 @@ def start_game():
     CRATER_WIDTH = 128
     CRATER_HEIGHT = 64
 
+    # 2-4 craters
     num_craters = random.randrange(3) + 2
     for i in range(num_craters):
         c = Object_handler.spawn("Misc", "Crater", random.randrange(Screen_handler.window.width - CRATER_WIDTH), random.randrange(Screen_handler.window.height - CRATER_HEIGHT))        
-        c.size = 0.5 if random.randrange(100) <= 75 else 1
+        c.size = 0.5 if random.randrange(100) <= 75 else 1 # mostly small craters
         obj.Backgrounds_list.append(c)
 
     player = Object_handler.spawn('Player', "Player_Basic", Screen_handler.window.width / 2, Screen_handler.window.height / 2)
@@ -66,17 +67,19 @@ def frame_callback(dt):
     Object_handler.update()
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
-        if player.x > Screen_handler.window.width-100: player.x = Screen_handler.window.width-100#Push them back by previous movement.
-        if player.x < 100: player.x = 100
-        if player.y > Screen_handler.window.height-100: player.y = Screen_handler.window.height - 100
-        if player.y < 100: player.y = 100
-  
-
+        # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
+        if player.x > Screen_handler.window.width - 100:
+            player.x = Screen_handler.window.width - 100    #Push them back by previous movement.
+        if player.x < 100:
+            player.x = 100
+        if player.y > Screen_handler.window.height - 100:
+            player.y = Screen_handler.window.height - 100
+        if player.y < 100:
+            player.y = 100
 
 
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen()
-
 
 file_watcher.watch('data/object.json', obj.load_prototype_data)
 
@@ -86,7 +89,6 @@ if config.get("skip_splash_screens") != True:
 else:
     start_game()
 
-#GameObject.note_screen_size(WINDOW_WIDTH, WINDOW_HEIGHT)
 pyglet.clock.schedule(frame_callback)
 pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # call frame_callback at 30FPS
 
