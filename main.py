@@ -37,7 +37,7 @@ def start_game():
     obj.Misc_list[:]=[]
     obj.Backgrounds_list[:]=[]
 
-    background = Object_handler.spawn('Misc', 'Background', 0, 0)
+    background = Object_handler.spawn('Background', 'Background', 0, 0)
 
     CRATER_WIDTH = 128
     CRATER_HEIGHT = 64
@@ -45,7 +45,7 @@ def start_game():
     # 2-4 craters
     num_craters = random.randrange(3) + 2
     for i in range(num_craters):
-        c = Object_handler.spawn("Misc", "Crater", random.randrange(Screen_handler.width - CRATER_WIDTH), random.randrange(Screen_handler.height - CRATER_HEIGHT))        
+        c = Object_handler.spawn("Background", "Crater", random.randrange(Screen_handler.width - CRATER_WIDTH), random.randrange(Screen_handler.height - CRATER_HEIGHT))        
         c.size = 0.5 if random.randrange(100) <= 75 else 1 # mostly small craters
         obj.Backgrounds_list.append(c)
 

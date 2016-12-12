@@ -20,7 +20,7 @@ WINDOW_HEIGHT = 480
 
 class Screen:			#Class handling window and window related functions (Draw, Events, Input)
     def __init__(self):
-        self.__window = pyglet.window.Window(width=640, height=480)
+        self.__window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.mouse_x = 0
         self.mouse_y = 0
         self.mouse_button = 0

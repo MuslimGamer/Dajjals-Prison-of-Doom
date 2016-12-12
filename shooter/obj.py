@@ -42,7 +42,7 @@ def load_prototype_data(raw_json):
     prototypes_json["Player"] = json_object["Player"]
     prototypes_json["Bullet"] = json_object["Bullets"]
     prototypes_json["Misc"] = json_object["Misc"]
-
+    prototypes_json["Background"] = json_object["Misc"] # horrible, hideous hack
 
 class Object_handler:
     def __init__(self):
