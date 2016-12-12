@@ -116,22 +116,20 @@ class Object_handler:
     def update(self):
         for player in Player_list:
             player.move()
+            player.update()
         for enemy in Enemy_list:
             enemy.ai()
             enemy.move()
+            enemy.update()
         for bullet in Bullet_list:
             bullet.ai()
             bullet.move()
+            bullet.update()
         for misc in Misc_list:
             misc.ai()
+            misc.update()
+
         self.collision()
-
-##TODO: Decide new location for below:
-
-        # Call your update method, if you have one
-        #if hasattr(obj, "update") and callable(getattr(obj, "update")):
-        #    obj.update()
-        #pass
 
 class GameObject:
     __screen_width = 0
@@ -305,6 +303,10 @@ class GameObject:
         self.my = -1 *self.speed* cos(theta)
    
         return
+
+    def update(self):
+        # "virtual" method. Subclasses override it.
+        pass
 
 #TODO: Start here tomorrow.
 
