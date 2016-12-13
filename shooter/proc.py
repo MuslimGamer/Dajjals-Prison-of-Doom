@@ -17,6 +17,8 @@ from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
 class Screen:			#Class handling window and window related functions (Draw, Events, Input)
     def __init__(self, width, height):
+        self.offset_x = 100
+        self.offset_y = 100
         self.__window = pyglet.window.Window(width, height)
         self.mouse_x = 0
         self.mouse_y = 0

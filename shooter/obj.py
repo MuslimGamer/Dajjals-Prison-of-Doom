@@ -4,6 +4,8 @@ import random
 from shooter import file_watcher
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
+
+
 obj_enemy=[]	#Lists of object prototypes
 obj_player=[]	#The one and only player prototype
 obj_bullet=[]
@@ -42,9 +44,17 @@ def load_prototype_data(raw_json):
     prototypes_json["Misc"] = json_object["Misc"]
     prototypes_json["Background"] = json_object["Misc"] # horrible, hideous hack
 
-class Object_handler:
+def loot():
+    SpawnIncome += 0.1
+
+class Object_handler:      #Should I remove this class and just have the various functions loose in this file?
+                           #IE outside of this file, call obj.spawn(), rather than Object_handler.spawn()
     def __init__(self):
         file_watcher.watch('data/object.json', load_prototype_data)
+
+    SpawnBudget = 1
+    SpawnIncome = 0.1
+    NextEnemy = 0
 
 	###
 	# Spawns an object of type object_type (from prototypes_json, eg. "Enemy"), using
@@ -53,6 +63,9 @@ class Object_handler:
 	# NOTE: as_type must be a subclass of GameObject with a constructor that takes 
 	# a single parameter "prototype" (JSON) data and passes it to the base class.
 	###
+
+
+
     def spawn(self,object_type, id, x, y, as_type = None):
         list_of_prototypes = prototypes_json[object_type]
         # Find an object x in the collection that matches the specified ID; defaults to None
@@ -62,21 +75,21 @@ class Object_handler:
         else:
             spawned = as_type(self,prototype)
     
-        spawned.x = x
-        spawned.y = y
+        spawned.x = spawned.centroid_x = x
+        spawned.y = spawned.centroid_y = y
         spawned.sprite.set_position(x,y)
         Type_lists[object_type].append(spawned)
         return spawned
 
     def spawn_enemy(self,id, x, y):
         e = self.spawn("Enemy", id, x, y)
+        #e.on_death = lambda: Loot()
         return e
 
     def spawn_random(self,dt):
-        type_select = random.randrange(3)
-        side = random.randrange(4)
-        rand_x = random.randrange(GAME_WIDTH)
-        rand_y = random.randrange(GAME_HEIGHT)
+        self.SpawnBudget += dt* self.SpawnIncome
+        self.SpawnIncome += 0.01
+
 
         type_select_result = {
             0: "Enemy_Basic",
@@ -84,21 +97,38 @@ class Object_handler:
             2: "Enemy_Slow"
         }
 
-        position_generate_x = {
-            0: GAME_WIDTH + 100,
-            1: -100,
-            2: rand_x,
-            3: rand_x
-        }
+        EnemyID = type_select_result[self.NextEnemy]
 
-        position_generate_y = {
-            0: rand_y,
-            1: rand_y,
-            2: -100,
-            3: GAME_HEIGHT + 100
-        }
 
-        self.spawn_enemy(type_select_result[type_select], position_generate_x[side],position_generate_y[side])
+        list_of_prototypes = prototypes_json["Enemy"]
+        # Find an object x in the collection that matches the specified ID; defaults to None
+        prototype = next((x for x in list_of_prototypes if x['ID'] == EnemyID), None)
+        
+        print("SpawnBudget: " + str(self.SpawnBudget) + " NextEnemy: " + EnemyID + " Enemy.cost: " + str(prototype['Cost']))
+
+        if self.SpawnBudget >= prototype['Cost']:
+            self.SpawnBudget -= prototype['Cost']
+            self.NextEnemy = random.randrange(3)
+            side = random.randrange(4)
+            rand_x = random.randrange(GAME_WIDTH)
+            rand_y = random.randrange(GAME_HEIGHT)
+
+            position_generate_x = {
+                0: GAME_WIDTH + 100,
+                1: -100,
+                2: rand_x,
+                3: rand_x
+            }
+
+            position_generate_y = {
+                0: rand_y,
+                1: rand_y,
+                2: -100,
+                3: GAME_HEIGHT + 100
+            }
+
+
+            self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
 
 
     def collision(self):
@@ -192,6 +222,8 @@ class GameObject:
     def size(self, value):
         self.sprite.scale = value
 
+
+
     def Circle_collision(self, Target_object):
         if (self.id == Target_object.parent):return 0
 
@@ -204,6 +236,12 @@ class GameObject:
         dy = self.centroid_y - Target_object.centroid_y
         radius = self.radius + Target_object.radius
         if(radius>sqrt(dx*dx + dy*dy)):
+            print ("\nHit Detection! - Radius: " +str(radius))
+            print (self.id +" X:" + str(self.centroid_x)+" " +self.id+" Y:"+str(self.centroid_y))
+            print (Target_object.id +" X:" + str(Target_object.centroid_x)+" " +Target_object.id+" Y:"+str(Target_object.centroid_y))
+            print (self.id +" Heath: " +str(self.health)+"\n")
+
+            #print(self.id + Target_object.id)
             self.health = self.health - 1
             Target_object.health = 0
             return 1   #Hit detected
@@ -295,7 +333,6 @@ class GameObject:
         # "virtual" method. Subclasses override it.
         pass
 
-#TODO: Start here tomorrow.
 
 
 #Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
