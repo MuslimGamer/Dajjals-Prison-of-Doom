@@ -15,12 +15,9 @@ from shooter import file_watcher
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
-WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 480
-
 class Screen:			#Class handling window and window related functions (Draw, Events, Input)
-    def __init__(self):
-        self.__window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT)
+    def __init__(self, width, height):
+        self.__window = pyglet.window.Window(width, height)
         self.mouse_x = 0
         self.mouse_y = 0
         self.mouse_button = 0
@@ -32,15 +29,15 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
         def on_mouse_press(x, y, button, modifiers):
             self.mouse_pressed(x,y,button)
-            print("Mouse pressed")
+            pass #print("Mouse pressed")
 
         def on_mouse_release(x,y,button, modifiers):
             self.mouse_released(button)
-            print("Mouse released")
+            pass #print("Mouse released")
 
         def on_mouse_drag(x,y,dx,dy, buttons, modifiers):        
             self.mouse_dragged(x, y)
-            print("Mouse dragged")
+            pass #print("Mouse dragged")
 
         def on_draw():		#Kept seperate from processing callback, Frame rate not tied to simulation speed.
             self.__window.clear()

@@ -4,9 +4,6 @@ import random
 from shooter import file_watcher
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
-Game_WIDTH = 640
-Game_HEIGHT = 480
-
 obj_enemy=[]	#Lists of object prototypes
 obj_player=[]	#The one and only player prototype
 obj_bullet=[]
@@ -32,6 +29,10 @@ prototypes_json = {				#Define object_type dictionary. Used to parse objects int
     'Bullet': obj_bullet,			#Object type Bullet.	(Future potential for various projectiles?)
     'Misc': obj_misc			#Object type Misc.	(Intended for graphical effects, Eg enemy dies spawn Explosion object)
 }
+
+# Set by main.py
+GAME_WIDTH = 0
+GAME_HEIGHT = 0
 
 def load_prototype_data(raw_json):
     json_object = json.loads(raw_json)
@@ -74,8 +75,8 @@ class Object_handler:
     def spawn_random(self,dt):
         type_select = random.randrange(3)
         side = random.randrange(4)
-        rand_x = random.randrange(Game_WIDTH)
-        rand_y = random.randrange(Game_HEIGHT)
+        rand_x = random.randrange(GAME_WIDTH)
+        rand_y = random.randrange(GAME_HEIGHT)
 
         type_select_result = {
             0: "Enemy_Basic",
@@ -84,7 +85,7 @@ class Object_handler:
         }
 
         position_generate_x = {
-            0: Game_WIDTH + 100,
+            0: GAME_WIDTH + 100,
             1: -100,
             2: rand_x,
             3: rand_x
@@ -94,7 +95,7 @@ class Object_handler:
             0: rand_y,
             1: rand_y,
             2: -100,
-            3: Game_HEIGHT + 100
+            3: GAME_HEIGHT + 100
         }
 
         self.spawn_enemy(type_select_result[type_select], position_generate_x[side],position_generate_y[side])
@@ -251,7 +252,7 @@ class GameObject:
 
 
     def is_on_screen(self):
-        return self.x >= 0 and self.x <= Game_WIDTH - self.sprite.width and self.y >= 0 and self.y <= Game_HEIGHT - self.sprite.width
+        return self.x >= 0 and self.x <= GAME_WIDTH - self.sprite.width and self.y >= 0 and self.y <= GAME_HEIGHT - self.sprite.width
 
     #AI functions:
     #Standard behavior, rush player, attack location

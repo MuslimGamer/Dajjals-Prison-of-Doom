@@ -14,6 +14,11 @@ from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
+GAME_WIDTH = 1024
+GAME_HEIGHT = 576
+
+obj.GAME_WIDTH = GAME_WIDTH
+obj.GAME_HEIGHT = GAME_HEIGHT
 
 # color_tuple is a four-colour tuple (R, G, B, A).
 def create_color(width, height, color_tuple):
@@ -79,7 +84,7 @@ def frame_callback(dt):
 
 
 Object_handler = obj.Object_handler()
-Screen_handler = proc.Screen()
+Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
 
 file_watcher.watch('data/object.json', obj.load_prototype_data)
 
