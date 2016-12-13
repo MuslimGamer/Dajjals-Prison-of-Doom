@@ -33,7 +33,12 @@ def create_image(image_filename):
 
 def show_dg_splash():
     splash = Object_handler.spawn('Misc', "DG Splash", 0, 0, splash_screen.SplashScreen)
+    center(splash)
     splash.on_death = lambda: start_game()
+
+def center(game_obj):
+    game_obj.x = (Screen_handler.width - game_obj.img.width) / 2
+    game_obj.y = (Screen_handler.height - game_obj.img.height) / 2
 
 def start_game():
     obj.Player_list[:]=[]
@@ -61,8 +66,7 @@ def start_game():
 
 def game_over():
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
-    over.x = (Screen_handler.width - over.img.width) / 2
-    over.y = (Screen_handler.height - over.img.height) / 2
+    center(over)
     over.on_death = lambda: start_game()
 
 def frame_callback(dt):
@@ -89,8 +93,9 @@ Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
 file_watcher.watch('data/object.json', obj.load_prototype_data)
 
 if config.get("skip_splash_screens") != True:
-    dg_splash_screen = Object_handler.spawn('Misc', "MG Splash", 0, 0, splash_screen.SplashScreen)
-    dg_splash_screen.on_death = lambda: show_dg_splash()
+    screen = Object_handler.spawn('Misc', "MG Splash", 0, 0, splash_screen.SplashScreen)
+    center(screen)
+    screen.on_death = lambda: show_dg_splash()
 else:
     start_game()
 

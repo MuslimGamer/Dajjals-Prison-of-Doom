@@ -255,6 +255,9 @@ class GameObject:
     #AI functions:
     #Standard behavior, rush player, attack location
     def agro_ai(self, player):
+        if player is None:
+            return
+            
         dx = self.centroid_x - player.centroid_x
         dy = self.centroid_y - player.centroid_y
         distance_from_player = sqrt(dx*dx + dy*dy)
@@ -267,6 +270,9 @@ class GameObject:
 
     #Coward behavior, maintain distance, attack location
     def coward_ai(self, player):
+        if player is None:
+            return
+
         dx = self.x - player.x
         dy = self.y - player.y
         theta = atan2(dx,dy)			#Mathy goodness.
@@ -298,6 +304,9 @@ class GameObject:
             self.health = self.health - 1
 
     def sword_ai(self, player):
+        if player is None:
+            return
+            
         self.health = player.cooldown
         self.mx = 0.01
         self.theta = self.theta +0.3
