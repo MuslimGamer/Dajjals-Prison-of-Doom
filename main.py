@@ -20,8 +20,6 @@ GAME_HEIGHT = 576
 obj.GAME_WIDTH = GAME_WIDTH
 obj.GAME_HEIGHT = GAME_HEIGHT
 
-
-
 # color_tuple is a four-colour tuple (R, G, B, A).
 def create_color(width, height, color_tuple):
     img = pyglet.image.SolidColorImagePattern(color_tuple).create_image(32, 32)
@@ -39,8 +37,8 @@ def show_dg_splash():
     splash.on_death = lambda: start_game()
 
 def center(game_obj):
-    game_obj.x = (Screen_handler.width - game_obj.img.width) / 2
-    game_obj.y = (Screen_handler.height - game_obj.img.height) / 2
+    game_obj.sprite.x = (Screen_handler.width - game_obj.img.width) / 2
+    game_obj.sprite.y = (Screen_handler.height - game_obj.img.height) / 2
 
 def start_game():
     obj.Player_list[:]=[]
@@ -48,7 +46,6 @@ def start_game():
     obj.Bullet_list[:]=[]
     obj.Misc_list[:]=[]
     obj.Backgrounds_list[:]=[]
-
 
     background = Object_handler.spawn('Background', 'Background', 0, 0)
 
@@ -75,12 +72,6 @@ def game_over():
     over.on_death = lambda: start_game()
 
 def frame_callback(dt):
-
-
-
-    
-
-
     #Check user input
     Screen_handler.input()
     Object_handler.update()
