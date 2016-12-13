@@ -1,4 +1,4 @@
 {
-    "skip_splash_screens": true,
+    "skip_splash_screens": false,
     "melee_enabled": true
 }

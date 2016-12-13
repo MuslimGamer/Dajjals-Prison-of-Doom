@@ -139,7 +139,7 @@ class GameObject:
         self.id = json_data['ID']				#Todo: Check list on generation of conflicting IDs and throw error.
         self.parent = 0	
 
-	#Initialisation of object tracking variables
+    #Initialisation of object tracking variables
         self.x = 0						#Current Positions (Sprite Datum)
         self.y = 0
         self.mx = 0						#Current Movement
@@ -155,14 +155,14 @@ class GameObject:
         self.cost = json_data['Cost']
         self._health = json_data['Health']			#Hits to remove || frames until timeout
 
-	#Sprite relevent attributes
-	#TODO: Construct list of images, check/skip if image already loaded by previous object.
+    #Sprite relevent attributes
+	    #TODO: Construct list of images, check/skip if image already loaded by previous object.
         self.img = pyglet.image.load(json_data['Img'])		#Load image for object 
         self.sprite = pyglet.sprite.Sprite(self.img,self.x,self.y)
         self.size = json_data['Size']
 
-        #Pre-calculating numbers for centering sprites after rotation. Maths is expensive, space is not.
-        #Better to pre calculate constant trig functions than re-calculate when required.
+    #Pre-calculating numbers for centering sprites after rotation. Maths is expensive, space is not.
+    #Better to pre calculate constant trig functions than re-calculate when required.
             #Calculate 'radius' of sprite - Hyp component for finding sprite centroid following rotation.
             #Theta offset - Rotation offset for centroid location from sprite base rotation
         self.radius = sqrt(self.sprite.height*self.sprite.height + self.sprite.width * self.sprite.width)/2
@@ -213,8 +213,6 @@ class GameObject:
     def attack(self, Attack_Type, target_x,target_y):
         #Check object is currently able to attack (On screen, cooldown expired)
         if not (self.is_on_screen()) or (self.cooldown): return	
-
-
 
         # Calculate the angle of the shot by using trig
         # This gives us consistent bullet speed regardless of angle
@@ -295,7 +293,7 @@ class GameObject:
 
 
 #Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
-    def misc_ai(self,player):
+    def misc_ai(self, player):
         if (self.health > 0):
             self.health = self.health - 1
 
@@ -318,6 +316,7 @@ class GameObject:
 
 #No AI attached to this object
     def NULL_ai(self,player):
+        raise(Exception("NULL AI?!"))
         pass
 
 #Undefined behavior referenced.
@@ -327,17 +326,26 @@ class GameObject:
 
     #Generic AI handler
     #Reference dictionary against object AI variable, Vector to specific function for AI type.
-    def ai(self):			
+    def ai(self):	
         ai_action={
             "agro": self.agro_ai,
             "coward": self.coward_ai,
             "bullet": self.bullet_ai,
             "sword": self.sword_ai,
             "NULL": self.NULL_ai,
-            "misc": self.misc_ai}
-        for player in Player_list:
-            ai_action[self.ai_type](player)		
+            "misc": self.misc_ai
+        }
+
+        # Misc and bullet AIs don't depend on the player. We have to run them
+        # even if there is no player. Trust that the AIs are smart enough not
+        # to throw if player is null (null-check, or don't get instantiated
+        # unless the player is around).
+        if len(Player_list) > 0:
+            for player in Player_list:
+                ai_action[self.ai_type](player)		
             return
+        else:
+            ai_action[self.ai_type](None) # We don't have a player right now
 
 
 # Prototypes of enemies, the player, bullets, and misc stuff (splash screens, explosions, etc.)
