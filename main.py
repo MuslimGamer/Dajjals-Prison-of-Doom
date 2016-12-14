@@ -20,6 +20,8 @@ GAME_HEIGHT = 576
 obj.GAME_WIDTH = GAME_WIDTH
 obj.GAME_HEIGHT = GAME_HEIGHT
 
+
+
 # color_tuple is a four-colour tuple (R, G, B, A).
 def create_color(width, height, color_tuple):
     img = pyglet.image.SolidColorImagePattern(color_tuple).create_image(32, 32)
@@ -47,6 +49,7 @@ def start_game():
     obj.Misc_list[:]=[]
     obj.Backgrounds_list[:]=[]
 
+
     background = Object_handler.spawn('Background', 'Background', 0, 0)
 
     CRATER_WIDTH = 128
@@ -67,9 +70,16 @@ def start_game():
 def game_over():
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
+    pyglet.clock.unschedule(Object_handler.spawn_random)
+
     over.on_death = lambda: start_game()
 
 def frame_callback(dt):
+
+
+
+    
+
 
     #Check user input
     Screen_handler.input()
