@@ -1,6 +1,7 @@
 import json
 import pyglet
 import random
+from shooter import config
 from shooter import file_watcher
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
@@ -348,8 +349,10 @@ class GameObject:
         self.mx = 0.01
         self.theta = self.theta +0.3
         self.sprite.rotation = self.theta *180/pi + 90
-        self.x = player.x + (player.img.width / 2) - (self.img.width / 2) + sin(self.theta)*20
-        self.y = player.y + (player.img.height / 2) + (self.img.height / 2) + cos(self.theta)*20
+        sword_attack_radius = config.get("sword_attack_radius")
+        # +width/2, -height/2 makes the sword perfectly center on the player
+        self.x = player.x + (player.img.width / 2) - (self.img.width / 2) + sin(self.theta) * sword_attack_radius
+        self.y = player.y + (player.img.height / 2) + (self.img.height / 2) + cos(self.theta)* sword_attack_radius
     #if left button pressed, calc theta, rotation, then update sprite 
         pass
 
