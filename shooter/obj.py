@@ -348,8 +348,8 @@ class GameObject:
         self.mx = 0.01
         self.theta = self.theta +0.3
         self.sprite.rotation = self.theta *180/pi + 90
-        self.x = player.centroid_x + sin(self.theta)*20
-        self.y = player.centroid_y + cos(self.theta)*20
+        self.x = player.x + (player.img.width / 2) - (self.img.width / 2) + sin(self.theta)*20
+        self.y = player.y + (player.img.height / 2) + (self.img.height / 2) + cos(self.theta)*20
     #if left button pressed, calc theta, rotation, then update sprite 
         pass
 
