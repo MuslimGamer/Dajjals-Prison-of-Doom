@@ -325,8 +325,8 @@ class GameObject:
                 self.attack('Bullet_Basic',player.x-50+random.randrange(100),player.y-50+random.randrange(100))	
 	#Added inaccuracy
 
-        self.mx = -1 *self.speed* sin(theta)
-        self.my = -1 *self.speed* cos(theta)
+        self.mx = -1 * self.speed * sin(theta)
+        self.my = -1 * self.speed * cos(theta)
    
         return
 
@@ -348,18 +348,18 @@ class GameObject:
         self.health = player.cooldown
         self.mx = 0.01
         self.theta = self.theta +0.3
-        self.sprite.rotation = self.theta *180/pi + 90
+        self.sprite.rotation = self.theta * 180/pi + 90
         sword_attack_radius = config.get("sword_attack_radius")
         # +width/2, -height/2 makes the sword perfectly center on the player
         self.x = player.x + (player.img.width / 2) - (self.img.width / 2) + sin(self.theta) * sword_attack_radius
-        self.y = player.y + (player.img.height / 2) + (self.img.height / 2) + cos(self.theta)* sword_attack_radius
+        self.y = player.y + (player.img.height / 2) + (self.img.height / 2) + cos(self.theta) * sword_attack_radius
     #if left button pressed, calc theta, rotation, then update sprite 
         pass
 
     def bullet_ai(self,player):
-        self.health = self.health -1
-        self.mx = sin(self.theta)*self.speed
-        self.my = cos(self.theta)*self.speed
+        self.health = self.health - 1
+        self.mx = sin(self.theta) * self.speed
+        self.my = cos(self.theta) * self.speed
         pass
 
 
