@@ -92,14 +92,14 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 player.my = player.my * 0.707 * player.speed
 
             if not (player.cooldown):
-                if (self.is_pressed(mouse.LEFT)):
+                if (self.is_pressed(mouse.RIGHT)):
                     if config.get('melee_enabled'):
                         player.attack("Bullet_Melee",self.mouse_x,self.mouse_y)
                     else:
                         player.attack("Bullet_Basic",self.mouse_x,self.mouse_y) 
-                elif (self.is_pressed(mouse.RIGHT)):
+                elif (self.is_pressed(mouse.LEFT)):
                     player.attack("Bullet_Basic",self.mouse_x,self.mouse_y)
-            elif (self.is_pressed(mouse.LEFT)):
+            elif (self.is_pressed(mouse.RIGHT)):
                 player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
             return
 
