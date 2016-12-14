@@ -60,7 +60,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             for misc in obj.Misc_list:		#Render Misc sprites
                 misc.sprite.draw()
 
-            if self.draw_ui:
+            if self.draw_ui and len(obj.Player_list) >= 1:
+                # First player is THE player to pass into the UI manager
                 self.__ui_manager.draw(obj.Player_list[0])
 
         def on_close():
