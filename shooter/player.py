@@ -6,7 +6,7 @@ from shooter import obj
 class Player(obj.GameObject):
     def __init__(self, owner, prototype):
         # call base class constructor
-        obj.GameObject.__init__(self, owner, 'player', prototype)
+        obj.GameObject.__init__(self, owner, 'Player', prototype)
         self.__shots_left = 15
         self.__last_shot = time.time()
 
