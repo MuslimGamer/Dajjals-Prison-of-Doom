@@ -7,12 +7,15 @@ from shooter import obj
 ###
 class UiManager:
     SPACE_BETWEEN_LINES = 24
+    FONT_NAME = "Orbitron"
+    RIGHT_PADDING = 120
 
     def __init__(self):
-        self.health_label = pyglet.text.Label('Health: ?',
-            x = obj.GAME_WIDTH - 85, y = obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
+        self.health_label = pyglet.text.Label('Health: ?', font_name = UiManager.FONT_NAME,
+            x = obj.GAME_WIDTH - UiManager.RIGHT_PADDING, y = obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
 
-        self.ammo_label = pyglet.text.Label("", x = self.health_label.x, y = self.health_label.y - UiManager.SPACE_BETWEEN_LINES)
+        self.ammo_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = self.health_label.x, y = self.health_label.y - UiManager.SPACE_BETWEEN_LINES)
 
     def draw(self, player):
         self.health_label.text = "Health: {0}".format(player.health)
@@ -23,3 +26,6 @@ class UiManager:
         else:
             self.ammo_label.text = "{0} bullets".format(player.shots_left)
         self.ammo_label.draw()
+
+pyglet.font.add_file('fonts/Orbitron-Bold.ttf')
+pyglet.font.load(UiManager.FONT_NAME, bold=True)
