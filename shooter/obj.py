@@ -65,8 +65,6 @@ class Object_handler:      #Should I remove this class and just have the various
 	# a single parameter "prototype" (JSON) data and passes it to the base class.
 	###
 
-
-
     def spawn(self,object_type, id, x, y, as_type = None):
         list_of_prototypes = prototypes_json[object_type]
         # Find an object x in the collection that matches the specified ID; defaults to None

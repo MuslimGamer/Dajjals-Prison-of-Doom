@@ -12,6 +12,7 @@ from pyglet.window import key, mouse
 from shooter import obj
 from shooter import config
 from shooter import file_watcher
+from shooter import ui_manager
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
@@ -25,6 +26,10 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.mouse_button = 0
         self.keyboard = pyglet.window.key.KeyStateHandler()
         self._currently_pressed = []
+
+        self.__ui_manager = ui_manager.UiManager()
+        self.draw_ui = False
+
         # TODO: scale when we have time!
         # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
         #print(self.__window_Scale)
@@ -54,6 +59,9 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 bullet.sprite.draw()
             for misc in obj.Misc_list:		#Render Misc sprites
                 misc.sprite.draw()
+
+            if self.draw_ui:
+                self.__ui_manager.draw(obj.Player_list[0])
 
         def on_close():
             file_watcher.stop()
@@ -97,7 +105,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                         player.attack("Bullet_Melee",self.mouse_x,self.mouse_y)
                     else:
                         player.attack("Bullet_Basic",self.mouse_x,self.mouse_y) 
-                elif (self.is_pressed(mouse.LEFT)):
+                elif self.is_pressed(mouse.LEFT) and player.fire():
                     player.attack("Bullet_Basic",self.mouse_x,self.mouse_y)
             elif (self.is_pressed(mouse.RIGHT)):
                 player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 

@@ -10,6 +10,7 @@ import random
 from shooter import config
 from shooter import file_watcher
 from shooter import obj		#Object module	-Severok
+from shooter.player import Player
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
@@ -59,10 +60,12 @@ def start_game():
         c.size = 0.5 if random.randrange(100) <= 75 else 1 # mostly small craters
         obj.Backgrounds_list.append(c)
 
-    player = Object_handler.spawn('Player', "Player_Basic", Screen_handler.width / 2, Screen_handler.height / 2)
+    player = Object_handler.spawn('Player', "Player_Basic", Screen_handler.width / 2, Screen_handler.height / 2, Player)
     player.on_death = lambda: game_over()
 
     pyglet.clock.schedule_interval(Object_handler.spawn_random, 1)
+
+    Screen_handler.draw_ui = True
 
 def game_over():
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
@@ -78,14 +81,14 @@ def frame_callback(dt):
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
         # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
-        if player.x > Screen_handler.width - 100:
-            player.x = Screen_handler.width - 100    #Push them back by previous movement.
-        if player.x < 100:
-            player.x = 100
-        if player.y > Screen_handler.height - 100:
-            player.y = Screen_handler.height - 100
-        if player.y < 100:
-            player.y = 100
+        if player.x > Screen_handler.width - player.img.width:
+            player.x = Screen_handler.width - player.img.width    #Push them back by previous movement.
+        if player.x < 0:
+            player.x = 0
+        if player.y > Screen_handler.height - player.img.height:
+            player.y = Screen_handler.height - player.img.height
+        if player.y < 0:
+            player.y = 0
 
 
 Object_handler = obj.Object_handler()
