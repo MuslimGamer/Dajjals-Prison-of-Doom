@@ -1,13 +1,13 @@
 import time
 
 from shooter import obj
-from shooter import gun
+from shooter.weapons import shotgun
 
 class Player(obj.GameObject):
     def __init__(self, owner, prototype):
         # call base class constructor
         obj.GameObject.__init__(self, owner, 'Player', prototype)
-        self.__gun = gun.Gun("pistol")
+        self.__gun = shotgun.Shotgun()
 
     def reload(self):
         self.__gun.reload()
