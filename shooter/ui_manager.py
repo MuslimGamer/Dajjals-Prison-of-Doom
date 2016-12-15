@@ -28,7 +28,6 @@ class UiManager:
         self.score_label.text = "Score: {0}".format(player.handle.score)
         self.score_label.draw()
 
-
         if player.is_reloading():
             self.ammo_label.text = "Reloading!"
         else:

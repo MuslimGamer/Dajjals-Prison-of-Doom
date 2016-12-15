@@ -2,35 +2,27 @@ import time
 
 from shooter import config
 from shooter import obj
-from shooter.weapons.pistol import Pistol
+from shooter.weapons.gun import Gun
 
 class Player(obj.GameObject):
     def __init__(self, owner, prototype):
         # call base class constructor
         obj.GameObject.__init__(self, owner, 'Player', prototype)
-        self.__shots_left = 15
-        self.__last_shot = time.time()
-        self.__current_gun = Pistol()
+        self.__gun = Gun(config.get("pistol_bullets"), config.get("pistol_reload_seconds"), "Bullet_Basic")
 
-    # Returns true if we actually have bullets to fire
     def reload(self):
-        self.__shots_left = 0
+        self.__gun.reload()
+
+    def is_reloading(self):
+        return self.__gun.is_reloading()
 
     def fire(self, mouse_x, mouse_y):        
-        if self.__shots_left > 0:
-            self.__shots_left -= 1
-            self.__last_shot = time.time()
-            self.attack("Bullet_Basic", mouse_x, mouse_y)
-        else:
-            return False
+        if self.__gun.fire():
+            self.attack(self.__gun.bullet_type, mouse_x, mouse_y)
 
     def update(self):
-        if self.__shots_left == 0 and not self.is_reloading():
-            self.__shots_left = config.get("pistol_bullets")
+        self.__gun.update()
 
     @property
     def shots_left(self):
-        return self.__shots_left
-
-    def is_reloading(self):
-        return self.__shots_left == 0 and time.time() - self.__last_shot <= config.get("pistol_reload_seconds")
+        return self.__gun.shots_left
