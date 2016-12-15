@@ -1,6 +1,5 @@
 import time
 
-from shooter import config
 from shooter import obj
 from shooter import gun
 

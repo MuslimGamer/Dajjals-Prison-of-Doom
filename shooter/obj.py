@@ -5,8 +5,6 @@ from shooter import config
 from shooter import file_watcher
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
-
-
 obj_enemy=[]	#Lists of object prototypes
 obj_player=[]	#The one and only player prototype
 obj_bullet=[]
@@ -46,10 +44,6 @@ def load_prototype_data(raw_json):
     prototypes_json["Bullet"] = json_object["Bullets"]
     prototypes_json["Misc"] = json_object["Misc"]
     prototypes_json["Background"] = json_object["Misc"] # horrible, hideous hack
-
-
-
-
 
 class Object_handler:      #Should I remove this class and just have the various functions loose in this file?
                            #IE outside of this file, call obj.spawn(), rather than Object_handler.spawn()
@@ -269,8 +263,10 @@ class GameObject:
 
 
     def attack(self, Attack_Type, target_x,target_y):
-        #Check object is currently able to attack (On screen, cooldown expired)
-        if not (self.is_on_screen()) or (self.cooldown): return	
+        if not self.type == "Player" and (not (self.is_on_screen()) or (self.cooldown)):
+            # Check object is currently able to attack (On screen, cooldown expired)
+            # Player manages its own cooldown            
+            return	
 
         # Calculate the angle of the shot by using trig
         # This gives us consistent bullet speed regardless of angle
