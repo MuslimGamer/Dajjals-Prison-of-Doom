@@ -1,15 +1,17 @@
 import time
 
+from shooter import config
+
 class Gun:
     # total bullets => how many bullets before we have to reload
     # reload_time => total time (seconds) to reload
     # cooldown_time (delay between two bullets (autofire rate)) is the bullet cost in object.json
-    def __init__(self, total_shots, reload_time_seconds, cooldown_time_seconds, bullet_type):
-        self.__total_shots = total_shots
-        self.__shots_left = total_shots
-        self.reload_time_seconds = reload_time_seconds
-        self.__cooldown_time_seconds = cooldown_time_seconds
-        self.bullet_type = bullet_type
+    def __init__(self, gun_config_prefix):
+        self.__total_shots = config.get("{0}_bullets".format(gun_config_prefix))
+        self.__shots_left = self.__total_shots
+        self.reload_time_seconds = config.get("{0}_reload_seconds".format(gun_config_prefix))
+        self.__cooldown_time_seconds = config.get("{0}_cooldown_seconds".format(gun_config_prefix))
+        self.bullet_type = config.get("{0}_bullet_type".format(gun_config_prefix))
         self.__last_shot = time.time()
 
     def reload(self):
