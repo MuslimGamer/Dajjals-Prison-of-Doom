@@ -4,10 +4,11 @@ class Gun:
     # total bullets => how many bullets before we have to reload
     # reload_time => total time (seconds) to reload
     # cooldown_time (delay between two bullets (autofire rate)) is the bullet cost in object.json
-    def __init__(self, total_shots, reload_time_seconds, bullet_type):
+    def __init__(self, total_shots, reload_time_seconds, cooldown_time_seconds, bullet_type):
         self.__total_shots = total_shots
         self.__shots_left = total_shots
         self.reload_time_seconds = reload_time_seconds
+        self.__cooldown_time_seconds = cooldown_time_seconds
         self.bullet_type = bullet_type
         self.__last_shot = time.time()
 
@@ -16,7 +17,7 @@ class Gun:
 
     # Returns true if we just fired a shot
     def fire(self):
-        if self.__shots_left > 0:
+        if self.__shots_left > 0 and (time.time() - self.__last_shot) >= self.__cooldown_time_seconds:
             self.__shots_left -= 1
             self.__last_shot = time.time()
             return True

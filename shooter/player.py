@@ -2,13 +2,14 @@ import time
 
 from shooter import config
 from shooter import obj
-from shooter.weapons.gun import Gun
+from shooter import gun
 
 class Player(obj.GameObject):
     def __init__(self, owner, prototype):
         # call base class constructor
         obj.GameObject.__init__(self, owner, 'Player', prototype)
-        self.__gun = Gun(config.get("pistol_bullets"), config.get("pistol_reload_seconds"), "Bullet_Basic")
+        self.__gun = gun.Gun(config.get("pistol_bullets"), config.get("pistol_reload_seconds"),
+            config.get("pistol_cooldown_seconds"), "Bullet_Basic")
 
     def reload(self):
         self.__gun.reload()

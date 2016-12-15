@@ -104,23 +104,21 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             if self.keyboard[key.R]: 
                 player.reload()
 
-            if not (player.cooldown):
-                if (self.is_pressed(mouse.RIGHT)):
-                    if config.get('melee_enabled'):
+            if (self.is_pressed(mouse.RIGHT)):
+                if config.get('melee_enabled'):
+                    if not (player.cooldown):                        
                         player.attack("Bullet_Melee",self.mouse_x,self.mouse_y)
                     else:
-                        player.fire(self.mouse_x, self.mouse_y) 
-                elif self.is_pressed(mouse.LEFT):                           
-                    player.fire(self.mouse_x, self.mouse_y)
-            elif (self.is_pressed(mouse.RIGHT)):
-                for sword in obj.Bullet_list:
-                    if sword.id == "Bullet_Melee":
-                        dx = self.mouse_x - player.x
-                        dy = self.mouse_y - player.y
-                        sword.theta = atan2(dx,dy)			#Mathy goodness.
-                player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
-
-            return
+                        for sword in obj.Bullet_list:
+                            if sword.id == "Bullet_Melee":
+                                dx = self.mouse_x - player.x
+                                dy = self.mouse_y - player.y
+                                sword.theta = atan2(dx,dy)			#Mathy goodness.
+                    player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
+                else:
+                    player.fire(self.mouse_x, self.mouse_y) 
+            elif self.is_pressed(mouse.LEFT):                           
+                player.fire(self.mouse_x, self.mouse_y)
 
     @property
     def width(self):

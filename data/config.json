@@ -4,5 +4,6 @@
     "sword_attack_radius": 30,
 
     "pistol_bullets":  15,
-    "pistol_reload_seconds": 3
+    "pistol_reload_seconds": 3,
+    "pistol_cooldown_seconds": 0.25
 }
