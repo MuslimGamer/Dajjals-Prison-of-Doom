@@ -11,6 +11,9 @@ class Player(obj.GameObject):
         self.__last_shot = time.time()
 
     # Returns true if we actually have bullets to fire
+    def reload(self):
+        self.__shots_left = 0
+
     def fire(self):        
         if self.__shots_left > 0:
             self.__shots_left -= 1

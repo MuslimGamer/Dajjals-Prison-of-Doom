@@ -48,6 +48,8 @@ def start_game():
     obj.Misc_list[:]=[]
     obj.Backgrounds_list[:]=[]
 
+
+
     background = Object_handler.spawn('Background', 'Background', 0, 0)
 
     CRATER_WIDTH = 128

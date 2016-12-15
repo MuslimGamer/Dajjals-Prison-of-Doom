@@ -8,6 +8,7 @@ import pyglet
 import random
 
 
+
 from pyglet.window import key, mouse
 from shooter import obj
 from shooter import config
@@ -28,7 +29,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self._currently_pressed = []
 
         self.__ui_manager = ui_manager.UiManager()
-        self.draw_ui = False
+        self.draw_ui = True
 
         # TODO: scale when we have time!
         # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
@@ -100,6 +101,9 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 player.mx = player.mx * 0.707 * player.speed
                 player.my = player.my * 0.707 * player.speed
 
+            if self.keyboard[key.R]: 
+                player.reload()
+
             if not (player.cooldown):
                 if (self.is_pressed(mouse.RIGHT)):
                     if config.get('melee_enabled'):
@@ -109,7 +113,13 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 elif self.is_pressed(mouse.LEFT) and player.fire():
                     player.attack("Bullet_Basic",self.mouse_x,self.mouse_y)
             elif (self.is_pressed(mouse.RIGHT)):
+                for sword in obj.Bullet_list:
+                    if sword.id == "Bullet_Melee":
+                        dx = self.mouse_x - player.x
+                        dy = self.mouse_y - player.y
+                        sword.theta = atan2(dx,dy)			#Mathy goodness.
                 player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
+
             return
 
     @property

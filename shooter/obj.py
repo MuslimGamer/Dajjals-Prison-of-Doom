@@ -37,6 +37,8 @@ prototypes_json = {				#Define object_type dictionary. Used to parse objects int
 GAME_WIDTH = 0
 GAME_HEIGHT = 0
 
+Score = 0
+
 def load_prototype_data(raw_json):
     json_object = json.loads(raw_json)
     prototypes_json["Enemy"] = json_object["Enemies"]
@@ -45,17 +47,21 @@ def load_prototype_data(raw_json):
     prototypes_json["Misc"] = json_object["Misc"]
     prototypes_json["Background"] = json_object["Misc"] # horrible, hideous hack
 
-def loot():
-    SpawnIncome += 0.1
+
+
+
 
 class Object_handler:      #Should I remove this class and just have the various functions loose in this file?
                            #IE outside of this file, call obj.spawn(), rather than Object_handler.spawn()
     def __init__(self):
         file_watcher.watch('data/object.json', load_prototype_data)
 
-    SpawnBudget = 1
-    SpawnIncome = 0.1
-    NextEnemy = 0
+        self.score = 0
+        self.SpawnBudget = 0
+        self.SpawnCost = 1
+        self.SpawnIncome = 0.5
+        self.NextEnemy = 0
+        
 
 	###
 	# Spawns an object of type object_type (from prototypes_json, eg. "Enemy"), using
@@ -82,32 +88,22 @@ class Object_handler:      #Should I remove this class and just have the various
 
     def spawn_enemy(self,id, x, y):
         e = self.spawn("Enemy", id, x, y)
-        #e.on_death = lambda: Loot()
+        e.on_death = lambda: e.Loot()
         return e
 
     def spawn_random(self,dt):
         self.SpawnBudget += dt* self.SpawnIncome
-        self.SpawnIncome += 0.01
+        while(self.SpawnBudget >= self.SpawnCost):
+            self.SpawnBudget -= self.SpawnCost
 
+            type_select_result = {
+                0: "Enemy_Basic",
+                1: "Enemy_Coward",
+                2: "Enemy_Slow"
+            }
 
-        type_select_result = {
-            0: "Enemy_Basic",
-            1: "Enemy_Coward",
-            2: "Enemy_Slow"
-        }
+            EnemyID = type_select_result[self.NextEnemy]
 
-        EnemyID = type_select_result[self.NextEnemy]
-
-
-        list_of_prototypes = prototypes_json["Enemy"]
-        # Find an object x in the collection that matches the specified ID; defaults to None
-        prototype = next((x for x in list_of_prototypes if x['ID'] == EnemyID), None)
-        
-        print("SpawnBudget: " + str(self.SpawnBudget) + " NextEnemy: " + EnemyID + " Enemy.cost: " + str(prototype['Cost']))
-
-        if self.SpawnBudget >= prototype['Cost']:
-            self.SpawnBudget -= prototype['Cost']
-            self.NextEnemy = random.randrange(3)
             side = random.randrange(4)
             rand_x = random.randrange(GAME_WIDTH)
             rand_y = random.randrange(GAME_HEIGHT)
@@ -126,8 +122,13 @@ class Object_handler:      #Should I remove this class and just have the various
                 3: GAME_HEIGHT + 100
             }
 
-
             self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
+            self.NextEnemy = random.randrange(3)
+
+            list_of_prototypes = prototypes_json["Enemy"]
+            # Find an object x in the collection that matches the specified ID; defaults to None
+            prototype = next((x for x in list_of_prototypes if x['ID'] == EnemyID), None)
+            self.SpawnCost = prototype['Cost']
 
 
     def collision(self):
@@ -141,22 +142,30 @@ class Object_handler:      #Should I remove this class and just have the various
                 enemy.Circle_collision(bullet)
 
     def update(self):
+        for enemy in Enemy_list:
+            enemy.ai()
+        for bullet in Bullet_list:
+            bullet.ai()
+        for misc in Misc_list:
+            misc.ai()
+
+        self.collision()    	#Attempting to add kick-back to collision.
+                      	#Collsion must be called after AI, but before move/update()
+
+
         for player in Player_list:
             player.move()
             player.update()
         for enemy in Enemy_list:
-            enemy.ai()
             enemy.move()
             enemy.update()
         for bullet in Bullet_list:
-            bullet.ai()
             bullet.move()
             bullet.update()
         for misc in Misc_list:
-            misc.ai()
             misc.update()
 
-        self.collision()
+        
 
 class GameObject:
 
@@ -221,6 +230,11 @@ class GameObject:
     def size(self, value):
         self.sprite.scale = value
 
+    def Loot(self):
+        self.handle.SpawnIncome += 0.1
+        self.handle.score += self.cost
+        print("Loot!")
+        print("SpawnIncome: "+str(self.handle.SpawnIncome))
 
 
     def Circle_collision(self, Target_object):
@@ -231,18 +245,25 @@ class GameObject:
         #Abstract circle is appoximated around sprite bounding the maximum sprite overlap area during rotation.
         #Calculated radius of this circle is accumulated from 2 test objects to detect range of collision
         #Distance between sprite centroids is calculated and compared to the detection range.
-        dx = self.centroid_x - Target_object.centroid_x
-        dy = self.centroid_y - Target_object.centroid_y
+        dx = self.x - Target_object.x
+        dy = self.y - Target_object.y
         radius = self.radius + Target_object.radius
         if(radius>sqrt(dx*dx + dy*dy)):
             print ("\nHit Detection! - Radius: " +str(radius))
-            print (self.id +" X:" + str(self.centroid_x)+" " +self.id+" Y:"+str(self.centroid_y))
-            print (Target_object.id +" X:" + str(Target_object.centroid_x)+" " +Target_object.id+" Y:"+str(Target_object.centroid_y))
+            print (self.id +" X:" + str(self.x)+" " +self.id+" Y:"+str(self.y))
+            print (Target_object.id +" X:" + str(Target_object.x)+" " +Target_object.id+" Y:"+str(Target_object.y))
             print (self.id +" Heath: " +str(self.health)+"\n")
 
             #print(self.id + Target_object.id)
             self.health = self.health - 1
             Target_object.health = 0
+            #If self is still alive after collision, apply kick-back
+            #Apply acceleration proportional to the ratio of mass of colliding objects.
+            if self.health:
+                self.x += Target_object.mx *(Target_object.size/self.size)
+                self.y += Target_object.my *(Target_object.size/self.size)
+
+
             return 1   #Hit detected
         return 0       #No Hit Detected
 
@@ -253,12 +274,12 @@ class GameObject:
 
         # Calculate the angle of the shot by using trig
         # This gives us consistent bullet speed regardless of angle
-        dx = target_x - self.centroid_x    
-        dy = target_y - self.centroid_y
-        theta = atan2(dx,dy)			
+        dx = target_x - self.x    
+        dy = target_y - self.y
+        theta = atan2(dx,dy)		
 
 	#Spawn attack object
-        b = self.handle.spawn('Bullet',Attack_Type,self.centroid_x+10*self.sprite.scale,self.centroid_y+10*self.sprite.scale)
+        b = self.handle.spawn('Bullet',Attack_Type,self.x,self.y)
         b.sprite.rotation = theta * 180/pi
         b.theta = theta	
         b.parent = self.id
@@ -274,10 +295,10 @@ class GameObject:
             theta = atan2(-self.my,self.mx)		#Sprite face direction of movement.
             self.sprite.rotation = theta*180/pi	#Sprite rotation in degrees, while trig functions return radians (Like real maths)
 
-            self.centroid_x = self.x - self.radius * sin(theta+self.theta_offset)	#Calculate centroid position given:
-            self.centroid_y = self.y - self.radius * cos(theta+self.theta_offset)	# Sprite Datum position/Rotation &
+            self.sprite_x = self.x - self.radius * sin(theta+self.theta_offset)	#Calculate centroid position given:
+            self.sprite_y = self.y - self.radius * cos(theta+self.theta_offset)	# Sprite Datum position/Rotation &
            										# Calculated centroid offsets from sprite aspects
-            self.sprite.set_position(self.centroid_x,self.centroid_y)
+            self.sprite.set_position(self.sprite_x,self.sprite_y)
 
         if self.health <= 0:
             Type_lists[self.type].remove(self)
@@ -295,8 +316,8 @@ class GameObject:
         if player is None:
             return
             
-        dx = self.centroid_x - player.centroid_x
-        dy = self.centroid_y - player.centroid_y
+        dx = self.x - player.x
+        dy = self.y - player.y
         distance_from_player = sqrt(dx*dx + dy*dy)
         if (distance_from_player > 30):				#Get in close
             theta = atan2(dx,dy)					#Mathy goodness.
@@ -342,15 +363,18 @@ class GameObject:
     def sword_ai(self, player):
         if player is None:
             return
-            
-        self.health = player.cooldown
-        self.mx = 0.01
-        self.theta = self.theta +0.3
-        self.sprite.rotation = self.theta * 180/pi + 90
         sword_attack_radius = config.get("sword_attack_radius")
+        self.health = player.cooldown
+        self.mx = 0.01 * sin(self.theta)	#Apply small movement to ensure sword renders with correct rotation.
+        self.my = 0.01 * cos(self.theta)        #Position applied below instead of movement function so position updated before collsion detection
+        self.sprite.rotation = self.theta
+        #self.sprite.rotation = self.theta * 180/pi + 90
+
         # +width/2, -height/2 makes the sword perfectly center on the player
-        self.x = player.x + (player.img.width / 2) - (self.img.width / 2) + sin(self.theta) * sword_attack_radius
-        self.y = player.y + (player.img.height / 2) + (self.img.height / 2) + cos(self.theta) * sword_attack_radius
+        self.x = player.x +sword_attack_radius * sin(self.theta)    #Apply position immediately so factors in collision detection
+        self.y = player.y + sword_attack_radius * cos(self.theta)  
+        #self.x = player.x + (player.img.width / 2) - (self.img.width / 2) + sin(self.theta) * sword_attack_radius
+        #self.y = player.y + (player.img.height / 2) + (self.img.height / 2) + cos(self.theta) * sword_attack_radius
     #if left button pressed, calc theta, rotation, then update sprite 
         pass
 
