@@ -1,0 +1,2 @@
+class Pistol:
+    pass

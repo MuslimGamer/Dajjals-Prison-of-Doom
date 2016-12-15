@@ -109,9 +109,9 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                     if config.get('melee_enabled'):
                         player.attack("Bullet_Melee",self.mouse_x,self.mouse_y)
                     else:
-                        player.attack("Bullet_Basic",self.mouse_x,self.mouse_y) 
-                elif self.is_pressed(mouse.LEFT) and player.fire():
-                    player.attack("Bullet_Basic",self.mouse_x,self.mouse_y)
+                        player.fire(self.mouse_x, self.mouse_y) 
+                elif self.is_pressed(mouse.LEFT):                           
+                    player.fire(self.mouse_x, self.mouse_y)
             elif (self.is_pressed(mouse.RIGHT)):
                 for sword in obj.Bullet_list:
                     if sword.id == "Bullet_Melee":
