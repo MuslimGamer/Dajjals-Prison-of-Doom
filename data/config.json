@@ -3,8 +3,14 @@
     "melee_enabled": true,
     "sword_attack_radius": 30,
 
+    # Guns! Each gun needs a pair of four attributes.
     "pistol_bullets":  15,
-    "pistol_reload_seconds": 3,
-    "pistol_cooldown_seconds": 0.25,
-    "pistol_bullet_type": "Bullet_Basic"
+    "pistol_reload_seconds": 1.5,
+    "pistol_cooldown_seconds": 0.35,
+    "pistol_bullet_type": "Bullet_Basic",
+
+    "shotgun_bullets": 12,
+    "shotgun_reload_seconds": 5,
+    "shotgun_cooldown_seconds": 0.20,
+    "shotgun_bullet_type": "Bullet_Basic"
 }

@@ -19,7 +19,7 @@ class Gun:
 
     # Returns true if we just fired a shot
     def fire(self):
-        if self.__shots_left > 0 and (time.time() - self.__last_shot) >= self.__cooldown_time_seconds:
+        if self.__shots_left > 0 and time.time() - self.__last_shot >= self.__cooldown_time_seconds:
             self.__shots_left -= 1
             self.__last_shot = time.time()
             return True

@@ -1,7 +1,7 @@
 import time
 
 from shooter import obj
-from shooter.weapons import shotgun
+from shooter.weapons import gun, shotgun
 
 class Player(obj.GameObject):
     def __init__(self, owner, prototype):
