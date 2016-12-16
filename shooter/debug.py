@@ -16,6 +16,9 @@ def spawn_enemy(player):
     which_one = "Enemy_{0}".format(which_one)
     obj.Object_handler().spawn_enemy(which_one, 1024, 576)
 
+def lots_of_bullets(player):
+    player._gun._shots_left = 999
+
 cheats = {
     "roketfiq": invincible,
     "spawn": spawn_enemy,
