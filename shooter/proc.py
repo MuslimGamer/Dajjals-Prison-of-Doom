@@ -10,6 +10,7 @@ import random
 
 
 from pyglet.window import key, mouse
+from shooter import debug
 from shooter import obj
 from shooter import config
 from shooter import file_watcher
@@ -100,6 +101,9 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
                 player.mx = player.mx * 0.707 * player.speed
                 player.my = player.my * 0.707 * player.speed
+
+            if config.get("enable_cheat_codes") == True and self.keyboard[key.GRAVE]:
+                debug.ask_and_process_cheat_code(player)
 
             if self.keyboard[key.R]: 
                 player.reload()

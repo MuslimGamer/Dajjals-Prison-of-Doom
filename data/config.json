@@ -2,6 +2,7 @@
     "skip_splash_screens": false,
     "melee_enabled": true,
     "sword_attack_radius": 30,
+    "enable_cheat_codes": true,
 
     # Guns! Each gun needs a pair of four attributes.
     "pistol_bullets":  15,
