@@ -6,6 +6,15 @@
 
 import pyglet
 import random
+import os
+import sys
+
+# Support for PyInstaller --onefile. It creates an archive exe that
+# unpacks to a temp directory. We need to convince all our file I/O
+# to use that directoy as the application base dir. chdir is the
+# easiest way, if we use relative paths for everything else.
+if hasattr(sys, '_MEIPASS'):
+    os.chdir(sys._MEIPASS)
 
 from shooter import config
 from shooter import file_watcher
@@ -91,8 +100,7 @@ def frame_callback(dt):
             player.y = Screen_handler.height - player.img.height
         if player.y < 0:
             player.y = 0
-
-
+    
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
 
