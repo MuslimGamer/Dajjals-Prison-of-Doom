@@ -13,3 +13,7 @@
 # if you re-run this command, add `images` to `datas` eg. `datas=[ ('images', 'images') ]`
 
 pyinstaller main.spec
+cp -rf data dist
+cp -rf images dist
+cp -rf fonts dist
+cp -rf sounds dist
