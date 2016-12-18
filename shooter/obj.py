@@ -246,7 +246,6 @@ class GameObject:
     def Loot(self,chance):
         self.handle.SpawnIncome += 0.1
         self.handle.score += self.cost
-        print(str(len(Pickup_list)))
         if((random.randrange(100)<chance) and (len(Pickup_list)<3)):
             Type = random.randrange(4)
             PickupType = {

@@ -10,7 +10,7 @@ class Player(obj.GameObject):
     def __init__(self, owner, prototype):
         # call base class constructor
         obj.GameObject.__init__(self, owner, 'Player', prototype)
-        self.__gun = pistol.Pistol()
+        self.__gun = machine.Machine()
 
     def switch(self,gun_config_prefix):
         self.__gun.switch(gun_config_prefix)

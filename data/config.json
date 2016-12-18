@@ -24,7 +24,7 @@
     "machine_burst": 1,
     "machine_spread": 5,
     "machine_reload_seconds": 3,
-    "machine_cooldown_seconds": 0.02,
+    "machine_cooldown_seconds": 0.1,
     "machine_bullet_type": "Bullet_Basic",	#Short range bullet
 
 
