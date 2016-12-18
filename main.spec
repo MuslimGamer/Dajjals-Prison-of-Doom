@@ -4,9 +4,13 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['D:\\Dropbox\\Python\\pcg-shooter'],
+             pathex=['D:\\dropbox\\Python\\pcg-shooter'],
              binaries=None,
-             datas=[ ('images', 'images') ],
+             # Nothing seems to work here. Just ship with datas.
+             # They are correctly bundled (see: temp path on run has them),
+             # they're just impossible to reference correctly. We get a crash
+             # with no explanation of which file was missing.
+             datas=None,
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -25,4 +29,4 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=True )
+          console=False )

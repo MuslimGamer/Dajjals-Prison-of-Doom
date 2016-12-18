@@ -57,6 +57,7 @@ def load_prototype_data(raw_json):
 
 class Object_handler:      #Should I remove this class and just have the various functions loose in this file?
                            #IE outside of this file, call obj.spawn(), rather than Object_handler.spawn()
+
     def __init__(self):
         file_watcher.watch('data/object.json', load_prototype_data)
 
