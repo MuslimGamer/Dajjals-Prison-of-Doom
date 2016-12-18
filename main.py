@@ -108,5 +108,11 @@ else:
 pyglet.clock.schedule(frame_callback)
 pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # call frame_callback at 30FPS
 
-pyglet.app.run()
+
+# Shut down threads cleanly in case of a crash
+try:
+    pyglet.app.run()
+except:
+    file_watcher.stop()
+    raise
 
