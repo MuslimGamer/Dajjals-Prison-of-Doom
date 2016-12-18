@@ -60,7 +60,7 @@
     },
     {
       "ID": "Bullet_Rocket",
-      "Health": 10,
+      "Health": 100,
       "Img": "images/rocket.png",
       "Size": 1,
       "Speed": 10,
@@ -162,6 +162,24 @@
     }        
   ],
   "Pickup": [
+    {
+      "ID": "Weapon_Pistol",
+      "Health": 1000,
+      "Img": "images/pickpist.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+    {
+      "ID": "Weapon_Machine",
+      "Health": 1000,
+      "Img": "images/pickmach.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
     {
       "ID": "Weapon_Shotgun",
       "Health": 1000,

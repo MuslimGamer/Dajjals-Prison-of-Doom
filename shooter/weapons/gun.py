@@ -24,7 +24,7 @@ class Gun:
         self.reload_time_seconds = config.get("{0}_reload_seconds".format(gun_config_prefix))
         self.__cooldown_time_seconds = config.get("{0}_cooldown_seconds".format(gun_config_prefix))
         self.bullet_type = config.get("{0}_bullet_type".format(gun_config_prefix))
-        self.__last_shot = time.time()
+        #self.__last_shot = time.time()
 
     def reload(self):
         self.__shots_left = 0 # triggers auto-reload

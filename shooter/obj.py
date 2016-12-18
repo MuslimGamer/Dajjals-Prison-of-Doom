@@ -38,7 +38,7 @@ prototypes_json = {			#Define object_type dictionary. Used to parse objects into
     'Bullet': obj_bullet,		#Object type Bullet.	(Future potential for various projectiles?)
     'Misc': obj_misc,			#Object type Misc.	(Intended for graphical effects, Eg enemy dies spawn Explosion object)
     'Pickup': obj_pickup
-}
+}	
 
 # Set by main.py
 GAME_WIDTH = 0
@@ -83,8 +83,6 @@ class Object_handler:      #Should I remove this class and just have the various
             spawned = GameObject(self,object_type,prototype)
         else:
             spawned = as_type(self,prototype)
-
-        print(spawned.type)
     
         spawned.x = spawned.centroid_x = x
         spawned.y = spawned.centroid_y = y
@@ -94,7 +92,7 @@ class Object_handler:      #Should I remove this class and just have the various
 
     def spawn_enemy(self,id, x, y):
         e = self.spawn("Enemy", id, x, y)
-        e.on_death = lambda: e.Loot(100)
+        e.on_death = lambda: e.Loot(10)
         return e
 
     def spawn_random(self,dt):
@@ -247,18 +245,17 @@ class GameObject:
     def Loot(self,chance):
         self.handle.SpawnIncome += 0.1
         self.handle.score += self.cost
-        if(random.randrange(100)<chance):
-            Type = random.randrange(2)
+        print(str(len(Pickup_list)))
+        if((random.randrange(100)<chance) and (len(Pickup_list)<3)):
+            Type = random.randrange(4)
             PickupType = {
-                0:"Weapon_Shotgun",
-                1:"Weapon_Rocket"
+                0:"Weapon_Pistol",
+                1:"Weapon_Machine",
+                2:"Weapon_Shotgun",
+                3:"Weapon_Rocket"
             }
-
-            print("Type: ",str(Type)," ",str(PickupType[Type]))
             self.handle.spawn('Pickup',PickupType[Type],self.x, self.y)
- 
-        print("Loot!")
-        print("SpawnIncome: "+str(self.handle.SpawnIncome))
+
 
     def pickup(self, Target_object):    #Cheap and hacky - Copy pasted collsion detection and modify for pickup rather than damage. 
 
@@ -267,6 +264,8 @@ class GameObject:
         radius = self.radius + Target_object.radius
         if(radius>sqrt(dx*dx + dy*dy)):
             PickupType = {
+                "Weapon_Pistol":"pistol",
+                "Weapon_Machine":"machine",
                 "Weapon_Shotgun":"shotgun",
                 "Weapon_Rocket":"rocket"
             }
@@ -324,18 +323,18 @@ class GameObject:
 
     def move(self):
         #Function name move is misleading: Function responsible for processing movement, rotation & object maintainance
-        if(self.mx!=0)or(self.my!=0):
-            self.x = self.x + self.mx
-            self.y = self.y + self.my
+        #if(self.mx!=0)or(self.my!=0):
+        self.x = self.x + self.mx
+        self.y = self.y + self.my
             #Calculate sprite rotation + position(Sprite centroid, not datum) and update sprite
 
-            theta = atan2(-self.my,self.mx)		#Sprite face direction of movement.
-            self.sprite.rotation = theta*180/pi	#Sprite rotation in degrees, while trig functions return radians (Like real maths)
+        theta = atan2(-self.my,self.mx)		#Sprite face direction of movement
+        self.sprite.rotation = theta*180/pi	#Sprite rotation in degrees, while trig functions return radians (Like real maths)
 
-            self.sprite_x = self.x - self.radius * sin(theta+self.theta_offset)	#Calculate centroid position given:
-            self.sprite_y = self.y - self.radius * cos(theta+self.theta_offset)	# Sprite Datum position/Rotation &
+        self.sprite_x = self.x - self.radius * sin(theta+self.theta_offset)	#Calculate centroid position given:
+        self.sprite_y = self.y - self.radius * cos(theta+self.theta_offset)	# Sprite Datum position/Rotation &
            										# Calculated centroid offsets from sprite aspects
-            self.sprite.set_position(self.sprite_x,self.sprite_y)
+        self.sprite.set_position(self.sprite_x,self.sprite_y)
 
         if self.health <= 0:
             Type_lists[self.type].remove(self)

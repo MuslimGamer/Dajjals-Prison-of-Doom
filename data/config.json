@@ -19,11 +19,19 @@
     "shotgun_cooldown_seconds": 1,
     "shotgun_bullet_type": "Bullet_Basic",	#Short range bullet
 
-    "rocket_bullets": 1,
+    "machine_bullets": 30,
+    "machine_burst": 1,
+    "machine_spread": 5,
+    "machine_reload_seconds": 3,
+    "machine_cooldown_seconds": 0.02,
+    "machine_bullet_type": "Bullet_Basic",	#Short range bullet
+
+
+    "rocket_bullets": 2,
     "rocket_burst": 1,
     "rocket_spread": 0,
-    "rocket_reload_seconds": 5,
-    "rocket_cooldown_seconds": 4,
+    "rocket_reload_seconds": 3,
+    "rocket_cooldown_seconds": 1,
     "rocket_bullet_type": "Bullet_Rocket"	#On removal, spawn explosion.
 }
 
