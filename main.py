@@ -11,6 +11,9 @@ from shooter import config
 from shooter import file_watcher
 from shooter import obj		#Object module	-Severok
 from shooter.player import Player
+
+
+
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from math import atan2,atan, sin, cos, degrees, pi, sqrt

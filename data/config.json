@@ -1,16 +1,29 @@
 {
-    "skip_splash_screens": false,
+    "skip_splash_screens": true,
+    "enable_enemies":true,
     "melee_enabled": true,
     "sword_attack_radius": 30,
 
     # Guns! Each gun needs a pair of four attributes.
-    "pistol_bullets":  15,
-    "pistol_reload_seconds": 1.5,
-    "pistol_cooldown_seconds": 0.35,
-    "pistol_bullet_type": "Bullet_Basic",
+    "pistol_bullets":  15,                      #How many bullets / clip
+    "pistol_burst": 1,				#How many bullets / shot
+    "pistol_spread": 1,				#Weapon accuracy spread (Degrees)
+    "pistol_reload_seconds": 1.5, 		#Time to reload (Seconds)
+    "pistol_cooldown_seconds": 0.35,		#Time between shots (Seconds)
+    "pistol_bullet_type": "Bullet_Basic",	#Bullet objet to spawn on attack.
 
-    "shotgun_bullets": 12,
-    "shotgun_reload_seconds": 5,
-    "shotgun_cooldown_seconds": 0.20,
-    "shotgun_bullet_type": "Bullet_Basic"
+    "shotgun_bullets": 4,
+    "shotgun_burst": 5,
+    "shotgun_spread": 5,
+    "shotgun_reload_seconds": 3,
+    "shotgun_cooldown_seconds": 1,
+    "shotgun_bullet_type": "Bullet_Basic",	#Short range bullet
+
+    "rocket_bullets": 1,
+    "rocket_burst": 1,
+    "rocket_spread": 0,
+    "rocket_reload_seconds": 5,
+    "rocket_cooldown_seconds": 4,
+    "rocket_bullet_type": "Bullet_Rocket"	#On removal, spawn explosion.
 }
+

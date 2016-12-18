@@ -39,7 +39,7 @@
       "Cost": 0
     }
   ],
-  "Bullets": [
+  "Bullet": [
     {
       "ID": "Bullet_Basic",
       "Health": 100,
@@ -54,6 +54,33 @@
       "Health": 5,
       "Img": "images/sword.png",
       "Size": 1,
+      "Speed": 0,
+      "Behavior": "sword",
+      "Cost": 5
+    },
+    {
+      "ID": "Bullet_Rocket",
+      "Health": 10,
+      "Img": "images/rocket.png",
+      "Size": 1,
+      "Speed": 10,
+      "Behavior": "rocket",
+      "Cost": 5
+    },
+    {
+      "ID": "Explode",
+      "Health": 10,
+      "Img": "images/explode.png",
+      "Size": 10,
+      "Speed": 0,
+      "Behavior": "NULL",
+      "Cost": 0
+    },
+    {
+      "ID": "Shield",
+      "Health": 5,
+      "Img": "images/shield.png",
+      "Size": 3,
       "Speed": 0,
       "Behavior": "sword",
       "Cost": 5
@@ -106,6 +133,25 @@
       "Cost": 0
     },
     {
+      "ID": "Explode",
+      "Health": 10,
+      "Img": "images/explode.png",
+      "Size": 10,
+      "Speed": 0,
+      "Behavior": "NULL",
+      "Cost": 0
+    },
+    {
+      "ID": "Smoke",
+      "Health": 10,
+      "Img": "images/smoke.png",
+      "Size": 3,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+
+    {
       "ID": "Splat",
       "Health": 100,
       "Img": "images/crater.png",
@@ -114,5 +160,25 @@
       "Behavior": "misc",
       "Cost": 0
     }        
-  ]
+  ],
+  "Pickup": [
+    {
+      "ID": "Weapon_Shotgun",
+      "Health": 1000,
+      "Img": "images/pickshot.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+   {
+      "ID": "Weapon_Rocket",
+      "Health": 1000,
+      "Img": "images/pickrock.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    }
+]
 }

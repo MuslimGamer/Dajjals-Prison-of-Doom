@@ -8,6 +8,18 @@ class Gun:
     # cooldown_time (delay between two bullets (autofire rate)) is the bullet cost in object.json
     def __init__(self, gun_config_prefix):
         self.__total_shots = config.get("{0}_bullets".format(gun_config_prefix))
+        self.burst_shots = config.get("{0}_burst".format(gun_config_prefix))
+        self.spread = config.get("{0}_spread".format(gun_config_prefix))
+        self.__shots_left = self.__total_shots
+        self.reload_time_seconds = config.get("{0}_reload_seconds".format(gun_config_prefix))
+        self.__cooldown_time_seconds = config.get("{0}_cooldown_seconds".format(gun_config_prefix))
+        self.bullet_type = config.get("{0}_bullet_type".format(gun_config_prefix))
+        self.__last_shot = time.time()
+
+    def switch(self, gun_config_prefix):
+        self.__total_shots = config.get("{0}_bullets".format(gun_config_prefix))
+        self.burst_shots = config.get("{0}_burst".format(gun_config_prefix))
+        self.spread = config.get("{0}_spread".format(gun_config_prefix))
         self.__shots_left = self.__total_shots
         self.reload_time_seconds = config.get("{0}_reload_seconds".format(gun_config_prefix))
         self.__cooldown_time_seconds = config.get("{0}_cooldown_seconds".format(gun_config_prefix))
