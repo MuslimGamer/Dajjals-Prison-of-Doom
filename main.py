@@ -19,7 +19,11 @@ if hasattr(sys, '_MEIPASS'):
 from shooter import config
 from shooter import file_watcher
 from shooter import obj		#Object module	-Severok
+from shooter import sound
 from shooter.player import Player
+
+
+
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
@@ -89,6 +93,7 @@ def frame_callback(dt):
     #Check user input
     Screen_handler.input()
     Object_handler.update()
+    sound.SoundHandler.play()
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
         # TODO: consider replacing with walls that border the map (perhaps off-screen ones)

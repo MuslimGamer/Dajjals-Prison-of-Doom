@@ -61,6 +61,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 bullet.sprite.draw()
             for misc in obj.Misc_list:		#Render Misc sprites
                 misc.sprite.draw()
+            for pickup in obj.Pickup_list:
+                pickup.sprite.draw()
 
             if self.draw_ui and len(obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
