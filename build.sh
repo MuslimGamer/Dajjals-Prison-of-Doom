@@ -12,4 +12,6 @@
 #
 # if you re-run this command, add `images` to `datas` eg. `datas=[ ('images', 'images') ]`
 
+rm -rf build
+rm -rf dist
 pyinstaller main.spec
