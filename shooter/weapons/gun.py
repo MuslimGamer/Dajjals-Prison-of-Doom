@@ -42,7 +42,7 @@ class Gun:
         if self.__shots_left > 0 and time.time() - self._last_shot >= self._cooldown_time_seconds:
             self.__shots_left -= 1
             self._last_shot = time.time()
-            sound.SoundHandler.queue(0,self.pew)
+            sound.SoundHandler.queue(self.pew)
             #self.pew.play()
             #pyglet.media.load(self.__audio_file, streaming=False).play()
             return True
