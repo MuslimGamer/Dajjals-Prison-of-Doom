@@ -22,6 +22,7 @@ class Gun:
         self.__audio_file = "sounds/{0}.wav".format(gun_config_prefix)
         self.pew = pyglet.media.StaticSource(pyglet.media.load(self.__audio_file, streaming = False))
         self.reload_sound = pyglet.media.StaticSource(pyglet.media.load("sounds/reload.wav", streaming = False))
+        self.pickup_sound = pyglet.media.StaticSource(pyglet.media.load("sounds/pickup-weapon.wav", streaming = False))
 
     def switch(self, gun_config_prefix):
         self.__total_shots = config.get("{0}_bullets".format(gun_config_prefix))
@@ -33,6 +34,7 @@ class Gun:
         self.bullet_type = config.get("{0}_bullet_type".format(gun_config_prefix))
         self.__audio_file = "sounds/{0}.wav".format(gun_config_prefix) 
         self.pew = pyglet.media.StaticSource(pyglet.media.load(self.__audio_file, streaming = False))
+        sound.SoundHandler.queue(self.pickup_sound)
         #self.__last_shot = time.time()
 
     def reload(self):
