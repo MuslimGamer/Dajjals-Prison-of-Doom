@@ -21,6 +21,7 @@ class Gun:
         self._last_shot = time.time()
         self.__audio_file = "sounds/{0}.wav".format(gun_config_prefix)
         self.pew = pyglet.media.StaticSource(pyglet.media.load(self.__audio_file, streaming = False))
+        self.reload_sound = pyglet.media.StaticSource(pyglet.media.load("sounds/reload.wav", streaming = False))
 
     def switch(self, gun_config_prefix):
         self.__total_shots = config.get("{0}_bullets".format(gun_config_prefix))
@@ -52,7 +53,7 @@ class Gun:
     def update(self):
         if self.__shots_left == 0 and not self.is_reloading():
             self.__shots_left = self.__total_shots
-            
+            sound.SoundHandler.queue(self.reload_sound)
 
     def is_reloading(self):
         return self.shots_left == 0 and time.time() - self._last_shot <= self.reload_time_seconds
