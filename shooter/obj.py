@@ -216,7 +216,11 @@ class GameObject:
     #Better to pre calculate constant trig functions than re-calculate when required.
             #Calculate 'radius' of sprite - Hyp component for finding sprite centroid following rotation.
             #Theta offset - Rotation offset for centroid location from sprite base rotation
-        self.radius = sqrt(self.sprite.height*self.sprite.height + self.sprite.width * self.sprite.width)/2
+        if "Splash" in self.id or self.id == "Game Over":
+            self.radius = 0
+        else:
+            self.radius = sqrt(self.sprite.height*self.sprite.height + self.sprite.width * self.sprite.width)/2
+
         self.theta_offset = atan2(self.sprite.height,self.sprite.width)
 
         # Event handlers you can override

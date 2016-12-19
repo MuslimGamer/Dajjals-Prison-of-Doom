@@ -46,13 +46,13 @@ def create_image(image_filename):
     return sprite
 
 def show_dg_splash():
-    splash = Object_handler.spawn('Misc', "DG Splash", 0, 0, splash_screen.SplashScreen)
+    splash = Object_handler.spawn("Misc", "DG Splash", 192, 48, splash_screen.SplashScreen)
     center(splash)
     splash.on_death = lambda: start_game()
 
 def center(game_obj):
-    game_obj.sprite.x = (Screen_handler.width - game_obj.img.width) / 2
-    game_obj.sprite.y = (Screen_handler.height - game_obj.img.height) / 2
+    game_obj.x = (Screen_handler.width - game_obj.img.width) / 2
+    game_obj.y = (Screen_handler.height - game_obj.img.height) / 2
 
 def start_game():
     obj.Player_list[:]=[]
@@ -60,8 +60,6 @@ def start_game():
     obj.Bullet_list[:]=[]
     obj.Misc_list[:]=[]
     obj.Backgrounds_list[:]=[]
-
-
 
     background = Object_handler.spawn('Background', 'Background', 0, 0)
 
@@ -85,6 +83,7 @@ def start_game():
 def game_over():
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
+    print("Over and out: {0}, {1}".format(over.x, over.y))
     pyglet.clock.unschedule(Object_handler.spawn_random)
 
     over.on_death = lambda: start_game()
