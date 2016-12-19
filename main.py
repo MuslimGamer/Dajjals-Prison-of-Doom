@@ -10,6 +10,7 @@ import random
 from shooter import config
 from shooter import file_watcher
 from shooter import obj		#Object module	-Severok
+from shooter import sound
 from shooter.player import Player
 
 
@@ -83,6 +84,7 @@ def frame_callback(dt):
     #Check user input
     Screen_handler.input()
     Object_handler.update()
+    sound.SoundHandler.play()
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
         # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
