@@ -62,12 +62,7 @@ class Object_handler:      #Should I remove this class and just have the various
 
     def __init__(self):
         file_watcher.watch('data/object.json', load_prototype_data)
-
-        self.score = 0
-        self.SpawnBudget = 0
-        self.SpawnCost = 1
-        self.SpawnIncome = 0.5
-        self.NextEnemy = 0
+        self.start()
         
 
 	###
@@ -77,6 +72,12 @@ class Object_handler:      #Should I remove this class and just have the various
 	# NOTE: as_type must be a subclass of GameObject with a constructor that takes 
 	# a single parameter "prototype" (JSON) data and passes it to the base class.
 	###
+    def start(self):
+        self.score = 0
+        self.SpawnBudget = 0
+        self.SpawnCost = 1
+        self.SpawnIncome = 0.5
+        self.NextEnemy = 0
 
     def spawn(self,object_type, id, x, y, as_type = None):
         list_of_prototypes = prototypes_json[object_type]

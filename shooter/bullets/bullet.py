@@ -1,10 +1,11 @@
 from shooter import obj
-from shooter.bullets import rocket, basic, explode
+from shooter.bullets import rocket, basic, melee, explode
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
 Bullet_Subclass = {
     'Bullet_Basic': basic,
     'Bullet_Rocket': rocket,
+    'Bullet_Melee': melee,
     'Explode': explode
 }
 class Bullet(obj.GameObject):

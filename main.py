@@ -83,6 +83,15 @@ def start_game():
     Screen_handler.draw_ui = True
 
 def game_over():
+
+    obj.Player_list[:]=[]
+    obj.Enemy_list[:]=[]
+    obj.Bullet_list[:]=[]
+    obj.Misc_list[:]=[]
+    obj.Backgrounds_list[:]=[]
+
+    Object_handler.start()
+
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
     print("Over and out: {0}, {1}".format(over.x, over.y))
