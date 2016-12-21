@@ -77,6 +77,7 @@ def game_over():
     obj.Enemy_list[:]=[]
     obj.Bullet_list[:]=[]
     obj.Misc_list[:]=[]
+    obj.Pickup_list[:]=[]    
     obj.Backgrounds_list[:]=[]
 
     Object_handler.start()
