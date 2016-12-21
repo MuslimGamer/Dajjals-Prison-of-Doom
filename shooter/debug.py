@@ -1,4 +1,9 @@
+import random
+
 from shooter import obj
+
+def process_generically(input):
+    pass
 
 def ask_and_process_cheat_code(player):
     cheat_code = input("Code: ")
@@ -7,20 +12,23 @@ def ask_and_process_cheat_code(player):
         cheat_code = cheat_code.lower()
         if cheat_code in cheats:
             cheats[cheat_code](player)
+            return
+
+    process_generically(cheat_code)
 
 def invincible(player):
     player.health = 999
 
-def spawn_enemy(player):
-    which_one = input("Which enemy (eg. basic): ").lower().capitalize()
-    which_one = "Enemy_{0}".format(which_one)
-    obj.Object_handler().spawn_enemy(which_one, 1024, 576)
+def spawn_enemies(player):
+    x = 3 + random.randrange(3)
+    for i in range(x):
+        obj.Object_handler().spawn_random(5)
 
 def lots_of_bullets(player):
-    player._gun._shots_left = 999
+    player.unlimited_ammo()
 
 cheats = {
     "roketfiq": invincible,
-    "spawn": spawn_enemy,
+    "spawn": spawn_enemies,
     "ammo": lots_of_bullets
 }

@@ -45,8 +45,8 @@ class Player(obj.GameObject):
     def update(self):
         self.__gun.update()
 
-
-
+    def unlimited_ammo(self):
+        self.__gun.cheat()
 
     @property
     def shots_left(self):

@@ -60,6 +60,9 @@ class Gun:
     def is_reloading(self):
         return self.shots_left == 0 and time.time() - self._last_shot <= self.reload_time_seconds
 
+    def cheat(self):
+        self.__shots_left = 999
+
     @property
     def shots_left(self):
         return self.__shots_left
