@@ -16,6 +16,14 @@ def ask_and_process_cheat_code(player):
 
     process_generically(cheat_code)
 
+def spawn_pickup(player):
+    types = ["Weapon_Pistol", "Weapon_Machine", "Weapon_Shotgun", "Weapon_Rocket"]
+    spawn = random.randrange(len(types))
+    if len(obj.Enemy_list) > 0:
+        obj.Enemy_list[0].Loot(100) # turn the first enemy into kibble
+    else:
+        player.Loot(100)
+
 def invincible(player):
     player.health = 999
 
@@ -27,8 +35,13 @@ def spawn_enemies(player):
 def lots_of_bullets(player):
     player.unlimited_ammo()
 
+def die(player):
+    player.health = 0
+
 cheats = {
     "roketfiq": invincible,
     "spawn": spawn_enemies,
-    "ammo": lots_of_bullets
+    "ammo": lots_of_bullets,
+    "pickup": spawn_pickup,
+    "die": die
 }

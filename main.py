@@ -55,10 +55,12 @@ def center(game_obj):
     game_obj.y = (Screen_handler.height - game_obj.img.height) / 2
 
 def start_game():
+    # Clear everything on screen
     obj.Player_list[:]=[]
     obj.Enemy_list[:]=[]
     obj.Bullet_list[:]=[]
     obj.Misc_list[:]=[]
+    obj.Pickup_list[:]=[]
     obj.Backgrounds_list[:]=[]
 
     background = Object_handler.spawn('Background', 'Background', 0, 0)
