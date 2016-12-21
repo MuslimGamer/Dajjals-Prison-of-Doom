@@ -1,4 +1,4 @@
-from shooter import obj
+from shooter.obj import GameObject
 from shooter.bullets import rocket, basic, melee, explode
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
@@ -8,9 +8,9 @@ Bullet_Subclass = {
     'Bullet_Melee': melee,
     'Explode': explode
 }
-class Bullet(obj.GameObject):
+class Bullet(GameObject):
     def __init__(self, owner, prototype):
-        obj.GameObject.__init__(self, owner, 'Bullet', prototype)
+        GameObject.__init__(self, owner, 'Bullet', prototype)
         print("Accessing Bullet subclass")
 
         #self.explosion = pyglet.media.load("sounds/explosion.wav", streaming = False)
@@ -22,9 +22,3 @@ class Bullet(obj.GameObject):
         self.mx = sin(self.theta) * self.speed
         self.my = cos(self.theta) * self.speed
         Bullet_Subclass[self.id].update(self)
-
-
-
-   
-
-

@@ -24,8 +24,6 @@ from shooter import sound
 from shooter.player import Player
 from shooter import obj		#Object module	-Severok
 
-
-
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
@@ -35,17 +33,6 @@ GAME_HEIGHT = 576
 
 obj.GAME_WIDTH = GAME_WIDTH
 obj.GAME_HEIGHT = GAME_HEIGHT
-
-# color_tuple is a four-colour tuple (R, G, B, A).
-def create_color(width, height, color_tuple):
-    img = pyglet.image.SolidColorImagePattern(color_tuple).create_image(32, 32)
-    sprite = pyglet.sprite.Sprite(img)
-    return sprite
-
-def create_image(image_filename):
-    img = pyglet.image.load(image_filename)
-    sprite = pyglet.sprite.Sprite(img)
-    return sprite
 
 def show_dg_splash():
     splash = Object_handler.spawn("Misc", "DG Splash", 192, 48, splash_screen.SplashScreen)
