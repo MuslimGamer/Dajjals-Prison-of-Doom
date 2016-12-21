@@ -1,12 +1,14 @@
+from shooter import sound
 
-class Rocket: 
-    def __init__(self):
-        print("Make a rocket")
-        self.on_death = lambda: explode() 
+def init(bullet):
+    print("Make a rocket")
 
-    def explode(self):
-        print("Bang")
-        self.handle.spawn("Bullet",'Explode',self.x,self.y)	#Spawning 2 version of object for explosion
-        self.handle.spawn("Misc","explode", self.x, self.y)	#Bullet: responsible for spash damage, Misc: Cosmetic sprite to persist after explosion collision.
+def update(bullet):
+    pass
 
- 
+def on_death(bullet):
+    sound.explosion.play()
+    bullet.handle.spawn("Bullet",'Explode',bullet.x,bullet.y)	#Spawning 2 version of object for explosion
+    bullet.handle.spawn("Misc",'Explode', bullet.x,bullet.y)	#Bullet: responsible for spash damage, Misc: Cosmetic sprite to persist
+
+

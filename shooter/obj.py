@@ -3,7 +3,9 @@ import pyglet
 import random
 from shooter import config
 from shooter import file_watcher
-#from shooter.bullet import Bullet
+from shooter import sound
+
+
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 from shooter.weapons import gun, shotgun, rocket
 
@@ -147,7 +149,8 @@ class Object_handler:      #Should I remove this class and just have the various
                 player.Circle_collision(enemy)
         for enemy in Enemy_list:
             for bullet in Bullet_list:
-                enemy.Circle_collision(bullet)
+                if enemy.Circle_collision(bullet): 
+                    sound.enemy_hit.play
 
     def update(self):
         for enemy in Enemy_list:
@@ -308,7 +311,7 @@ class GameObject:
         if not (self.type == "Player" or self.type == "Bullet") and (not (self.is_on_screen()) or (self.cooldown)):
             # Check object is currently able to attack (On screen, cooldown expired)
             # Player manages its own cooldown            
-            return	
+            return False	
 
         # Calculate the angle of the shot by using trig
         # This gives us consistent bullet speed regardless of angle
@@ -317,13 +320,14 @@ class GameObject:
         theta = atan2(dx,dy)		
 
 	#Spawn attack object
-        b = self.handle.spawn('Bullet',Attack_Type,self.x,self.y)
+        b = self.handle.spawn('Bullet',Attack_Type,self.x,self.y,Bullet)
         b.sprite.rotation = theta * 180/pi
         b.theta = theta	
         b.parent = self.id
 
         if(b.id == "Bullet_rocket"):self.on_death=lambda: self.explode()
         self.cooldown = b.cost     		#Apply cooldown from attack.
+        return True
 
     def move(self):
         #Function name move is misleading: Function responsible for processing movement, rotation & object maintainance
@@ -381,7 +385,8 @@ class GameObject:
         if (distance_from_player < 150 + random.randrange(100)):			#Get in kind of close.
             theta = theta *-0.9								#Jittery holding pattern
             if self.is_on_screen():
-                self.attack('Bullet_Basic',player.x-50+random.randrange(100),player.y-50+random.randrange(100))	
+                
+                if self.attack('Bullet_Basic',player.x-50+random.randrange(100),player.y-50+random.randrange(100)): sound.pistol.play()	
 	#Added inaccuracy
 
         self.mx = -1 * self.speed * sin(theta)
@@ -421,16 +426,11 @@ class GameObject:
         pass
 
     def bullet_ai(self,player):
-        self.health = self.health - 1
-        self.mx = sin(self.theta) * self.speed
-        self.my = cos(self.theta) * self.speed
+
         pass
 
     def rocket_ai(self,player):
-        self.health -= 1
-        self.handle.spawn("Misc", 'Smoke', self.x, self.y)
-        self.mx = sin(self.theta) * self.speed
-        self.my = cos(self.theta) * self.speed
+
         pass
 
 
@@ -479,7 +479,7 @@ class GameObject:
 #    'Misc': obj_misc			#Object type Misc.	(Intended for graphical effects, Eg enemy dies spawn Explosion object)
 #}
 
-
+from shooter.bullets.bullet import Bullet
 
 
 

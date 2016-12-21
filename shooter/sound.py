@@ -1,20 +1,12 @@
 import pyglet
 from shooter import config
 
-#TODO: Implement array of player objects in class to allow multiple sound files to be played in paralell
+pyglet.options['audio'] = ('directsound', 'openal', 'pulse', 'silent')
 
-class Sound:
-    def __init__(self):
-        self.player = pyglet.media.Player()
-
-    def queue(self, source):
-        self.player.next_source()
-        self.player.queue(source)
- 
-
-    def play(self):
-        self.player.play()
+pistol = pyglet.media.load("sounds/pistol.wav", streaming = False)
+machine = pyglet.media.load("sounds/machine.wav", streaming = False)
+explosion = pyglet.media.load("sounds/explosion.wav", streaming = False)
+enemy_hit = pyglet.media.load("sounds/hitenemy.wav", streaming = False)
 
 
-SoundHandler = Sound()
         
