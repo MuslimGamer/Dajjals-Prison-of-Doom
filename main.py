@@ -8,6 +8,7 @@ import pyglet
 import random
 import os
 import sys
+from shooter import sound
 
 # Support for PyInstaller --onefile. It creates an archive exe that
 # unpacks to a temp directory. We need to convince all our file I/O
@@ -18,9 +19,10 @@ if hasattr(sys, '_MEIPASS'):
 
 from shooter import config
 from shooter import file_watcher
-from shooter import obj		#Object module	-Severok
+
 from shooter import sound
 from shooter.player import Player
+from shooter import obj		#Object module	-Severok
 
 
 
@@ -83,6 +85,15 @@ def start_game():
     Screen_handler.draw_ui = True
 
 def game_over():
+
+    obj.Player_list[:]=[]
+    obj.Enemy_list[:]=[]
+    obj.Bullet_list[:]=[]
+    obj.Misc_list[:]=[]
+    obj.Backgrounds_list[:]=[]
+
+    Object_handler.start()
+
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
     print("Over and out: {0}, {1}".format(over.x, over.y))
@@ -94,7 +105,7 @@ def frame_callback(dt):
     #Check user input
     Screen_handler.input()
     Object_handler.update()
-    sound.SoundHandler.play()
+    #sound.SoundHandler.play()
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
         # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
@@ -106,6 +117,8 @@ def frame_callback(dt):
             player.y = Screen_handler.height - player.img.height
         if player.y < 0:
             player.y = 0
+
+
     
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)

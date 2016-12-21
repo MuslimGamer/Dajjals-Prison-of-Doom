@@ -69,11 +69,11 @@
     },
     {
       "ID": "Explode",
-      "Health": 10,
+      "Health": 5,
       "Img": "images/explode.png",
-      "Size": 10,
+      "Size": 5,
       "Speed": 0,
-      "Behavior": "NULL",
+      "Behavior": "bullet",
       "Cost": 0
     },
     {
@@ -134,11 +134,11 @@
     },
     {
       "ID": "Explode",
-      "Health": 10,
+      "Health": 3,
       "Img": "images/explode.png",
-      "Size": 10,
+      "Size": 5,
       "Speed": 0,
-      "Behavior": "NULL",
+      "Behavior": "misc",
       "Cost": 0
     },
     {
