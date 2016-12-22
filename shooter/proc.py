@@ -18,6 +18,9 @@ from shooter import ui_manager
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
+
+
+
 class Screen:			#Class handling window and window related functions (Draw, Events, Input)
     def __init__(self, width, height):
         self.offset_x = 100
@@ -28,6 +31,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.mouse_button = 0
         self.keyboard = pyglet.window.key.KeyStateHandler()
         self._currently_pressed = []
+
 
         self.__ui_manager = ui_manager.UiManager()
         self.draw_ui = True
@@ -123,7 +127,14 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                     player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
                 else:
                     player.fire(self.mouse_x, self.mouse_y) 
-            elif self.is_pressed(mouse.LEFT):                           
+            elif self.is_pressed(mouse.LEFT):      
+                for rail in obj.Bullet_list:
+                    if rail.id == "Bullet_RailCharge":
+                        dx = self.mouse_x - player.x
+                        dy = self.mouse_y - player.y
+                        rail.theta = atan2(dx,dy)
+                        rail.health = 20
+                        return
                 player.fire(self.mouse_x, self.mouse_y)
 
     @property

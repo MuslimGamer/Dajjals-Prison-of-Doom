@@ -1,5 +1,5 @@
 def init(bullet):
-    print("Code run on spawning Basic shot")
+    pass
 
 def update(bullet):
     pass

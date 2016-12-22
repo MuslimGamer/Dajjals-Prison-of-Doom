@@ -33,6 +33,15 @@
     "rocket_spread": 0,
     "rocket_reload_seconds": 3,
     "rocket_cooldown_seconds": 1,
-    "rocket_bullet_type": "Bullet_Rocket"	#On removal, spawn explosion.
+    "rocket_bullet_type": "Bullet_Rocket",	#On removal, spawn explosion.
+
+    "rail_bullets": 1,
+    "rail_burst": 1,
+    "rail_spread": 0,
+    "rail_reload_seconds": 3,
+    "rail_cooldown_seconds": 1,
+    "rail_bullet_type": "Bullet_RailCharge"	#On removal, spawn RailShot.
+
+
 }
 

@@ -69,11 +69,11 @@
     },
     {
       "ID": "Explode",
-      "Health": 5,
+      "Health": 10,
       "Img": "images/explode.png",
       "Size": 5,
       "Speed": 0,
-      "Behavior": "bullet",
+      "Behavior": "misc",
       "Cost": 0
     },
     {
@@ -83,6 +83,24 @@
       "Size": 3,
       "Speed": 0,
       "Behavior": "sword",
+      "Cost": 5
+    },
+    {
+      "ID": "Bullet_RailCharge",
+      "Health": 90,
+      "Img": "images/railcharge.png",
+      "Size": 0.5,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 5
+    },
+    {
+      "ID": "Bullet_RailFire",
+      "Health": 10,
+      "Img": "images/railfire2.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
       "Cost": 5
     }
   ],
@@ -134,12 +152,21 @@
     },
     {
       "ID": "Explode",
-      "Health": 3,
+      "Health": 10,
       "Img": "images/explode.png",
       "Size": 5,
       "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
+    },
+    {
+      "ID": "Rail_Fire",
+      "Health": 90,
+      "Img": "images/railfire.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 5
     },
     {
       "ID": "Smoke",

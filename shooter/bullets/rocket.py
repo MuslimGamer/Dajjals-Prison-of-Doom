@@ -1,9 +1,10 @@
 from shooter import sound
 
 def init(bullet):
-    print("Make a rocket")
+    pass  
 
 def update(bullet):
+    bullet.handle.spawn("Misc",'Smoke',bullet.x-bullet.mx,bullet.y-bullet.my)
     pass
 
 def on_death(bullet):

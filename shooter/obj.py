@@ -73,6 +73,13 @@ class Object_handler:      #Should I remove this class and just have the various
 	# a single parameter "prototype" (JSON) data and passes it to the base class.
 	###
     def start(self):
+
+        Player_list[:]=[]
+        Enemy_list[:]=[]
+        Bullet_list[:]=[]
+        Misc_list[:]=[]
+        Pickup_list[:]=[]
+        Backgrounds_list[:]=[]
         self.score = 0
         self.SpawnBudget = 0
         self.SpawnCost = 1

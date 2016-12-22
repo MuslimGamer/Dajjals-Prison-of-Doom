@@ -5,13 +5,13 @@ from math import atan2, sin, cos, pi, sqrt
 
 from shooter import obj
 from shooter.bullets import bullet
-from shooter.weapons import gun, pistol, machine, shotgun, rocket
+from shooter.weapons import gun, pistol, machine, shotgun, rocket, rail
 
 class Player(obj.GameObject):
     def __init__(self, owner, prototype):
         # call base class constructor
         obj.GameObject.__init__(self, owner, 'Player', prototype)
-        self.__gun = rocket.Rocket()
+        self.__gun = rail.Rail()
 
     def switch(self,gun_config_prefix):
         self.__gun.switch(gun_config_prefix)

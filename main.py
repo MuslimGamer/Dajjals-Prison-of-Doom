@@ -45,12 +45,7 @@ def center(game_obj):
 
 def start_game():
     # Clear everything on screen
-    obj.Player_list[:]=[]
-    obj.Enemy_list[:]=[]
-    obj.Bullet_list[:]=[]
-    obj.Misc_list[:]=[]
-    obj.Pickup_list[:]=[]
-    obj.Backgrounds_list[:]=[]
+    Object_handler.start()
 
     background = Object_handler.spawn('Background', 'Background', 0, 0)
 
@@ -73,14 +68,6 @@ def start_game():
 
 def game_over():
 
-    obj.Player_list[:]=[]
-    obj.Enemy_list[:]=[]
-    obj.Bullet_list[:]=[]
-    obj.Misc_list[:]=[]
-    obj.Pickup_list[:]=[]    
-    obj.Backgrounds_list[:]=[]
-
-    Object_handler.start()
 
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
