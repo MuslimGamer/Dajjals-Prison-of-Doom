@@ -79,7 +79,8 @@ def game_over():
 def frame_callback(dt):
     #Check user input
     Screen_handler.input()
-    Object_handler.update()
+    if not Screen_handler.paused:
+        Object_handler.update()
     #sound.SoundHandler.play()
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
