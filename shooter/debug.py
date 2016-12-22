@@ -32,7 +32,7 @@ def invincible(player):
 def spawn_enemies(player):
     x = 3 + random.randrange(3)
     for i in range(x):
-        obj.Object_handler().spawn_random(5)
+        obj.Object_handler.instance.spawn_random(5)
 
 def lots_of_bullets(player):
     player.unlimited_ammo()

@@ -55,7 +55,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             pass #print("Mouse dragged")
         
         def on_key_press(symbol, modifiers):
-            self._currently_pressed.append(symbol)
+            if not symbol in self._currently_pressed:
+                self._currently_pressed.append(symbol)
 
             # game logic to execute when we press a key the first time only (not press+hold)
             if symbol == key.R: 
@@ -63,9 +64,13 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             elif symbol == key.P:
                 self.paused = not self.paused
                 ui_manager.paused = self.paused
+            elif config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
+                debug.ask_and_process_cheat_code(obj.Player_list[0])
+
 
         def on_key_release(symbol, modifiers):
-            self._currently_pressed.remove(symbol)
+            if symbol in self._currently_pressed:
+                self._currently_pressed.remove(symbol)
         
         def on_draw():		#Kept seperate from processing callback, Frame rate not tied to simulation speed.
             self.__window.clear()
@@ -115,10 +120,10 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         return to_return != None
 
 
+    # NOT event driven: called frequently. If you check keys here, we constantly apply
+    # this logic as long as these keys are held down. If you want something more event-driven,
+    # add your code under on_key_press.
     def input(self): 
-        if config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
-            debug.ask_and_process_cheat_code(player)
-
         if not self.paused:
             for player in obj.Player_list:        
                 player.mx = self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1
