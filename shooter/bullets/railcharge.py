@@ -35,16 +35,23 @@ def on_death(rail):
     #rail.sound.queue(sound.rail_fire)#.play()
     #rail.sound.next()
 
+    step_x = 0.01*sin(rail.theta)
+    step_y = 0.01*cos(rail.theta)
+    scale_step_x = step_x*3000*rail.size
+    scale_step_y = step_y*3000*rail.size
+
     x = rail.x     #Apply position immediately so factors in collision detect
     y = rail.y
     while (x > 0 and x < obj.GAME_WIDTH and y > 0 and y < obj.GAME_HEIGHT):
         b1 = rail.handle.spawn("Bullet", 'Bullet_RailFire',x,y)
         b1.parent = rail.parent
         b1.size = rail.size
-        b1.mx +=0.01*sin(rail.theta)
-        b1.my +=0.01*cos(rail.theta)
-        x += b1.mx*3000*b1.size
-        y += b1.my*3000*b1.size
+        b1.mx = step_x
+        b1.my = step_y
+        x += scale_step_x
+        y += step_y*3000*rail.size
+        b1.move()
+        #b1.mx=b1.my = 0
         
 
 
