@@ -16,9 +16,11 @@ def ask_and_process_cheat_code(player):
 
     process_generically(cheat_code)
 
+def railgun(player):
+    player.switch("rail")
+
 def spawn_pickup(player):
     types = ["Weapon_Pistol", "Weapon_Machine", "Weapon_Shotgun", "Weapon_Rocket"]
-    spawn = random.randrange(len(types))
     if len(obj.Enemy_list) > 0:
         obj.Enemy_list[0].Loot(100) # turn the first enemy into kibble
     else:
@@ -43,5 +45,6 @@ cheats = {
     "spawn": spawn_enemies,
     "ammo": lots_of_bullets,
     "pickup": spawn_pickup,
-    "die": die
+    "die": die,
+    "rail": railgun
 }
