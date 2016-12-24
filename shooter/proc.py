@@ -101,14 +101,31 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         if (len(obj.Player_list)):
             player = obj.Player_list[0]
             if not(player.id == "Player_Basic"):return
-     
-            player.mx = self.keyboard[key.A] * -1 + self.keyboard[key.D] * 1
-            player.my = self.keyboard[key.S] * -1 + self.keyboard[key.W] * 1
 
-            if not (abs(player.mx) + abs(player.my) == 1):
-            # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
-                player.mx = player.mx * 0.707 * player.speed
-                player.my = player.my * 0.707 * player.speed
+            if config.get("control_style") == "relative":
+                thrust = self.keyboard[key.S] * -0.01 + self.keyboard[key.W] * 0.05
+                player.theta += (self.keyboard[key.A] * -1 + self.keyboard[key.D] * 1)*2*pi/180
+
+            
+
+
+                player.mx += thrust * cos(player.theta)
+                player.my += thrust * -1*sin(player.theta)
+
+                if (sqrt(player.mx*player.mx+player.my*player.my)>player.speed):
+                    player.mx = player.mx*.9
+                    player.my = player.my*.9
+                player.mx = player.mx *0.99 
+                player.my = player.my *0.99
+            
+            else:
+                player.mx = self.keyboard[key.A] * -1 + self.keyboard[key.D] * 1
+                player.my = self.keyboard[key.S] * -1 + self.keyboard[key.W] * 1
+
+                if not (abs(player.mx) + abs(player.my) == 1):
+                # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
+                    player.mx = player.mx * 0.707 * player.speed
+                    player.my = player.my * 0.707 * player.speed
 
             if config.get("enable_cheat_codes") == True and self.keyboard[key.GRAVE]:
                 debug.ask_and_process_cheat_code(player)
@@ -118,14 +135,16 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
             if (self.is_pressed(mouse.RIGHT)):
                 if config.get('melee_enabled'):
-                    if not (player.cooldown):                        
-                        player.attack("Bullet_Melee",self.mouse_x,self.mouse_y)
+                    if not (player.cooldown):  
+                        print("Deflect")                      
+                        shield = player.handle.spawn('Player',"Deflect",player.x,player.y)
+                        print(shield.id)
                     else:
-                        for sword in obj.Bullet_list:
-                            if sword.id == "Bullet_Melee":
+                        for deflect in obj.Player_list:
+                            if deflect.id == "Deflect":
                                 dx = self.mouse_x - player.x
                                 dy = self.mouse_y - player.y
-                                sword.theta = atan2(dx,dy)			#Mathy goodness.
+                                deflect.theta = atan2(dx,dy)			#Mathy goodness.
                     player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
                 else:
                     player.fire(self.mouse_x, self.mouse_y) 

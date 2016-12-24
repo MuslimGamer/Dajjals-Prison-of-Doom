@@ -315,7 +315,13 @@ class GameObject:
         if(radius>sqrt(dx*dx + dy*dy)):
 
             self.health = self.health - 1
-            Target_object.health = 0
+            if (self.id == "Deflect"): 
+                theta = atan2(dx,dy)
+                bullet.mx = -1*bullet.speed*sin(theta)
+                bullet.my = -1*bullet.speed*cos(theta)
+            else: 
+                Target_object.health = 0
+
             #If self is still alive after collision, apply kick-back
             #Apply acceleration proportional to the ratio of mass of colliding objects.
             if self.health:
@@ -352,11 +358,23 @@ class GameObject:
     def move(self):
         #Function name move is misleading: Function responsible for processing movement, rotation & object maintainance
         #if(self.mx!=0)or(self.my!=0):
+        
         self.x = self.x + self.mx
         self.y = self.y + self.my
+
+        if not (self.id == "Player_Basic"):
+
             #Calculate sprite rotation + position(Sprite centroid, not datum) and update sprite
 
-        theta = atan2(-self.my,self.mx)		#Sprite face direction of movement
+            theta = atan2(-self.my,self.mx)		#Sprite face direction of movement
+        else: 
+            theta = self.theta
+            if self.x < 0: self.x = GAME_WIDTH
+            if self.x > GAME_WIDTH: self.x = 0
+            if self.y < 0: self.y = GAME_HEIGHT
+            if self.y > GAME_HEIGHT: self.y = 0
+
+        if not config.get("control_style") == "relative":theta = atan2(-self.my,self.mx)
         self.sprite.rotation = theta*180/pi	#Sprite rotation in degrees, while trig functions return radians (Like real maths)
 
         self.sprite_x = self.x - self.radius * sin(theta+self.theta_offset)	#Calculate centroid position given:
@@ -472,6 +490,20 @@ class GameObject:
         if (self.health > 0):
             self.health = self.health - 1
 
+
+    def deflect_ai(self, player):
+        if player is None:
+            return
+        shield_radius = config.get("sword_attack_radius")
+        self.health = player.cooldown
+        self.mx = 0.01 * sin(self.theta)	#Apply small movement to ensure sword renders with correct rotation.
+        self.my = 0.01 * cos(self.theta)        #Position applied below instead of movement function so position updated before collsion detection
+        self.sprite.rotation = self.theta
+
+        # +width/2, -height/2 makes the sword perfectly center on the player
+        self.x = player.x +shield_radius * sin(self.theta)    #Apply position immediately so factors in collision detection
+        self.y = player.y + shield_radius * cos(self.theta)  
+
     def sword_ai(self, player):
         if player is None:
             return
@@ -513,6 +545,7 @@ class GameObject:
         ai_action={
             "agro": self.agro_ai,
             "coward": self.coward_ai,
+            "deflect": self.deflect_ai,
             "npc": self.npc_ai,
             "bullet": self.bullet_ai,
             "rocket": self.rocket_ai,

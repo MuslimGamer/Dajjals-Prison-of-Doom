@@ -39,10 +39,19 @@
       "Cost": 0
     },
     {
+      "ID": "Deflect",
+      "Health": 3,
+      "Img": "images/shield.png",
+      "Size": 1,
+      "Speed": 1.5,
+      "Behavior": "sword",
+      "Cost": 0
+    },
+    {
       "ID": "NPC_Basic",
       "Health": 1,
       "Img": "images/bluetriangle.png",
-      "Size": 1,
+      "Size": 0.5,
       "Speed": 0.5,
       "Behavior": "npc",
       "Cost": 1
@@ -164,6 +173,15 @@
       "Health": 10,
       "Img": "images/explode.png",
       "Size": 5,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+    {
+      "ID": "Hit",
+      "Health": 10,
+      "Img": "images/explode.png",
+      "Size": 0.3,
       "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
