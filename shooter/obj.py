@@ -4,6 +4,7 @@ import random
 from shooter import config
 from shooter import file_watcher
 from shooter import sound
+from shooter import ai
 
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
@@ -20,6 +21,7 @@ obj_pickup=[]
 
 Player_list=[]			#Active player list - Swap player objects for powerup effects
 Enemy_list= []			#Active enemy list
+NPC_list= []
 Bullet_list=[]			#Active bullet list
 Misc_list = []			#Active cosmetic sprite list
 Pickup_list = []
@@ -63,6 +65,7 @@ class Object_handler:      #Should I remove this class and just have the various
     def __init__(self):
         file_watcher.watch('data/object.json', load_prototype_data)
         self.start()
+        #ai.init()
         
 
 	###
@@ -113,9 +116,10 @@ class Object_handler:      #Should I remove this class and just have the various
             self.SpawnBudget -= self.SpawnCost
 
             type_select_result = {
-                0: "Enemy_Basic",
-                1: "Enemy_Coward",
-                2: "Enemy_Slow"
+                0: "NPC_Basic",
+                1: "Enemy_Basic",
+                2: "Enemy_Coward",
+                3: "Enemy_Slow", 
             }
 
             EnemyID = type_select_result[self.NextEnemy]
@@ -138,19 +142,22 @@ class Object_handler:      #Should I remove this class and just have the various
                 3: GAME_HEIGHT + 100
             }
 
-            self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
-            self.NextEnemy = random.randrange(3)
+            if(self.NextEnemy>0):self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
+            else: self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
+            self.NextEnemy = random.randrange(4)
 
-            list_of_prototypes = prototypes_json["Enemy"]
-            # Find an object x in the collection that matches the specified ID; defaults to None
-            prototype = next((x for x in list_of_prototypes if x['ID'] == EnemyID), None)
-            self.SpawnCost = prototype['Cost']
-
+            if(self.NextEnemy>0):
+                list_of_prototypes = prototypes_json["Enemy"]
+                EnemyID = type_select_result[self.NextEnemy]
+                prototype = next((x for x in list_of_prototypes if x['ID'] == EnemyID), None)
+                self.SpawnCost = prototype['Cost']
+            else: self.SpawnCost = 1
 
     def collision(self):
         for player in Player_list:
-            for pickup in Pickup_list:
-                player.pickup(pickup)
+            if player == Player_list[0]:
+                for pickup in Pickup_list:
+                    player.pickup(pickup)
             for bullet in Bullet_list:
                 player.Circle_collision(bullet)
             for enemy in Enemy_list:
@@ -161,6 +168,8 @@ class Object_handler:      #Should I remove this class and just have the various
                     sound.enemy_hit.play
 
     def update(self):
+        #ai.update()
+
         for enemy in Enemy_list:
             enemy.ai()
         for bullet in Bullet_list:
@@ -173,6 +182,7 @@ class Object_handler:      #Should I remove this class and just have the various
 
 
         for player in Player_list:
+            player.ai()
             player.move()
             player.update()
         for enemy in Enemy_list:
@@ -206,6 +216,8 @@ class GameObject:
         self.y = 0
         self.mx = 0						#Current Movement
         self.my = 0	
+        self.destinationx = random.randrange(GAME_WIDTH)
+        self.destinationy = random.randrange(GAME_HEIGHT)
         self.cooldown = 0					#Time until next attack avaliable
         self.centroid_x = 0					#Storing calculated centroid of sprite for current rotation.
         self.centroid_y = 0					#Reference of parent object (If any)
@@ -364,43 +376,84 @@ class GameObject:
 
     #AI functions:
     #Standard behavior, rush player, attack location
+
+    def npc_ai(self, player):
+        if player is None:
+            return
+        if self.is_on_screen():
+            dx = self.x - GAME_WIDTH/2
+            dy = self.y - GAME_HEIGHT/2
+            distance_from_home = sqrt(dx*dx+dy*dy)
+            if distance_from_home < 50:				#If at home:
+                self.health = 0						#Despawn
+                self.handle.score += 100				#Increase score +100
+                return
+
+            if distance_from_home < 100:			#If near home, run for safety
+                theta = atan2(dx,dy)
+                mx = self.speed * sin(theta)
+                my = self.speed * cos(theta)
+                return
+
+            player = Player_list[0]				#Otherwise, look for player to follow.
+            dx = self.x - player.x
+            dy = self.y - player.y
+            distance_from_player = sqrt(dx*dx+dy*dy)
+            if (distance_from_player<50):		#Keep some distance from player to avoid crowding.
+                self.mx=self.my = 0
+                return
+            if (distance_from_player<200):		#If player near: follow
+                ai.charge(self,player)
+                return
+                   						#If player far:
+            ai.wander(self)				#Seek player or other NPCs (Preference to player)
+								#Flee bullets and enemies.
+                    
+
     def agro_ai(self, player):
         if player is None:
             return
-            
-        dx = self.x - player.x
-        dy = self.y - player.y
-        distance_from_player = sqrt(dx*dx + dy*dy)
-        if (distance_from_player > 30):				#Get in close
-            theta = atan2(dx,dy)					#Mathy goodness.
-            self.mx = -1 * self.speed * sin(theta)
-            self.my = -1 * self.speed *cos(theta)
+        #if self.is_on_screen():
+        nearest = 1000
+        for player in Player_list:				#Select nearest target
+            dx = self.x - player.x
+            dy = self.y - player.y
+            distance_from_player = sqrt(dx*dx+dy*dy)
+            if (distance_from_player < nearest): 
+                nearest = distance_from_player
+                Target = player
+            #if (distance_from_player<400):			#If player or NPC is near: Charge
+        ai.charge(self,Target)					#Agro range: 400
         return
+        #ai.wander(self)					#Else, Seek targets, Spread out & avoid danger. 
+        #return
 
 
     #Coward behavior, maintain distance, attack location
     def coward_ai(self, player):
         if player is None:
             return
+        #if self.is_on_screen():
+        nearest = 1000
+        for player in Player_list:					#Select nearest target
+            dx = self.x - player.x
+            dy = self.y - player.y
+            distance_from_player = sqrt(dx*dx+dy*dy)
+            if (distance_from_player < nearest): 
+                nearest = distance_from_player
+                Target = player
 
-        dx = self.x - player.x
-        dy = self.y - player.y
-        theta = atan2(dx,dy)			#Mathy goodness.
-        distance_from_player = sqrt(dx*dx + dy*dy)
-        # NOTE: ranodm here means sporadic firing when we're within d=150-250 of the player
-        # This extra value should be persisted with the object somewhere for consistency
-        # But, I doubt anyone will notice :)
-        if (distance_from_player < 150 + random.randrange(100)):			#Get in kind of close.
-            theta = theta *-0.9								#Jittery holding pattern
-            if self.is_on_screen():
-                
-                if self.attack('Bullet_Basic',player.x-50+random.randrange(100),player.y-50+random.randrange(100)): sound.pistol.play()	
-	#Added inaccuracy
-
-        self.mx = -1 * self.speed * sin(theta)
-        self.my = -1 * self.speed * cos(theta)
-   
+        if (distance_from_player < 150 + random.randrange(100)):	#If target in range, attempt to attack
+            if self.attack('Bullet_Basic',player.x-50+random.randrange(100),player.y-50+random.randrange(100)): 
+                sound.pistol.play()
+            ai.flee(self, Target)					#Hold distance
+            return
+            #if (distance_from_player<400):					#If target in Agro range, approach
+        ai.charge(self,Target)
         return
+        #ai.wander(self)								#Else, Seek targets, Spread out & avoid danger. 							
+        #return
+
 
     def update(self):
         # "virtual" method. Subclasses override it.
@@ -442,9 +495,9 @@ class GameObject:
         pass
 
 
-#No AI attached to this object
+#No AI attached to this object - No decision making required on behalf of this object (EG Player or bullet)
     def NULL_ai(self,player):
-        raise(Exception("NULL AI?!"))
+        #raise(Exception("NULL AI?!"))
         pass
 
 #Undefined behavior referenced.
@@ -458,6 +511,7 @@ class GameObject:
         ai_action={
             "agro": self.agro_ai,
             "coward": self.coward_ai,
+            "npc": self.npc_ai,
             "bullet": self.bullet_ai,
             "rocket": self.rocket_ai,
             "sword": self.sword_ai,

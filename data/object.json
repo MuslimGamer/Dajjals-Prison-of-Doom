@@ -37,6 +37,15 @@
       "Speed": 1.5,
       "Behavior": "NULL",
       "Cost": 0
+    },
+    {
+      "ID": "NPC_Basic",
+      "Health": 1,
+      "Img": "images/bluetriangle.png",
+      "Size": 1,
+      "Speed": 0.5,
+      "Behavior": "npc",
+      "Cost": 1
     }
   ],
   "Bullet": [

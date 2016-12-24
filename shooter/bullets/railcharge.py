@@ -49,7 +49,7 @@ def on_death(rail):
         b1.mx = step_x
         b1.my = step_y
         x += scale_step_x
-        y += step_y*3000*rail.size
+        y += scale_step_y
         b1.move()
         #b1.mx=b1.my = 0
         

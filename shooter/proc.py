@@ -70,7 +70,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
             if self.draw_ui and len(obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
-                self.__ui_manager.draw(obj.Player_list[0])
+                if obj.Player_list[0].id == "Player_Basic":self.__ui_manager.draw(obj.Player_list[0])
 
         def on_close():
             file_watcher.stop()
@@ -98,7 +98,9 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
 
     def input(self): 
-        for player in obj.Player_list:
+        if (len(obj.Player_list)):
+            player = obj.Player_list[0]
+            if not(player.id == "Player_Basic"):return
      
             player.mx = self.keyboard[key.A] * -1 + self.keyboard[key.D] * 1
             player.my = self.keyboard[key.S] * -1 + self.keyboard[key.W] * 1

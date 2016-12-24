@@ -5,6 +5,7 @@ from shooter import obj
 # A manager to draw just UI concerns, like points, lives, etc.
 # Game Over should probably go in here too. Probably.
 ###
+
 class UiManager:
     SPACE_BETWEEN_LINES = 24
     RIGHT_PADDING = 120
@@ -21,6 +22,7 @@ class UiManager:
 
         self.score_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.health_label.x, y = self.ammo_label.y - UiManager.SPACE_BETWEEN_LINES)
+
 
 
     def draw(self, player):
