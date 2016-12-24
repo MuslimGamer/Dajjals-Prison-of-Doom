@@ -27,7 +27,7 @@ class UiManager:
         self.health_label.text = "Health: {0}".format(player.health)
         self.health_label.draw()
 
-        self.score_label.text = "Score: {0}".format(player.handle.score)
+        self.score_label.text = "Score: {0}".format(obj.score)
         self.score_label.draw()
 
         if player.is_reloading():

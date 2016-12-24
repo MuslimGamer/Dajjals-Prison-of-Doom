@@ -1,16 +1,14 @@
 import json
-import pyglet
 import random
+
+import pyglet
+
 from shooter import config
 from shooter import file_watcher
 from shooter import sound
-
-
-from math import atan2,atan, sin, cos, degrees, pi, sqrt
 from shooter.weapons import gun, shotgun, rocket
 
-
-
+from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
 obj_enemy=[]	#Lists of object prototypes
 obj_player=[]	#The one and only player prototype
@@ -46,7 +44,7 @@ prototypes_json = {			#Define object_type dictionary. Used to parse objects into
 GAME_WIDTH = 0
 GAME_HEIGHT = 0
 
-Score = 0
+score = 0
 
 def load_prototype_data(raw_json):
     json_object = json.loads(raw_json)
@@ -64,7 +62,6 @@ class Object_handler:      #Should I remove this class and just have the various
         file_watcher.watch('data/object.json', load_prototype_data)
         self.start()
         Object_handler.instance = self
-        
 
 	###
 	# Spawns an object of type object_type (from prototypes_json, eg. "Enemy"), using
@@ -81,7 +78,7 @@ class Object_handler:      #Should I remove this class and just have the various
         Misc_list[:]=[]
         Pickup_list[:]=[]
         Backgrounds_list[:]=[]
-        self.score = 0
+        score = 0
         self.SpawnBudget = 0
         self.SpawnCost = 1
         self.SpawnIncome = 0.5
@@ -261,7 +258,8 @@ class GameObject:
 
     def Loot(self,chance):
         self.handle.SpawnIncome += 0.1
-        self.handle.score += self.cost
+        global score # obj.score
+        score += self.cost
         if((random.randrange(100)<chance) and (len(Pickup_list)<3)):
             Type = random.randrange(4)
             PickupType = {

@@ -4,10 +4,13 @@
 ## Main.py  -  Initialisation calls & Higher level functions ##
 ###############################################################
 
-import pyglet
 import random
 import os
 import sys
+from math import atan2,atan, sin, cos, degrees, pi, sqrt
+
+import pyglet
+
 from shooter import sound
 
 # Support for PyInstaller --onefile. It creates an archive exe that
@@ -26,7 +29,8 @@ from shooter import obj		#Object module	-Severok
 
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
-from math import atan2,atan, sin, cos, degrees, pi, sqrt
+from shooter import ui_manager
+
 
 GAME_WIDTH = 1024
 GAME_HEIGHT = 576
@@ -46,6 +50,8 @@ def center(game_obj):
 def start_game():
     # Clear everything on screen
     Object_handler.start()
+    Screen_handler.score_label = None
+    obj.score = 0
 
     background = Object_handler.spawn('Background', 'Background', 0, 0)
 
@@ -67,11 +73,13 @@ def start_game():
     Screen_handler.draw_ui = True
 
 def game_over():
-
-
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
-    print("Over and out: {0}, {1}".format(over.x, over.y))
+    
+    # TODO: encapsulate
+    Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
+        x = over.x + 160, y = over.y - 32, font_size = 24)
+
     pyglet.clock.unschedule(Object_handler.spawn_random)
 
     over.on_death = lambda: start_game()
@@ -94,8 +102,6 @@ def frame_callback(dt):
         if player.y < 0:
             player.y = 0
 
-
-    
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
 

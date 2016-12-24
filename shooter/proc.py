@@ -37,6 +37,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
         self.__ui_manager = ui_manager.UiManager()
         self.draw_ui = True
+        self.score_label = None # shouldn't be here, not every screen needs one
 
         # TODO: scale when we have time!
         # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
@@ -94,6 +95,10 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
             if self.paused:
                 self.pause_sprite.draw()
+
+            # draw score after game over. This is set to None if it's not supposed to be drawn.
+            if self.score_label != None:
+                self.score_label.draw()
 
         def on_close():
             file_watcher.stop()
