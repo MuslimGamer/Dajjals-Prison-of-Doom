@@ -386,7 +386,7 @@ class GameObject:
             distance_from_home = sqrt(dx*dx+dy*dy)
             if distance_from_home < 50:				#If at home:
                 self.health = 0						#Despawn
-                self.handle.score += 100				#Increase score +100
+                self.handle.score += 10				#Increase score +100
                 return
 
             if distance_from_home < 100:			#If near home, run for safety
@@ -415,6 +415,7 @@ class GameObject:
             return
         #if self.is_on_screen():
         nearest = 1000
+        Target = Player_list[0]
         for player in Player_list:				#Select nearest target
             dx = self.x - player.x
             dy = self.y - player.y
@@ -435,6 +436,7 @@ class GameObject:
             return
         #if self.is_on_screen():
         nearest = 1000
+        Target = Player_list[0]
         for player in Player_list:					#Select nearest target
             dx = self.x - player.x
             dy = self.y - player.y
