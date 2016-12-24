@@ -83,11 +83,11 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 enemy.sprite.draw()
             for bullet in obj.Bullet_list:		#Render bullet sprites
                 bullet.sprite.draw()
-            for misc in obj.Misc_list:		#Render Misc sprites
-                misc.sprite.draw()
             for pickup in obj.Pickup_list:
                 pickup.sprite.draw()
-
+            for misc in obj.Misc_list:		#Render Misc sprites
+                misc.sprite.draw()
+                
             if self.draw_ui and len(obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
                 self.__ui_manager.draw(obj.Player_list[0])
