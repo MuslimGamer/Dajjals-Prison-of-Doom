@@ -15,8 +15,10 @@ class Gun:
         self.burst_shots = config.get("{0}_burst".format(gun_config_prefix))
         self.spread = config.get("{0}_spread".format(gun_config_prefix))
         self.__shots_left = self.__total_shots
-        self.reload_time_seconds = config.get("{0}_reload_seconds".format(gun_config_prefix))
-        self._cooldown_time_seconds = config.get("{0}_cooldown_seconds".format(gun_config_prefix))
+        self.stock_reload_time_seconds = config.get("{0}_reload_seconds".format(gun_config_prefix))
+        self.reload_time_seconds = self.stock_reload_time_seconds
+        self.stock_cooldown_time_seconds = config.get("{0}_cooldown_seconds".format(gun_config_prefix))
+        self._cooldown_time_seconds = self.stock_cooldown_time_seconds
         self.bullet_type = config.get("{0}_bullet_type".format(gun_config_prefix))
         self._last_shot = time.time()
         self.__audio_file = "sounds/{0}.wav".format(gun_config_prefix)
@@ -29,8 +31,10 @@ class Gun:
         self.burst_shots = config.get("{0}_burst".format(gun_config_prefix))
         self.spread = config.get("{0}_spread".format(gun_config_prefix))
         self.__shots_left = self.__total_shots
-        self.reload_time_seconds = config.get("{0}_reload_seconds".format(gun_config_prefix))
-        self._cooldown_time_seconds = config.get("{0}_cooldown_seconds".format(gun_config_prefix))
+        self.stock_reload_time_seconds = config.get("{0}_reload_seconds".format(gun_config_prefix))
+        self.reload_time_seconds = self.stock_reload_time_seconds
+        self.stock_cooldown_time_seconds = config.get("{0}_cooldown_seconds".format(gun_config_prefix))
+        self._cooldown_time_seconds - self.stock_cooldown_time_seconds
         self.bullet_type = config.get("{0}_bullet_type".format(gun_config_prefix))
         self.__audio_file = "sounds/{0}.wav".format(gun_config_prefix) 
         self.pew = pyglet.media.StaticSource(pyglet.media.load(self.__audio_file, streaming = False))

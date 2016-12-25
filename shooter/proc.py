@@ -106,9 +106,6 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 thrust = self.keyboard[key.S] * -0.01 + self.keyboard[key.W] * 0.05
                 player.theta += (self.keyboard[key.A] * -1 + self.keyboard[key.D] * 1)*2*pi/180
 
-            
-
-
                 player.mx += thrust * cos(player.theta)
                 player.my += thrust * -1*sin(player.theta)
 
@@ -138,7 +135,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                     if not (player.cooldown):  
                         print("Deflect")                      
                         shield = player.handle.spawn('Player',"Deflect",player.x,player.y)
-                        print(shield.id)
+                        print(shld.id)
                     else:
                         for deflect in obj.Player_list:
                             if deflect.id == "Deflect":

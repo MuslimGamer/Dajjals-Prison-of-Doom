@@ -9,6 +9,7 @@ from shooter import obj
 class UiManager:
     SPACE_BETWEEN_LINES = 24
     RIGHT_PADDING = 120
+    LEFT_PADDING = 20
     
     FONT_NAME = "Orbitron"
     FONT_FILE = "fonts/Orbitron-Medium.ttf"
@@ -22,6 +23,14 @@ class UiManager:
 
         self.score_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.health_label.x, y = self.ammo_label.y - UiManager.SPACE_BETWEEN_LINES)
+
+        self.drive_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = UiManager.LEFT_PADDING, y = obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
+
+        self.crew_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = self.drive_label.x, y = self.drive_label.y - UiManager.SPACE_BETWEEN_LINES)
+
+
 
 
 
@@ -37,6 +46,14 @@ class UiManager:
         else:
             self.ammo_label.text = "{0} bullets".format(player.shots_left)
         self.ammo_label.draw()
+
+        self.crew_label.text = "Crew: {0} / 30".format(player.crew)
+        self.crew_label.draw()
+
+        if player.health < 5: self.drive_label.text = "Jump-Drive Disabled"
+        else: self.drive_label.text = "Drive Charge: {0}%".format(player.drive / 100)
+        self.drive_label.draw()
+
 
 pyglet.font.add_file(UiManager.FONT_FILE)
 pyglet.font.load(UiManager.FONT_NAME, bold=False)

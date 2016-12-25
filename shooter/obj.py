@@ -182,6 +182,13 @@ class Object_handler:      #Should I remove this class and just have the various
 
 
         for player in Player_list:
+            if player.id == "Player_Basic":
+                player.health += player.repair
+               
+                if player.health > 5: 
+                    player.drive +=1
+                    player.health = 5
+                
             player.ai()
             player.move()
             player.update()
@@ -325,9 +332,15 @@ class GameObject:
             #If self is still alive after collision, apply kick-back
             #Apply acceleration proportional to the ratio of mass of colliding objects.
             if self.health:
+
                 self.mx += Target_object.mx *(Target_object.size/self.size)
                 self.my += Target_object.my *(Target_object.size/self.size)
 
+                if(self.id == "Player_Basic"):
+                    if not (random.randrange(3)):			#If hit, 1-3 chance of losing crew
+                        self.crew -= 1
+                        if not (self.crew): self.crew = 1		#Preserve atleast 1 crew member.
+                   
 
             return 1   #Hit detected
         return 0       #No Hit Detected
@@ -401,24 +414,31 @@ class GameObject:
         if self.is_on_screen():
             dx = self.x - GAME_WIDTH/2
             dy = self.y - GAME_HEIGHT/2
-            distance_from_home = sqrt(dx*dx+dy*dy)
-            if distance_from_home < 50:				#If at home:
-                self.health = 0						#Despawn
-                self.handle.score += 10				#Increase score +100
-                return
-
-            if distance_from_home < 100:			#If near home, run for safety
-                theta = atan2(dx,dy)
-                mx = self.speed * sin(theta)
-                my = self.speed * cos(theta)
-                return
+            #distance_from_home = sqrt(dx*dx+dy*dy)
+            #if distance_from_home < 50:				#If at home:
+            #    self.health = 0						#Despawn
+            #    self.handle.score += 10				#Increase score +100
+            #    return
+	
+            #if distance_from_home < 100:			#If near home, run for safety
+            #    theta = atan2(dx,dy)
+            #    mx = self.speed * sin(theta)
+            #    my = self.speed * cos(theta)
+            #    return
 
             player = Player_list[0]				#Otherwise, look for player to follow.
+            if not player.id == "Player_Basic": return
             dx = self.x - player.x
             dy = self.y - player.y
             distance_from_player = sqrt(dx*dx+dy*dy)
-            if (distance_from_player<50):		#Keep some distance from player to avoid crowding.
+            if (distance_from_player<10):		#Keep some distance from player to avoid crowding.
                 self.mx=self.my = 0
+                self.health=0
+                player.crew = player.crew + 1
+                if player.crew > 30:
+                    player.score += 100
+                    player.crew = 30
+                player.upgrade()
                 return
             if (distance_from_player<200):		#If player near: follow
                 ai.charge(self,player)
