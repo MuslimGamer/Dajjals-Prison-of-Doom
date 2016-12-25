@@ -10,6 +10,10 @@ import glob
 import random
 import os
 import sys
+from math import atan2,atan, sin, cos, degrees, pi, sqrt
+
+import pyglet
+
 from shooter import sound
 
 # Support for PyInstaller --onefile. It creates an archive exe that
@@ -28,7 +32,8 @@ from shooter import obj		#Object module	-Severok
 
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
-from math import atan2,atan, sin, cos, degrees, pi, sqrt
+from shooter import ui_manager
+
 
 from shooter import background
 
@@ -65,12 +70,13 @@ def create_background():
         # assume up to 300x300
         x = random.randrange(obj.GAME_WIDTH - 300)
         y = random.randrange(obj.GAME_HEIGHT - 300)
-        print("{0}, {1}".format(x, y))
         obj.Backgrounds_list.append(background.Background(planet, x, y))
 
 def start_game():
     # Clear everything on screen
     Object_handler.start()
+    Screen_handler.score_label = None
+    obj.score = 0
 
     create_background()
 
@@ -82,11 +88,13 @@ def start_game():
     Screen_handler.draw_ui = True
 
 def game_over():
-
-
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
-    print("Over and out: {0}, {1}".format(over.x, over.y))
+    
+    # TODO: encapsulate
+    Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
+        x = over.x + 160, y = over.y - 32, font_size = 24)
+
     pyglet.clock.unschedule(Object_handler.spawn_random)
 
     over.on_death = lambda: start_game()
@@ -94,7 +102,8 @@ def game_over():
 def frame_callback(dt):
     #Check user input
     Screen_handler.input()
-    Object_handler.update()
+    if not Screen_handler.paused:
+        Object_handler.update()
     #sound.SoundHandler.play()
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
@@ -108,8 +117,6 @@ def frame_callback(dt):
         if player.y < 0:
             player.y = 0
 
-
-    
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
 

@@ -143,7 +143,7 @@
     },
     {
       "ID": "Game Over",
-      "Health": 300,
+      "Health": 450,
       "Img": "images/game-over.png",
       "Size": 1,
       "Speed": 0,

@@ -18,9 +18,6 @@ from shooter import ui_manager
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
-
-
-
 class Screen:			#Class handling window and window related functions (Draw, Events, Input)
     def __init__(self, width, height):
         self.offset_x = 100
@@ -30,11 +27,17 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.mouse_y = 0
         self.mouse_button = 0
         self.keyboard = pyglet.window.key.KeyStateHandler()
-        self._currently_pressed = []
+        self._currently_pressed = [] # mouse buttons and keyboard keys
 
+        self.paused = False
+        pause_image = pyglet.image.load("images/paused.png") 
+        self.pause_sprite = pyglet.sprite.Sprite(pause_image, 0, 0)
+        self.pause_sprite.x = (width - self.pause_sprite.width) / 2
+        self.pause_sprite.y = (height - self.pause_sprite.height) / 2
 
         self.__ui_manager = ui_manager.UiManager()
         self.draw_ui = True
+        self.score_label = None # shouldn't be here, not every screen needs one
 
         # TODO: scale when we have time!
         # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
@@ -51,7 +54,25 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         def on_mouse_drag(x,y,dx,dy, buttons, modifiers):        
             self.mouse_dragged(x, y)
             pass #print("Mouse dragged")
+        
+        def on_key_press(symbol, modifiers):
+            if not symbol in self._currently_pressed:
+                self._currently_pressed.append(symbol)
 
+            # game logic to execute when we press a key the first time only (not press+hold)
+            if symbol == key.R: 
+                obj.Player_list[0].reload()
+            elif symbol == key.P:
+                self.paused = not self.paused
+                ui_manager.paused = self.paused
+            elif config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
+                debug.ask_and_process_cheat_code(obj.Player_list[0])
+
+
+        def on_key_release(symbol, modifiers):
+            if symbol in self._currently_pressed:
+                self._currently_pressed.remove(symbol)
+        
         def on_draw():		#Kept seperate from processing callback, Frame rate not tied to simulation speed.
             self.__window.clear()
 
@@ -63,19 +84,26 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 enemy.sprite.draw()
             for bullet in obj.Bullet_list:		#Render bullet sprites
                 bullet.sprite.draw()
-            for misc in obj.Misc_list:		#Render Misc sprites
-                misc.sprite.draw()
             for pickup in obj.Pickup_list:
                 pickup.sprite.draw()
-
+            for misc in obj.Misc_list:		#Render Misc sprites
+                misc.sprite.draw()
+                
             if self.draw_ui and len(obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
                 if obj.Player_list[0].id == "Player_Basic":self.__ui_manager.draw(obj.Player_list[0])
 
+            if self.paused:
+                self.pause_sprite.draw()
+
+            # draw score after game over. This is set to None if it's not supposed to be drawn.
+            if self.score_label != None:
+                self.score_label.draw()
+
         def on_close():
             file_watcher.stop()
 
-        self.__window.push_handlers(on_mouse_press,on_mouse_release,on_mouse_drag,on_draw,on_close, self.keyboard)
+        self.__window.push_handlers(on_mouse_press,on_mouse_release,on_mouse_drag,on_draw,on_close,on_key_press, on_key_release)
 
 
     def mouse_pressed(self,x,y,button):
@@ -97,14 +125,17 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         return to_return != None
 
 
+    # NOT event driven: called frequently. If you check keys here, we constantly apply
+    # this logic as long as these keys are held down. If you want something more event-driven,
+    # add your code under on_key_press.
     def input(self): 
-        if (len(obj.Player_list)):
+        if (not self.paused and len(obj.Player_list) > 0):
             player = obj.Player_list[0]
             if not(player.id == "Player_Basic"):return
 
             if config.get("control_style") == "relative":
-                thrust = self.keyboard[key.S] * -0.01 + self.keyboard[key.W] * 0.05
-                player.theta += (self.keyboard[key.A] * -1 + self.keyboard[key.D] * 1)*2*pi/180
+                thrust = self.is_pressed(key.S) * -0.01 + self.is_pressed(key.W) * 0.05
+                player.theta += (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*2*pi/180
 
                 player.mx += thrust * cos(player.theta)
                 player.my += thrust * -1*sin(player.theta)
@@ -116,18 +147,18 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 player.my = player.my *0.99
             
             else:
-                player.mx = self.keyboard[key.A] * -1 + self.keyboard[key.D] * 1
-                player.my = self.keyboard[key.S] * -1 + self.keyboard[key.W] * 1
+                player.mx = self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1
+                player.my = self.is_pressed(key.S) * -1 + self.is_pressed(key.W) * 1
 
                 if not (abs(player.mx) + abs(player.my) == 1):
                 # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
                     player.mx = player.mx * 0.707 * player.speed
                     player.my = player.my * 0.707 * player.speed
 
-            if config.get("enable_cheat_codes") == True and self.keyboard[key.GRAVE]:
+            if config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
                 debug.ask_and_process_cheat_code(player)
 
-            if self.keyboard[key.R]: 
+            if self.is_pressed(key.R): 
                 player.reload()
 
             if (self.is_pressed(mouse.RIGHT)):
