@@ -437,7 +437,7 @@ class GameObject:
                 self.health=0
                 player.crew = player.crew + 1
                 if player.crew > 30:
-                    player.score += 100
+                    player.handler.score += 100
                     player.crew = 30
                 player.upgrade()
                 return
