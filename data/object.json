@@ -151,24 +151,6 @@
       "Cost": 0
     },
     {
-      "ID": "Background",
-      "Health": 1,
-      "Img": "images/background.jpg",
-      "Size": 1,
-      "Speed": 0,
-      "Behavior": "NULL",
-      "Cost": 0
-    },
-    {
-      "ID": "Crater",
-      "Health": 1,
-      "Img": "images/crater.png",
-      "Size": 1,
-      "Speed": 0,
-      "Behavior": "NULL",
-      "Cost": 0
-    },
-    {
       "ID": "Explode",
       "Health": 10,
       "Img": "images/explode.png",
@@ -203,17 +185,7 @@
       "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
-    },
-
-    {
-      "ID": "Splat",
-      "Health": 100,
-      "Img": "images/crater.png",
-      "Size": 1,
-      "Speed": 0,
-      "Behavior": "misc",
-      "Cost": 0
-    }        
+    }
   ],
   "Pickup": [
     {

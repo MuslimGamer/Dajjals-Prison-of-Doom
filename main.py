@@ -5,6 +5,8 @@
 ###############################################################
 
 import pyglet
+
+import glob
 import random
 import os
 import sys
@@ -28,6 +30,9 @@ from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
+from shooter import background
+
+
 GAME_WIDTH = 1024
 GAME_HEIGHT = 576
 
@@ -43,21 +48,31 @@ def center(game_obj):
     game_obj.x = (Screen_handler.width - game_obj.img.width) / 2
     game_obj.y = (Screen_handler.height - game_obj.img.height) / 2
 
+def create_background():
+    # put in "Background" object list
+    starfields = glob.glob("images/background/starfield-*.png")
+    nebulae = glob.glob("images/background/nebula-*.png")
+    planetary_bodies = glob.glob("images/background/kawkab-*.png")
+
+    obj.Backgrounds_list.append(background.Background(random.choice(starfields)))
+    
+    if random.randrange(100) <= 50: # 50% chance of a nebula
+        obj.Backgrounds_list.append(background.Background(random.choice(nebulae)))
+    
+    num_planets = random.randrange(2) + 1 # 1-2 planets
+    for i in range(num_planets):
+        planet = random.choice(planetary_bodies)
+        # assume up to 300x300
+        x = random.randrange(obj.GAME_WIDTH - 300)
+        y = random.randrange(obj.GAME_HEIGHT - 300)
+        print("{0}, {1}".format(x, y))
+        obj.Backgrounds_list.append(background.Background(planet, x, y))
+
 def start_game():
     # Clear everything on screen
     Object_handler.start()
 
-    background = Object_handler.spawn('Background', 'Background', 0, 0)
-
-    CRATER_WIDTH = 128
-    CRATER_HEIGHT = 64
-
-    # 2-4 craters
-    num_craters = random.randrange(3) + 2
-    for i in range(num_craters):
-        c = Object_handler.spawn("Background", "Crater", random.randrange(Screen_handler.width - CRATER_WIDTH), random.randrange(Screen_handler.height - CRATER_HEIGHT))        
-        c.size = 0.5 if random.randrange(100) <= 75 else 1 # mostly small craters
-        obj.Backgrounds_list.append(c)
+    create_background()
 
     player = Object_handler.spawn('Player', "Player_Basic", Screen_handler.width / 2, Screen_handler.height / 2, Player)
     player.on_death = lambda: game_over()
