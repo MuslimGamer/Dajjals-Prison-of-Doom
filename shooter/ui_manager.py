@@ -1,5 +1,5 @@
 import pyglet
-from shooter import obj
+import shooter.obj
 
 ###
 # A manager to draw just UI concerns, like points, lives, etc.
@@ -16,7 +16,7 @@ class UiManager:
 
     def __init__(self):
         self.health_label = pyglet.text.Label('Health: ?', font_name = UiManager.FONT_NAME,
-            x = obj.GAME_WIDTH - UiManager.RIGHT_PADDING, y = obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
+            x = shooter.obj.GAME_WIDTH - UiManager.RIGHT_PADDING, y = shooter.obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
 
         self.ammo_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.health_label.x, y = self.health_label.y - UiManager.SPACE_BETWEEN_LINES)
@@ -25,20 +25,16 @@ class UiManager:
             x = self.health_label.x, y = self.ammo_label.y - UiManager.SPACE_BETWEEN_LINES)
 
         self.drive_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
-            x = UiManager.LEFT_PADDING, y = obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
+            x = UiManager.LEFT_PADDING, y = shooter.obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
 
         self.crew_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.drive_label.x, y = self.drive_label.y - UiManager.SPACE_BETWEEN_LINES)
-
-
-
-
 
     def draw(self, player):
         self.health_label.text = "Health: {0}".format(player.health)
         self.health_label.draw()
 
-        self.score_label.text = "Score: {0}".format(obj.score)
+        self.score_label.text = "Score: {0}".format(shooter.obj.score)
         self.score_label.draw()
 
         if player.is_reloading():

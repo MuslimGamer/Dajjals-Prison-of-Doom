@@ -1,8 +1,8 @@
 import time
 
+import shooter.player
+import shooter.obj
 from shooter import sound
-from shooter import player
-from shooter import obj
 from shooter import proc
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 

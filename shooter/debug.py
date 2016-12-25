@@ -1,6 +1,6 @@
 import random
 
-from shooter import obj
+import shooter.obj
 
 def process_generically(input):
     pass
