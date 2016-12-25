@@ -4,9 +4,9 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['D:\\Dropbox\\Python\\pcg-shooter'],
+             pathex=['D:\\dropbox\\Python\\pcg-shooter'],
              binaries=None,
-             datas=[ ('images', 'images') ],
+             datas=[('data', 'data'), ('images', 'images'), ('fonts', 'fonts'), ('sounds', 'sounds')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -25,4 +25,4 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=True )
+          console=False )

@@ -37,9 +37,27 @@
       "Speed": 1.5,
       "Behavior": "NULL",
       "Cost": 0
+    },
+    {
+      "ID": "Deflect",
+      "Health": 3,
+      "Img": "images/shield.png",
+      "Size": 1,
+      "Speed": 1.5,
+      "Behavior": "sword",
+      "Cost": 0
+    },
+    {
+      "ID": "NPC_Basic",
+      "Health": 1,
+      "Img": "images/bluetriangle.png",
+      "Size": 0.5,
+      "Speed": 0.5,
+      "Behavior": "npc",
+      "Cost": 1
     }
   ],
-  "Bullets": [
+  "Bullet": [
     {
       "ID": "Bullet_Basic",
       "Health": 100,
@@ -47,7 +65,7 @@
       "Size": 0.5,
       "Speed": 10,
       "Behavior": "bullet",
-      "Cost": 30
+      "Cost": 300
     },
     {
       "ID": "Bullet_Melee",
@@ -56,6 +74,51 @@
       "Size": 1,
       "Speed": 0,
       "Behavior": "sword",
+      "Cost": 5
+    },
+    {
+      "ID": "Bullet_Rocket",
+      "Health": 100,
+      "Img": "images/rocket.png",
+      "Size": 1,
+      "Speed": 10,
+      "Behavior": "rocket",
+      "Cost": 5
+    },
+    {
+      "ID": "Explode",
+      "Health": 10,
+      "Img": "images/explode.png",
+      "Size": 5,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+    {
+      "ID": "Shield",
+      "Health": 5,
+      "Img": "images/shield.png",
+      "Size": 3,
+      "Speed": 0,
+      "Behavior": "sword",
+      "Cost": 5
+    },
+    {
+      "ID": "Bullet_RailCharge",
+      "Health": 90,
+      "Img": "images/railcharge.png",
+      "Size": 0.5,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 5
+    },
+    {
+      "ID": "Bullet_RailFire",
+      "Health": 10,
+      "Img": "images/railfire2.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
       "Cost": 5
     }
   ],
@@ -80,7 +143,7 @@
     },
     {
       "ID": "Game Over",
-      "Health": 300,
+      "Health": 450,
       "Img": "images/game-over.png",
       "Size": 1,
       "Speed": 0,
@@ -88,31 +151,78 @@
       "Cost": 0
     },
     {
-      "ID": "Background",
-      "Health": 1,
-      "Img": "images/background.jpg",
-      "Size": 1,
+      "ID": "Explode",
+      "Health": 10,
+      "Img": "images/explode.png",
+      "Size": 5,
       "Speed": 0,
-      "Behavior": "NULL",
+      "Behavior": "misc",
       "Cost": 0
     },
     {
-      "ID": "Crater",
-      "Health": 1,
-      "Img": "images/crater.png",
-      "Size": 1,
+      "ID": "Hit",
+      "Health": 10,
+      "Img": "images/explode.png",
+      "Size": 0.3,
       "Speed": 0,
-      "Behavior": "NULL",
+      "Behavior": "misc",
       "Cost": 0
     },
     {
-      "ID": "Splat",
-      "Health": 100,
-      "Img": "images/crater.png",
+      "ID": "Rail_Fire",
+      "Health": 90,
+      "Img": "images/railfire.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 5
+    },
+    {
+      "ID": "Smoke",
+      "Health": 10,
+      "Img": "images/smoke.png",
+      "Size": 3,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    }
+  ],
+  "Pickup": [
+    {
+      "ID": "Weapon_Pistol",
+      "Health": 1000,
+      "Img": "images/pickpist.png",
       "Size": 1,
       "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
-    }        
-  ]
+    },
+    {
+      "ID": "Weapon_Machine",
+      "Health": 1000,
+      "Img": "images/pickmach.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+    {
+      "ID": "Weapon_Shotgun",
+      "Health": 1000,
+      "Img": "images/pickshot.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+   {
+      "ID": "Weapon_Rocket",
+      "Health": 1000,
+      "Img": "images/pickrock.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    }
+]
 }

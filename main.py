@@ -5,15 +5,38 @@
 ###############################################################
 
 import pyglet
+
+import glob
 import random
+import os
+import sys
+from math import atan2,atan, sin, cos, degrees, pi, sqrt
+
+import pyglet
+
+from shooter import sound
+
+# Support for PyInstaller --onefile. It creates an archive exe that
+# unpacks to a temp directory. We need to convince all our file I/O
+# to use that directoy as the application base dir. chdir is the
+# easiest way, if we use relative paths for everything else.
+if hasattr(sys, '_MEIPASS'):
+    os.chdir(sys._MEIPASS)
 
 from shooter import config
 from shooter import file_watcher
-from shooter import obj		#Object module	-Severok
+
+from shooter import sound
 from shooter.player import Player
+from shooter import obj		#Object module	-Severok
+
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
-from math import atan2,atan, sin, cos, degrees, pi, sqrt
+from shooter import ui_manager
+
+
+from shooter import background
+
 
 GAME_WIDTH = 1024
 GAME_HEIGHT = 576
@@ -21,46 +44,41 @@ GAME_HEIGHT = 576
 obj.GAME_WIDTH = GAME_WIDTH
 obj.GAME_HEIGHT = GAME_HEIGHT
 
-# color_tuple is a four-colour tuple (R, G, B, A).
-def create_color(width, height, color_tuple):
-    img = pyglet.image.SolidColorImagePattern(color_tuple).create_image(32, 32)
-    sprite = pyglet.sprite.Sprite(img)
-    return sprite
-
-def create_image(image_filename):
-    img = pyglet.image.load(image_filename)
-    sprite = pyglet.sprite.Sprite(img)
-    return sprite
-
 def show_dg_splash():
-    splash = Object_handler.spawn('Misc', "DG Splash", 0, 0, splash_screen.SplashScreen)
+    splash = Object_handler.spawn("Misc", "DG Splash", 192, 48, splash_screen.SplashScreen)
     center(splash)
     splash.on_death = lambda: start_game()
 
 def center(game_obj):
-    game_obj.sprite.x = (Screen_handler.width - game_obj.img.width) / 2
-    game_obj.sprite.y = (Screen_handler.height - game_obj.img.height) / 2
+    game_obj.x = (Screen_handler.width - game_obj.img.width) / 2
+    game_obj.y = (Screen_handler.height - game_obj.img.height) / 2
+
+def create_background():
+    # put in "Background" object list
+    starfields = glob.glob("images/background/starfield-*.png")
+    nebulae = glob.glob("images/background/nebula-*.png")
+    planetary_bodies = glob.glob("images/background/kawkab-*.png")
+
+    obj.Backgrounds_list.append(background.Background(random.choice(starfields)))
+    
+    if random.randrange(100) <= 50: # 50% chance of a nebula
+        obj.Backgrounds_list.append(background.Background(random.choice(nebulae)))
+    
+    num_planets = random.randrange(2) + 1 # 1-2 planets
+    for i in range(num_planets):
+        planet = random.choice(planetary_bodies)
+        # assume up to 300x300
+        x = random.randrange(obj.GAME_WIDTH - 300)
+        y = random.randrange(obj.GAME_HEIGHT - 300)
+        obj.Backgrounds_list.append(background.Background(planet, x, y))
 
 def start_game():
-    obj.Player_list[:]=[]
-    obj.Enemy_list[:]=[]
-    obj.Bullet_list[:]=[]
-    obj.Misc_list[:]=[]
-    obj.Backgrounds_list[:]=[]
+    # Clear everything on screen
+    Object_handler.start()
+    Screen_handler.score_label = None
+    obj.score = 0
 
-
-
-    background = Object_handler.spawn('Background', 'Background', 0, 0)
-
-    CRATER_WIDTH = 128
-    CRATER_HEIGHT = 64
-
-    # 2-4 craters
-    num_craters = random.randrange(3) + 2
-    for i in range(num_craters):
-        c = Object_handler.spawn("Background", "Crater", random.randrange(Screen_handler.width - CRATER_WIDTH), random.randrange(Screen_handler.height - CRATER_HEIGHT))        
-        c.size = 0.5 if random.randrange(100) <= 75 else 1 # mostly small craters
-        obj.Backgrounds_list.append(c)
+    create_background()
 
     player = Object_handler.spawn('Player', "Player_Basic", Screen_handler.width / 2, Screen_handler.height / 2, Player)
     player.on_death = lambda: game_over()
@@ -72,6 +90,11 @@ def start_game():
 def game_over():
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
+    
+    # TODO: encapsulate
+    Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
+        x = over.x + 160, y = over.y - 32, font_size = 24)
+
     pyglet.clock.unschedule(Object_handler.spawn_random)
 
     over.on_death = lambda: start_game()
@@ -79,7 +102,9 @@ def game_over():
 def frame_callback(dt):
     #Check user input
     Screen_handler.input()
-    Object_handler.update()
+    if not Screen_handler.paused:
+        Object_handler.update()
+    #sound.SoundHandler.play()
 
     for player in obj.Player_list:                 			#If player reaches boundry of screen
         # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
@@ -91,7 +116,6 @@ def frame_callback(dt):
             player.y = Screen_handler.height - player.img.height
         if player.y < 0:
             player.y = 0
-
 
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
@@ -108,5 +132,11 @@ else:
 pyglet.clock.schedule(frame_callback)
 pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # call frame_callback at 30FPS
 
-pyglet.app.run()
+
+# Shut down threads cleanly in case of a crash
+try:
+    pyglet.app.run()
+except:
+    file_watcher.stop()
+    raise
 

@@ -1,4 +1,5 @@
 import json
+import re
 from shooter import file_watcher
 
 # Global key/value pairs intended as global config. Reloads automatically.
@@ -6,7 +7,8 @@ from shooter import file_watcher
 __data = {}
 
 def load(raw_json):
-    # TODO: remove comments (JSON doesn't officially support comments)
+    # remove comments (JSON doesn't officially support comments)
+    raw_json = re.sub(r"#.*", "", raw_json)
     global __data
     __data = json.loads(raw_json)
 

@@ -10,6 +10,7 @@ import random
 
 
 from pyglet.window import key, mouse
+from shooter import debug
 from shooter import obj
 from shooter import config
 from shooter import file_watcher
@@ -26,10 +27,17 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.mouse_y = 0
         self.mouse_button = 0
         self.keyboard = pyglet.window.key.KeyStateHandler()
-        self._currently_pressed = []
+        self._currently_pressed = [] # mouse buttons and keyboard keys
+
+        self.paused = False
+        pause_image = pyglet.image.load("images/paused.png") 
+        self.pause_sprite = pyglet.sprite.Sprite(pause_image, 0, 0)
+        self.pause_sprite.x = (width - self.pause_sprite.width) / 2
+        self.pause_sprite.y = (height - self.pause_sprite.height) / 2
 
         self.__ui_manager = ui_manager.UiManager()
         self.draw_ui = True
+        self.score_label = None # shouldn't be here, not every screen needs one
 
         # TODO: scale when we have time!
         # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
@@ -46,7 +54,25 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         def on_mouse_drag(x,y,dx,dy, buttons, modifiers):        
             self.mouse_dragged(x, y)
             pass #print("Mouse dragged")
+        
+        def on_key_press(symbol, modifiers):
+            if not symbol in self._currently_pressed:
+                self._currently_pressed.append(symbol)
 
+            # game logic to execute when we press a key the first time only (not press+hold)
+            if symbol == key.R: 
+                obj.Player_list[0].reload()
+            elif symbol == key.P:
+                self.paused = not self.paused
+                ui_manager.paused = self.paused
+            elif config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
+                debug.ask_and_process_cheat_code(obj.Player_list[0])
+
+
+        def on_key_release(symbol, modifiers):
+            if symbol in self._currently_pressed:
+                self._currently_pressed.remove(symbol)
+        
         def on_draw():		#Kept seperate from processing callback, Frame rate not tied to simulation speed.
             self.__window.clear()
 
@@ -58,17 +84,26 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 enemy.sprite.draw()
             for bullet in obj.Bullet_list:		#Render bullet sprites
                 bullet.sprite.draw()
+            for pickup in obj.Pickup_list:
+                pickup.sprite.draw()
             for misc in obj.Misc_list:		#Render Misc sprites
                 misc.sprite.draw()
-
+                
             if self.draw_ui and len(obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
-                self.__ui_manager.draw(obj.Player_list[0])
+                if obj.Player_list[0].id == "Player_Basic":self.__ui_manager.draw(obj.Player_list[0])
+
+            if self.paused:
+                self.pause_sprite.draw()
+
+            # draw score after game over. This is set to None if it's not supposed to be drawn.
+            if self.score_label != None:
+                self.score_label.draw()
 
         def on_close():
             file_watcher.stop()
 
-        self.__window.push_handlers(on_mouse_press,on_mouse_release,on_mouse_drag,on_draw,on_close, self.keyboard)
+        self.__window.push_handlers(on_mouse_press,on_mouse_release,on_mouse_drag,on_draw,on_close,on_key_press, on_key_release)
 
 
     def mouse_pressed(self,x,y,button):
@@ -90,37 +125,66 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         return to_return != None
 
 
+    # NOT event driven: called frequently. If you check keys here, we constantly apply
+    # this logic as long as these keys are held down. If you want something more event-driven,
+    # add your code under on_key_press.
     def input(self): 
-        for player in obj.Player_list:
-     
-            player.mx = self.keyboard[key.A] * -1 + self.keyboard[key.D] * 1
-            player.my = self.keyboard[key.S] * -1 + self.keyboard[key.W] * 1
+        if (not self.paused and len(obj.Player_list) > 0):
+            player = obj.Player_list[0]
+            if not(player.id == "Player_Basic"):return
 
-            if not (abs(player.mx) + abs(player.my) == 1):
-            # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
-                player.mx = player.mx * 0.707 * player.speed
-                player.my = player.my * 0.707 * player.speed
+            if config.get("control_style") == "relative":
+                thrust = self.is_pressed(key.S) * -0.01 + self.is_pressed(key.W) * 0.05
+                player.theta += (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*2*pi/180
 
-            if self.keyboard[key.R]: 
+                player.mx += thrust * cos(player.theta)
+                player.my += thrust * -1*sin(player.theta)
+
+                if (sqrt(player.mx*player.mx+player.my*player.my)>player.speed):
+                    player.mx = player.mx*.9
+                    player.my = player.my*.9
+                player.mx = player.mx *0.99 
+                player.my = player.my *0.99
+            
+            else:
+                player.mx = self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1
+                player.my = self.is_pressed(key.S) * -1 + self.is_pressed(key.W) * 1
+
+                if not (abs(player.mx) + abs(player.my) == 1):
+                # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
+                    player.mx = player.mx * 0.707 * player.speed
+                    player.my = player.my * 0.707 * player.speed
+
+            if config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
+                debug.ask_and_process_cheat_code(player)
+
+            if self.is_pressed(key.R): 
                 player.reload()
 
-            if not (player.cooldown):
-                if (self.is_pressed(mouse.RIGHT)):
-                    if config.get('melee_enabled'):
-                        player.attack("Bullet_Melee",self.mouse_x,self.mouse_y)
+            if (self.is_pressed(mouse.RIGHT)):
+                if config.get('melee_enabled'):
+                    if not (player.cooldown):  
+                        print("Deflect")                      
+                        shield = player.handle.spawn('Player',"Deflect",player.x,player.y)
+                        print(shld.id)
                     else:
-                        player.attack("Bullet_Basic",self.mouse_x,self.mouse_y) 
-                elif self.is_pressed(mouse.LEFT) and player.fire():
-                    player.attack("Bullet_Basic",self.mouse_x,self.mouse_y)
-            elif (self.is_pressed(mouse.RIGHT)):
-                for sword in obj.Bullet_list:
-                    if sword.id == "Bullet_Melee":
+                        for deflect in obj.Player_list:
+                            if deflect.id == "Deflect":
+                                dx = self.mouse_x - player.x
+                                dy = self.mouse_y - player.y
+                                deflect.theta = atan2(dx,dy)			#Mathy goodness.
+                    player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
+                else:
+                    player.fire(self.mouse_x, self.mouse_y) 
+            elif self.is_pressed(mouse.LEFT):      
+                for rail in obj.Bullet_list:
+                    if rail.id == "Bullet_RailCharge":
                         dx = self.mouse_x - player.x
                         dy = self.mouse_y - player.y
-                        sword.theta = atan2(dx,dy)			#Mathy goodness.
-                player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
-
-            return
+                        rail.theta = atan2(dx,dy)
+                        rail.health = 20
+                        return
+                player.fire(self.mouse_x, self.mouse_y)
 
     @property
     def width(self):

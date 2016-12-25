@@ -3,7 +3,7 @@ from shooter import obj
 class SplashScreen(obj.GameObject):
     def __init__(self, owner, prototype):
         # call base class constructor
-        obj.GameObject.__init__(self, owner, 'misc', prototype)
+        obj.GameObject.__init__(self, owner, "Misc", prototype)
         self.total_health = self.health
 
     def update(self):        
