@@ -1,4 +1,5 @@
 from enum import Enum
+from shooter.tutorials.story_and_controls import StoryAndControls
 
 Tutorials = Enum("Tutorials", "Story_and_Controls")
 
@@ -19,8 +20,10 @@ def update():
     if is_first_game and not Tutorials.Story_and_Controls in tutorials_shown:
         tutorials_shown.append(Tutorials.Story_and_Controls)
         is_showing_tutorial = True
-        _current_tutorial = Tutorials.Story_and_Controls
+        _current_tutorial = StoryAndControls()
 
 # Called every draw. Draw stuff specific to the current tutorial.
 def draw():
-    pass
+    global _current_tutorial
+    if _current_tutorial != None:
+        _current_tutorial.draw()
