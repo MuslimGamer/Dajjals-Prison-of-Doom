@@ -115,7 +115,7 @@ def frame_callback(dt):
         #Check user input
         Screen_handler.input()
 
-        shooter.tutorials.tutorial_manager.update()
+        shooter.tutorials.tutorial_manager.update(Screen_handler._currently_pressed)
 
     if not Screen_handler.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial:
             Object_handler.update()

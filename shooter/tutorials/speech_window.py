@@ -10,6 +10,7 @@ class SpeechWindow:
         self.window = pyglet.sprite.Sprite(pyglet.image.load("images/text-window.png"), 0, 0)
         self.window.x = (shooter.obj.GAME_WIDTH - self.window.width) / 2
         self.window.y = (shooter.obj.GAME_HEIGHT - self.window.height) / 2
+        self.closed = False
 
         self.text_label = pyglet.text.Label("", font_name = shooter.ui_manager.UiManager.FONT_NAME, 
             y = self.window.y + self.window.height - 2 * SpeechWindow.PADDING, multiline = True,            
@@ -29,9 +30,13 @@ class SpeechWindow:
         self.text_label.text = "{0}: {1}".format(avatar.capitalize(), text)
 
     def draw(self):
-        self.window.draw()
-        # Did you set an avatar yet?
-        if (self.avatar != None):
-            self.avatar.draw()
+        if not self.closed:
+            self.window.draw()
+            # Did you set an avatar yet?
+            if (self.avatar != None):
+                self.avatar.draw()
 
-        self.text_label.draw()
+            self.text_label.draw()
+
+    def close(self):
+        self.closed = True
