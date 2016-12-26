@@ -11,10 +11,11 @@ import random
 
 from pyglet.window import key, mouse
 from shooter import debug
-from shooter import obj
+import shooter.obj
 from shooter import config
 from shooter import file_watcher
 from shooter import ui_manager
+import shooter.tutorials.tutorial_manager
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
@@ -61,12 +62,12 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
             # game logic to execute when we press a key the first time only (not press+hold)
             if symbol == key.R: 
-                obj.Player_list[0].reload()
+                shooter.obj.Player_list[0].reload()
             elif symbol == key.P:
                 self.paused = not self.paused
                 ui_manager.paused = self.paused
             elif config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
-                debug.ask_and_process_cheat_code(obj.Player_list[0])
+                debug.ask_and_process_cheat_code(shooter.obj.Player_list[0])
 
 
         def on_key_release(symbol, modifiers):
@@ -76,22 +77,24 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         def on_draw():		#Kept seperate from processing callback, Frame rate not tied to simulation speed.
             self.__window.clear()
 
-            for bg in obj.Backgrounds_list:
+            for bg in shooter.obj.Backgrounds_list:
                 bg.sprite.draw()
-            for player in obj.Player_list:		#Render player sprite
+            for player in shooter.obj.Player_list:		#Render player sprite
                 player.sprite.draw()
-            for enemy in obj.Enemy_list:		#Render enemy sprites
+            for enemy in shooter.obj.Enemy_list:		#Render enemy sprites
                 enemy.sprite.draw()
-            for bullet in obj.Bullet_list:		#Render bullet sprites
+            for bullet in shooter.obj.Bullet_list:		#Render bullet sprites
                 bullet.sprite.draw()
-            for pickup in obj.Pickup_list:
+            for pickup in shooter.obj.Pickup_list:
                 pickup.sprite.draw()
-            for misc in obj.Misc_list:		#Render Misc sprites
+            for misc in shooter.obj.Misc_list:		#Render Misc sprites
                 misc.sprite.draw()
                 
-            if self.draw_ui and len(obj.Player_list) >= 1:
+            if self.draw_ui and len(shooter.obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
-                if obj.Player_list[0].id == "Player_Basic":self.__ui_manager.draw(obj.Player_list[0])
+                if shooter.obj.Player_list[0].id == "Player_Basic":self.__ui_manager.draw(shooter.obj.Player_list[0])
+
+            shooter.tutorials.tutorial_manager.draw()
 
             if self.paused:
                 self.pause_sprite.draw()
@@ -129,8 +132,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
     # this logic as long as these keys are held down. If you want something more event-driven,
     # add your code under on_key_press.
     def input(self): 
-        if (not self.paused and len(obj.Player_list) > 0):
-            player = obj.Player_list[0]
+        if (not self.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial and len(shooter.obj.Player_list) > 0):
+            player = shooter.obj.Player_list[0]
             if not(player.id == "Player_Basic"):return
 
             if config.get("control_style") == "relative":
@@ -168,7 +171,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                         shield = player.handle.spawn('Player',"Deflect",player.x,player.y)
                         print(shld.id)
                     else:
-                        for deflect in obj.Player_list:
+                        for deflect in shooter.obj.Player_list:
                             if deflect.id == "Deflect":
                                 dx = self.mouse_x - player.x
                                 dy = self.mouse_y - player.y
@@ -177,7 +180,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 else:
                     player.fire(self.mouse_x, self.mouse_y) 
             elif self.is_pressed(mouse.LEFT):      
-                for rail in obj.Bullet_list:
+                for rail in shooter.obj.Bullet_list:
                     if rail.id == "Bullet_RailCharge":
                         dx = self.mouse_x - player.x
                         dy = self.mouse_y - player.y

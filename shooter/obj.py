@@ -112,7 +112,8 @@ class Object_handler:      #Should I remove this class and just have the various
     def spawn_random(self,dt):
         spawned = 0
         if not (config.get('enable_enemies')): return
-        self.SpawnBudget += dt* self.SpawnIncome
+
+        self.SpawnBudget += dt * self.SpawnIncome
         while(self.SpawnBudget >= self.SpawnCost):
             self.SpawnBudget -= self.SpawnCost
 

@@ -1,4 +1,4 @@
-from shooter import obj
+import shooter.obj
 from math import atan2, sin, cos, sqrt
 import random
 

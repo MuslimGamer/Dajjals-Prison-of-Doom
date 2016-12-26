@@ -33,7 +33,7 @@ from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from shooter import ui_manager
-
+import shooter.tutorials.tutorial_manager
 
 from shooter import background
 
@@ -43,6 +43,10 @@ GAME_HEIGHT = 576
 
 obj.GAME_WIDTH = GAME_WIDTH
 obj.GAME_HEIGHT = GAME_HEIGHT
+
+# Used to avoid doing Bad Things in frame_callback when we haven't yet started yet,
+# like showing tutorials or handling user input
+game_started = False
 
 def show_dg_splash():
     splash = Object_handler.spawn("Misc", "DG Splash", 192, 48, splash_screen.SplashScreen)
@@ -73,6 +77,9 @@ def create_background():
         obj.Backgrounds_list.append(background.Background(planet, x, y))
 
 def start_game():
+    global game_started
+    game_started = True
+    
     # Clear everything on screen
     Object_handler.start()
     Screen_handler.score_label = None
@@ -95,27 +102,35 @@ def game_over():
     Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
         x = over.x + 160, y = over.y - 32, font_size = 24)
 
+    shooter.tutorials.tutorial_manager.is_first_game = False
+
     pyglet.clock.unschedule(Object_handler.spawn_random)
 
     over.on_death = lambda: start_game()
 
 def frame_callback(dt):
-    #Check user input
-    Screen_handler.input()
-    if not Screen_handler.paused:
-        Object_handler.update()
-    #sound.SoundHandler.play()
+    global game_started
+    
+    if game_started:
+        #Check user input
+        Screen_handler.input()
 
-    for player in obj.Player_list:                 			#If player reaches boundry of screen
-        # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
-        if player.x > Screen_handler.width - player.img.width:
-            player.x = Screen_handler.width - player.img.width    #Push them back by previous movement.
-        if player.x < 0:
-            player.x = 0
-        if player.y > Screen_handler.height - player.img.height:
-            player.y = Screen_handler.height - player.img.height
-        if player.y < 0:
-            player.y = 0
+        shooter.tutorials.tutorial_manager.update(Screen_handler._currently_pressed)
+
+    if not Screen_handler.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial:
+            Object_handler.update()
+
+    if game_started:
+        for player in obj.Player_list:                 			#If player reaches boundry of screen
+            # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
+            if player.x > Screen_handler.width - player.img.width:
+                player.x = Screen_handler.width - player.img.width    #Push them back by previous movement.
+            if player.x < 0:
+                player.x = 0
+            if player.y > Screen_handler.height - player.img.height:
+                player.y = Screen_handler.height - player.img.height
+            if player.y < 0:
+                player.y = 0
 
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
@@ -129,9 +144,7 @@ if config.get("skip_splash_screens") != True:
 else:
     start_game()
 
-pyglet.clock.schedule(frame_callback)
 pyglet.clock.schedule_interval(frame_callback, 1 / 30.0) # call frame_callback at 30FPS
-
 
 # Shut down threads cleanly in case of a crash
 try:
