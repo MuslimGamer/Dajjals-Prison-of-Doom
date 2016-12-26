@@ -3,9 +3,6 @@ import random
 import shooter.obj
 
 def process_generically(input):
-    if input == "t":
-       import shooter.tutorial_manager
-       shooter.tutorial_manager.is_showing_tutorial = not shooter.tutorial_manager.is_showing_tutorial 
     pass
 
 def ask_and_process_cheat_code(player):
