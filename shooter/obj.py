@@ -110,6 +110,7 @@ class Object_handler:      #Should I remove this class and just have the various
         return e
 
     def spawn_random(self,dt):
+        spawned = 0
         if not (config.get('enable_enemies')): return
         self.SpawnBudget += dt* self.SpawnIncome
         while(self.SpawnBudget >= self.SpawnCost):
@@ -142,8 +143,12 @@ class Object_handler:      #Should I remove this class and just have the various
                 3: GAME_HEIGHT + 100
             }
 
-            if(self.NextEnemy>0):self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
-            else: self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
+            if(self.NextEnemy>0):
+                self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
+                spawned += 1
+            else: 
+                self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
+                spawned += 1
             self.NextEnemy = random.randrange(4)
 
             if(self.NextEnemy>0):
@@ -206,7 +211,6 @@ class Object_handler:      #Should I remove this class and just have the various
             pickup.move()
             pickup.update()
 
-        
 
 class GameObject:
 
@@ -437,7 +441,7 @@ class GameObject:
                 self.health=0
                 player.crew = player.crew + 1
                 if player.crew > 30:
-                    player.handler.score += 100
+                    player.handle.score += 100
                     player.crew = 30
                 player.upgrade()
                 return

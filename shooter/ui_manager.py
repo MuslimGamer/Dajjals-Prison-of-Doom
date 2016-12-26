@@ -30,6 +30,20 @@ class UiManager:
         self.crew_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.drive_label.x, y = self.drive_label.y - UiManager.SPACE_BETWEEN_LINES)
 
+        self.debug1 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = self.drive_label.x, y = UiManager.SPACE_BETWEEN_LINES)
+        self.debug2 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = self.drive_label.x, y = self.debug1.y + UiManager.SPACE_BETWEEN_LINES)
+        self.debug3 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = self.drive_label.x, y = self.debug2.y + UiManager.SPACE_BETWEEN_LINES)
+
+        self.debug4 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = self.health_label.x-300, y = self.debug1.y)
+        self.debug5 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = self.health_label.x-300, y = self.debug2.y)
+        self.debug6 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
+            x = self.health_label.x-300, y = self.debug3.y)
+
 
 
 
@@ -54,6 +68,20 @@ class UiManager:
         else: self.drive_label.text = "Drive Charge: {0}%".format(player.drive / 100)
         self.drive_label.draw()
 
+        self.debug3.text = "#NPC: {0}".format(len(obj.Player_list)-1)
+        self.debug3.draw()
+        self.debug2.text = "#Enemy: {0}".format(len(obj.Enemy_list))
+        self.debug2.draw()
+        self.debug1.text = "#Bullets: {0}".format(len(obj.Bullet_list))
+        self.debug1.draw()
+
+
+        self.debug6.text = "Spawn Income: {0}".format(player.handle.SpawnIncome)
+        self.debug6.draw()
+        self.debug5.text = "Spawn Budget: {0}".format(player.handle.SpawnBudget)
+        self.debug5.draw()
+        self.debug4.text = "Spawn Cost: {0}".format(player.handle.SpawnCost)
+        self.debug4.draw()
 
 pyglet.font.add_file(UiManager.FONT_FILE)
 pyglet.font.load(UiManager.FONT_NAME, bold=False)
