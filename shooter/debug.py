@@ -3,6 +3,9 @@ import random
 import shooter.obj
 
 def process_generically(input):
+    if input == "t":
+       import shooter.tutorial_manager
+       shooter.tutorial_manager.is_showing_tutorial = not shooter.tutorial_manager.is_showing_tutorial 
     pass
 
 def ask_and_process_cheat_code(player):
@@ -21,8 +24,8 @@ def railgun(player):
 
 def spawn_pickup(player):
     types = ["Weapon_Pistol", "Weapon_Machine", "Weapon_Shotgun", "Weapon_Rocket"]
-    if len(obj.Enemy_list) > 0:
-        obj.Enemy_list[0].Loot(100) # turn the first enemy into kibble
+    if len(shooter.obj.Enemy_list) > 0:
+        shooter.obj.Enemy_list[0].Loot(100) # turn the first enemy into kibble
     else:
         player.Loot(100)
 
@@ -32,7 +35,7 @@ def invincible(player):
 def spawn_enemies(player):
     x = 3 + random.randrange(3)
     for i in range(x):
-        obj.Object_handler.instance.spawn_random(5)
+        shooter.obj.Object_handler.instance.spawn_random(5)
 
 def lots_of_bullets(player):
     player.unlimited_ammo()
@@ -46,5 +49,5 @@ cheats = {
     "ammo": lots_of_bullets,
     "pickup": spawn_pickup,
     "die": die,
-    "rail": railgun
+    "rail": railgun,
 }

@@ -15,6 +15,7 @@ import shooter.obj
 from shooter import config
 from shooter import file_watcher
 from shooter import ui_manager
+import shooter.tutorial_manager
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
@@ -129,7 +130,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
     # this logic as long as these keys are held down. If you want something more event-driven,
     # add your code under on_key_press.
     def input(self): 
-        if (not self.paused and len(shooter.obj.Player_list) > 0):
+        if (not self.paused and not shooter.tutorial_manager.is_showing_tutorial and len(shooter.obj.Player_list) > 0):
             player = shooter.obj.Player_list[0]
             if not(player.id == "Player_Basic"):return
 

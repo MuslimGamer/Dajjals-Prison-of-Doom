@@ -33,7 +33,7 @@ from shooter import obj		#Object module	-Severok
 from shooter import proc	#Processing related functions
 from shooter import splash_screen
 from shooter import ui_manager
-
+import shooter.tutorial_manager
 
 from shooter import background
 
@@ -95,6 +95,8 @@ def game_over():
     Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
         x = over.x + 160, y = over.y - 32, font_size = 24)
 
+    shooter.tutorial_manager.is_first_game = False
+
     pyglet.clock.unschedule(Object_handler.spawn_random)
 
     over.on_death = lambda: start_game()
@@ -102,7 +104,7 @@ def game_over():
 def frame_callback(dt):
     #Check user input
     Screen_handler.input()
-    if not Screen_handler.paused:
+    if not Screen_handler.paused and not shooter.tutorial_manager.is_showing_tutorial:
         Object_handler.update()
     #sound.SoundHandler.play()
 
