@@ -175,7 +175,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                     if not (player.cooldown):  
                         print("Deflect")                      
                         shield = player.handle.spawn('Player',"Deflect",player.x,player.y)
-                        print(shld.id)
+                        print(shield.id)
                     else:
                         for deflect in shooter.obj.Player_list:
                             if deflect.id == "Deflect":

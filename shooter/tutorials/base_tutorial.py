@@ -13,5 +13,5 @@ class BaseTutorial:
     # helper method: keys/mouse we use to signal next/close the tutorial
     # note: spams. If you press space, you probably get 3-4 of these events.
     def check_input_to_advance(self, symbol):
-        return symbol == key.SPACE or symbol == key.ENTER or symbol == mouse.LEFT
+        return symbol == key.SPACE or symbol == key.ENTER
     
