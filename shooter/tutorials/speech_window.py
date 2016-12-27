@@ -25,8 +25,9 @@ class SpeechWindow:
         self.avatar.y = self.window.y + self.window.height - self.avatar.height - SpeechWindow.PADDING
 
         self.text_label.x = self.avatar.x + self.avatar.width + SpeechWindow.PADDING
-        print("{0} - {1} - {2}".format(self.window.width, self.avatar.width, 2 * SpeechWindow.PADDING))
-        self.text_label.width = self.window.width - self.avatar.width - 2 * SpeechWindow.PADDING
+        # Should be 2x padding for a close fit. Too close, since the window has a border (it looks like
+        # the text bleeds into it). Let's make it 3x padding so it fits comfortably (we have small texts).
+        self.text_label.width = self.window.width - self.avatar.width - 3 * SpeechWindow.PADDING
         self.text_label.text = "{0}: {1}".format(avatar.capitalize(), text)
 
     def draw(self):

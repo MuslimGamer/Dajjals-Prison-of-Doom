@@ -91,6 +91,8 @@ def start_game():
     player.on_death = lambda: game_over()
 
     pyglet.clock.schedule_interval(Object_handler.spawn_random, 1)
+    # Trigger first run of tutorial manager so we can show intro text
+    shooter.tutorials.tutorial_manager.on_keypress(None, [])
 
     Screen_handler.draw_ui = True
 
@@ -115,8 +117,6 @@ def frame_callback(dt):
         #Check user input
         Screen_handler.input()
 
-        shooter.tutorials.tutorial_manager.update(Screen_handler._currently_pressed)
-
     if not Screen_handler.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial:
             Object_handler.update()
 
@@ -134,6 +134,7 @@ def frame_callback(dt):
 
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
+Screen_handler.notify_on_press(shooter.tutorials.tutorial_manager.on_keypress)
 
 file_watcher.watch('data/object.json', obj.load_prototype_data)
 

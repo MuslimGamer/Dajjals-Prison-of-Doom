@@ -7,11 +7,11 @@ class BaseTutorial:
         pass
 
     # virtual
-    def update(self, keys_pressed):
+    def update(self, key):
         pass
 
     # helper method: keys/mouse we use to signal next/close the tutorial
-    # note: spams. If you press space, you probably get four of these.
-    def check_input_to_advance(self, keys_pressed):
-        return key.SPACE in keys_pressed or key.ENTER in keys_pressed or mouse.LEFT in keys_pressed
+    # note: spams. If you press space, you probably get 3-4 of these events.
+    def check_input_to_advance(self, symbol):
+        return symbol == key.SPACE or symbol == key.ENTER or symbol == mouse.LEFT
     

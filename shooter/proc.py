@@ -44,6 +44,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
         #print(self.__window_Scale)
 
+        # Methods are all private because we need them declared before we push the handlers
         def on_mouse_press(x, y, button, modifiers):
             self.mouse_pressed(x,y,button)
             pass #print("Mouse pressed")
@@ -60,6 +61,10 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             if not symbol in self._currently_pressed:
                 self._currently_pressed.append(symbol)
 
+            # Call our one and only subscriber if he's there (tutorial manager)
+            if self.on_press_callback != None:
+                self.on_press_callback(symbol, self._currently_pressed)
+
             # game logic to execute when we press a key the first time only (not press+hold)
             if symbol == key.R: 
                 shooter.obj.Player_list[0].reload()
@@ -68,7 +73,6 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 ui_manager.paused = self.paused
             elif config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
                 debug.ask_and_process_cheat_code(shooter.obj.Player_list[0])
-
 
         def on_key_release(symbol, modifiers):
             if symbol in self._currently_pressed:
@@ -108,6 +112,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
         self.__window.push_handlers(on_mouse_press,on_mouse_release,on_mouse_drag,on_draw,on_close,on_key_press, on_key_release)
 
+    def notify_on_press(self, method):
+        self.on_press_callback = method
 
     def mouse_pressed(self,x,y,button):
         self.mouse_x = x

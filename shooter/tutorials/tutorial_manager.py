@@ -13,8 +13,7 @@ is_showing_tutorial = False
 _current_tutorial = None
 tutorials_shown = []
 
-# Called every frame
-def update(keys_pressed):
+def on_keypress(key, previously_pressed):
     global is_first_game, is_showing_tutorial, tutorials_shown, _current_tutorial
     
     if is_first_game and not Tutorials.Story_and_Controls in tutorials_shown:
@@ -23,7 +22,7 @@ def update(keys_pressed):
         _current_tutorial = StoryAndControls()
 
     if _current_tutorial != None:
-        _current_tutorial.update(keys_pressed)
+        _current_tutorial.update(key)
         
         if _current_tutorial.closed:
             _current_tutorial = None
