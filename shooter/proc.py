@@ -173,17 +173,21 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             if (self.is_pressed(mouse.RIGHT)):
                 if config.get('melee_enabled'):
                     if not (player.cooldown):  
-                        print("Deflect")                      
                         shield = player.handle.spawn('Player',"Deflect",player.x,player.y)
-                        print(shield.id)
+                        shooter.obj.Player_list.append(shield)
                     else:
                         for deflect in shooter.obj.Player_list:
                             if deflect.id == "Deflect":
+                                # center on player
                                 dx = self.mouse_x - player.x
                                 dy = self.mouse_y - player.y
+                                # stay around player
                                 deflect.theta = atan2(dx,dy)			#Mathy goodness.
-                    player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
+                    #player.cooldown = 10 #Maintain cooldown of melee/shield if continuing 
                 else:
+                    # TODO: duplicate railgun code below (from elif self.is_pressed(mouse.LEFT)) here
+                    # If not, railgun just straight-out fires (doesn't charge) with right key if
+                    # melee is not enabled
                     player.fire(self.mouse_x, self.mouse_y) 
             elif self.is_pressed(mouse.LEFT):      
                 for rail in shooter.obj.Bullet_list:

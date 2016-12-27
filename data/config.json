@@ -1,5 +1,5 @@
 {
-    "skip_splash_screens": false,
+    "skip_splash_screens": true,
     "enable_enemies": true,
     "melee_enabled": true,
     "sword_attack_radius": 30,

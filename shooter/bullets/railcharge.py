@@ -15,7 +15,7 @@ def init(rail):
 
 def update(rail):
 
-    for player in obj.Player_list:
+    for player in shooter.obj.Player_list:
 
         if rail.size < 2:rail.size += 0.003
         rail.mx = 0.01 * sin(rail.theta)	#Apply small movement to ensure sword renders with correct rotation.
@@ -42,7 +42,7 @@ def on_death(rail):
 
     x = rail.x     #Apply position immediately so factors in collision detect
     y = rail.y
-    while (x > 0 and x < obj.GAME_WIDTH and y > 0 and y < obj.GAME_HEIGHT):
+    while (x > 0 and x < shooter.obj.GAME_WIDTH and y > 0 and y < shooter.obj.GAME_HEIGHT):
         b1 = rail.handle.spawn("Bullet", 'Bullet_RailFire',x,y)
         b1.parent = rail.parent
         b1.size = rail.size
