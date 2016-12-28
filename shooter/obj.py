@@ -8,7 +8,6 @@ from shooter import file_watcher
 from shooter import sound
 from shooter import ai
 
-
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 from shooter.weapons import gun, shotgun, rocket
 
@@ -149,8 +148,9 @@ class Object_handler:      #Should I remove this class and just have the various
                 spawned += 1
             else: 
                 if config.get("enable_npc") and len(Player_list) <=3:
-                    self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
-                spawned += 1
+                    npc = self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
+                    npc.on_death = lambda: sound.npc_pickup.play()
+                    spawned += 1
             self.NextEnemy = random.randrange(4)
 
             if(self.NextEnemy>0):
