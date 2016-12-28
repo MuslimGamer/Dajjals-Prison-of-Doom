@@ -10,6 +10,10 @@ class BaseTutorial:
     def update(self, key):
         pass
 
+    # virtual
+    def on_click(self, button, x, y):
+        pass
+
     # helper method: keys/mouse we use to signal next/close the tutorial
     # note: spams. If you press space, you probably get 3-4 of these events.
     def check_input_to_advance(self, symbol):

@@ -1,3 +1,6 @@
+import pyglet
+from pyglet.window import mouse
+
 import shooter.obj
 import shooter.tutorials.speech_window
 import shooter.tutorials.base_tutorial
@@ -7,6 +10,10 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
         self.showing = "1"
         self.window = shooter.tutorials.speech_window.SpeechWindow()
         self.window.show("More Muslim meat for my armies! I'll chase you to the ends of the galaxy!", "dajjal")
+
+        # Click already registers globally, no need to act        
+        self.window.add_button('images/next-button.png', None)
+        self.window.add_button('images/skip-button.png', None)
         self.closed = False
 
     def draw(self):
@@ -26,3 +33,11 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
             else:
                self.window.close()
                self.closed = True
+
+    def on_click(self, button, x, y):
+        for button in self.window.buttons:
+            if x >= button.x and x <= button.x + button.width and y >= button.y and y <= button.y + button.height:
+                print("xlixked {0}, {1}; b goes from {2}, {3} to {4}, {5}".format(x, y, button.x, button.y, button.x + button.width, button.y + button.height))
+                callback = self.window.button_callbacks[button]
+                if callback != None:
+                    callback()

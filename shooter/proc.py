@@ -43,6 +43,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         # Methods are all private because we need them declared before we push the handlers
         def on_mouse_press(x, y, button, modifiers):
             self.mouse_pressed(x,y,button)
+            if shooter.tutorials.tutorial_manager._current_tutorial != None:
+                shooter.tutorials.tutorial_manager._current_tutorial.on_click(button, x, y)
 
         def on_mouse_release(x,y,button, modifiers):
             self.mouse_released(button)
