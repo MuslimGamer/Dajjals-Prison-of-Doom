@@ -97,7 +97,7 @@ class Object_handler:      #Should I remove this class and just have the various
             spawned = GameObject(self,object_type,prototype)
         else:
             spawned = as_type(self,prototype)
-    
+
         spawned.x = spawned.centroid_x = x
         spawned.y = spawned.centroid_y = y
         spawned.sprite.set_position(x,y)
@@ -148,7 +148,7 @@ class Object_handler:      #Should I remove this class and just have the various
                 self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
                 spawned += 1
             else: 
-                if config.get("enable_npc"):
+                if config.get("enable_npc") and len(Player_list) <=3:
                     self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
                 spawned += 1
             self.NextEnemy = random.randrange(4)
@@ -171,16 +171,15 @@ class Object_handler:      #Should I remove this class and just have the various
                 player.Circle_collision(enemy)
         for enemy in Enemy_list:
             for bullet in Bullet_list:
-                if enemy.Circle_collision(bullet): 
-                    sound.enemy_hit.play
+                enemy.Circle_collision(bullet)
 
     def update(self):
         #ai.update()
 
         for enemy in Enemy_list:
-            enemy.ai()
+            if enemy.health: enemy.ai()
         for bullet in Bullet_list:
-            bullet.ai()
+            if bullet.health: bullet.ai()
         for misc in Misc_list:
             misc.ai()
 
@@ -194,24 +193,27 @@ class Object_handler:      #Should I remove this class and just have the various
                
                 if player.health > 5: 
                     player.drive +=1
-                    player.health = 5
-                
-            player.ai()
-            player.move()
+                    player.health = 5   
+            else: player.ai()
+
             player.update()
+            player.move()
         for enemy in Enemy_list:
-            enemy.move()
             enemy.update()
+            enemy.move()
+
         for bullet in Bullet_list:
-            bullet.move()
             bullet.update()
+            bullet.move()
+
         for misc in Misc_list:
-            misc.move()
             misc.update()
+            misc.move()
+
         for pickup in Pickup_list:
             pickup.ai()
-            pickup.move()
             pickup.update()
+            pickup.move()
 
 
 class GameObject:
@@ -422,7 +424,7 @@ class GameObject:
     #Standard behavior, rush player, attack location
 
     def npc_ai(self, player):
-        if player is None:
+        if player is None or self.health == 0:
             return
         if self.is_on_screen():
             #if not self.aicooldown:
@@ -441,7 +443,7 @@ class GameObject:
                 if player.crew > 30:
                     score += 100
                     player.crew = 30
-                player.upgrade()
+                player.upgrade() 
                 return
             if (self.distance_from_player<200):		#If player near: follow
                 ai.charge(self,player)
