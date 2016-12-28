@@ -148,8 +148,7 @@ class Object_handler:      #Should I remove this class and just have the various
                 spawned += 1
             else: 
                 if config.get("enable_npc") and len(Player_list) <=3 and len(Enemy_list) > 0:
-                    npc = self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
-                    npc.on_death = lambda: sound.npc_pickup.play()
+                    self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
                     spawned += 1
             self.NextEnemy = random.randrange(4)
 
@@ -190,11 +189,11 @@ class Object_handler:      #Should I remove this class and just have the various
         for player in Player_list:
             if player.id == "Player_Basic":
                 player.health += player.repair
-               
                 if player.health > 5: 
-                    player.drive +=1
+                    player.drive += 1
                     player.health = 5   
-            else: player.ai()
+            else:
+                player.ai()
 
             player.update()
             player.move()
@@ -319,9 +318,9 @@ class GameObject:
         
 
     def Circle_collision(self, Target_object):
-        if (self.id == Target_object.parent):return 0
+        if (self.id == Target_object.parent):
+            return 0
 
-    
         #Simple collision detection for rotating sprites.
         #Abstract circle is appoximated around sprite bounding the maximum sprite overlap area during rotation.
         #Calculated radius of this circle is accumulated from 2 test objects to detect range of collision
@@ -431,18 +430,21 @@ class GameObject:
             dy = self.y - player.y
             self.distance_from_player = sqrt(dx*dx+dy*dy)
             
-            if (self.distance_from_player<10):		#Keep some distance from player to avoid crowding.
+            if (self.distance_from_player < 10):		#Keep some distance from player to avoid crowding.
                 player = Player_list[0]				#Otherwise, look for player to follow.
                 if not player.id == "Player_Basic": return
                 self.mx=self.my = 0
-                self.health=0
+                self.health = 0
+                sound.npc_pickup.play()
+
                 player.crew = player.crew + 1
                 if player.crew > 30:
                     score += 100
                     player.crew = 30
                 player.upgrade() 
                 return
-            if (self.distance_from_player<200):		#If player near: follow
+
+            if (self.distance_from_player < 200):		#If player near: follow
                 ai.charge(self,player)
                 return
                    						#If player far:
