@@ -147,7 +147,7 @@ class Object_handler:      #Should I remove this class and just have the various
                 self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
                 spawned += 1
             else: 
-                if config.get("enable_npc") and len(Player_list) <=3:
+                if config.get("enable_npc") and len(Player_list) <=3 and len(Enemy_list) > 0:
                     npc = self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
                     npc.on_death = lambda: sound.npc_pickup.play()
                     spawned += 1
