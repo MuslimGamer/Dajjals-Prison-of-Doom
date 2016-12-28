@@ -241,7 +241,6 @@ class GameObject:
         self.theta = 0
 
         #Behavior management attributes
-        #self.ai = json_data['Behavior']				#AI reference	- See proc.py
         self.speed = json_data['Speed']
         self.cost = json_data['Cost']
         self._health = json_data['Health']			#Hits to remove || frames until timeout
@@ -383,8 +382,6 @@ class GameObject:
 
     def move(self):
         #Function name move is misleading: Function responsible for processing movement, rotation & object maintainance
-        #if(self.mx!=0)or(self.my!=0):
-        
         self.x = self.x + self.mx
         self.y = self.y + self.my
 
@@ -469,12 +466,8 @@ class GameObject:
                     nearest = self.distance_from_player
                     self.Target = player
             self.aicooldown = 120
-            #if (distance_from_player<400):			#If player or NPC is near: Charge
         ai.charge(self,self.Target)					#Agro range: 400
         return
-        #ai.wander(self)					#Else, Seek targets, Spread out & avoid danger. 
-        #return
-
 
     #Coward behavior, maintain distance, attack location
     def coward_ai(self, player):
@@ -498,24 +491,21 @@ class GameObject:
                 sound.pistol.play()
             ai.flee(self, self.Target)					#Hold distance
             return
-            #if (distance_from_player<400):					#If target in Agro range, approach
         ai.charge(self,self.Target)
         return
-        #ai.wander(self)								#Else, Seek targets, Spread out & avoid danger. 							
-        #return
 
 
+    # "virtual" method. Subclasses override it.
     def update(self):
-        # "virtual" method. Subclasses override it.
         pass
 
+    # "virtual" method. Subclasses override it.
     def on_death(self):
- 
        pass
 
 
 
-#Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
+    #Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
     def misc_ai(self, player):
         if (self.health > 0):
             self.health = self.health - 1
@@ -547,15 +537,12 @@ class GameObject:
         self.x = player.x +sword_attack_radius * sin(self.theta)    #Apply position immediately so factors in collision detection
         self.y = player.y + sword_attack_radius * cos(self.theta)  
 
-    #if left button pressed, calc theta, rotation, then update sprite 
-        pass
+        #if left button pressed, calc theta, rotation, then update sprite 
 
     def bullet_ai(self,player):
-
         pass
 
     def rocket_ai(self,player):
-
         pass
 
 
@@ -596,20 +583,4 @@ class GameObject:
             ai_action[self.ai_type](None) # We don't have a player right now
 
 
-# Prototypes of enemies, the player, bullets, and misc stuff (splash screens, explosions, etc.)
-
-
-#prototypes_json = {		#Define object_type dictionary. Used to parse objects into correct list for later referencing.
-#    'Enemy': obj_enemy,			#Object type Enemy.	(Add arbitary enemy times later)
-#    'Player': obj_player,		#Object type Player.	(Future potential for multiple player types or upgrades?)
-#    'Bullet': obj_bullet,		#Object type Bullet.	(Future potential for various projectiles?)
-#    'Misc': obj_misc			#Object type Misc.	(Intended for graphical effects, Eg enemy dies spawn Explosion object)
-#}
-
 from shooter.bullets.bullet import Bullet
-
-
-
-
-
-

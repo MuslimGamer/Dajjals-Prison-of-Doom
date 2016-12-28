@@ -40,22 +40,15 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.draw_ui = True
         self.score_label = None # shouldn't be here, not every screen needs one
 
-        # TODO: scale when we have time!
-        # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
-        #print(self.__window_Scale)
-
         # Methods are all private because we need them declared before we push the handlers
         def on_mouse_press(x, y, button, modifiers):
             self.mouse_pressed(x,y,button)
-            pass #print("Mouse pressed")
 
         def on_mouse_release(x,y,button, modifiers):
             self.mouse_released(button)
-            pass #print("Mouse released")
 
         def on_mouse_drag(x,y,dx,dy, buttons, modifiers):        
             self.mouse_dragged(x, y)
-            pass #print("Mouse dragged")
         
         def on_key_press(symbol, modifiers):
             if not symbol in self._currently_pressed:
@@ -96,7 +89,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 
             if self.draw_ui and len(shooter.obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
-                if shooter.obj.Player_list[0].id == "Player_Basic":self.__ui_manager.draw(shooter.obj.Player_list[0])
+                if shooter.obj.Player_list[0].id == "Player_Basic":
+                    self.__ui_manager.draw(shooter.obj.Player_list[0])
 
             shooter.tutorials.tutorial_manager.draw()
 
@@ -151,9 +145,6 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 player.mx += thrust * cos(player.theta)
                 player.my += thrust * -1*sin(player.theta)
 
-                #if (sqrt(player.mx*player.mx+player.my*player.my)>player.speed):
-                #    player.mx = player.mx*.9
-                #    player.my = player.my*.9
                 player.mx = player.mx *0.99
                 player.my = player.my *0.99
             

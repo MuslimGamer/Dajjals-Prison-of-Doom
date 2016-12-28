@@ -8,9 +8,6 @@ from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
 
 def init(rail):
-    #rail.sound.queue(sound.rail)
-    #rail.sound.play()
-    #sound.rail.play()
     pass  
 
 def update(rail):
@@ -22,7 +19,7 @@ def update(rail):
         rail.my = 0.01 * cos(rail.theta)        #Position applied below instead of movement function so position updated before collsion detection
         rail.sprite.rotation = rail.theta
 
-    # +width/2, -height/2 makes the sword perfectly center on the player
+        # +width/2, -height/2 makes the sword perfectly center on the player
         rail.x = player.x - player.sprite.width/2 +player.radius *2* sin(rail.theta)    #Apply position immediately so factors in collision detection
         rail.y = player.y - player.sprite.height/2 +player.radius *2* cos(rail.theta) 
         return
@@ -32,8 +29,6 @@ def update(rail):
 
 def on_death(rail):
     sound.rail_fire.play()
-    #rail.sound.queue(sound.rail_fire)#.play()
-    #rail.sound.next()
 
     step_x = 0.01*sin(rail.theta)
     step_y = 0.01*cos(rail.theta)
