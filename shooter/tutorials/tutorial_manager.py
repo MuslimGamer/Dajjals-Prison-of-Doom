@@ -13,9 +13,10 @@ is_showing_tutorial = False
 _current_tutorial = None
 tutorials_shown = []
 
+# key: keyboard key or mouse button integer (eg. mouse.LEFT = 1)
 def on_keypress(key, previously_pressed):
     global is_first_game, is_showing_tutorial, tutorials_shown, _current_tutorial
-    
+
     if is_first_game and not Tutorials.Story_and_Controls in tutorials_shown:
         tutorials_shown.append(Tutorials.Story_and_Controls)
         is_showing_tutorial = True

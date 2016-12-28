@@ -119,6 +119,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.mouse_x = x
         self.mouse_y = y
         self._currently_pressed.append(button)
+        if self.on_press_callback != None:
+            self.on_press_callback(button, self._currently_pressed)
 
     # Is a key being click+held?
     def mouse_dragged(self, x, y):
