@@ -148,7 +148,8 @@ class Object_handler:      #Should I remove this class and just have the various
                 self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
                 spawned += 1
             else: 
-                self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
+                if config.get("enable_npc"):
+                    self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
                 spawned += 1
             self.NextEnemy = random.randrange(4)
 
@@ -230,7 +231,9 @@ class GameObject:
         self.my = 0	
         self.destinationx = random.randrange(GAME_WIDTH)
         self.destinationy = random.randrange(GAME_HEIGHT)
+        self.distance_from_player = 1000
         self.cooldown = 0					#Time until next attack avaliable
+        self.aicooldown = 0
         self.centroid_x = 0					#Storing calculated centroid of sprite for current rotation.
         self.centroid_y = 0					#Reference of parent object (If any)
         self.theta = 0
@@ -369,6 +372,8 @@ class GameObject:
         b.sprite.rotation = theta * 180/pi
         b.theta = theta	
         b.parent = self.id
+        b.mx = sin(b.theta) * b.speed
+        b.my = cos(b.theta) * b.speed
 
         if(b.id == "Bullet_rocket"):self.on_death=lambda: self.explode()
         self.cooldown = b.cost     		#Apply cooldown from attack.
@@ -401,11 +406,13 @@ class GameObject:
            										# Calculated centroid offsets from sprite aspects
         self.sprite.set_position(self.sprite_x,self.sprite_y)
 
-        if self.health <= 0:
+        if self.health < 1:
             Type_lists[self.type].remove(self)
         
         if self.cooldown:
             self.cooldown = self.cooldown - 1
+        if self.aicooldown:
+            self.aicooldown -=1
 
 
     def is_on_screen(self):
@@ -418,57 +425,50 @@ class GameObject:
         if player is None:
             return
         if self.is_on_screen():
-            dx = self.x - GAME_WIDTH/2
-            dy = self.y - GAME_HEIGHT/2
-            #distance_from_home = sqrt(dx*dx+dy*dy)
-            #if distance_from_home < 50:				#If at home:
-            #    self.health = 0						#Despawn
-            #    self.handle.score += 10				#Increase score +100
-            #    return
-	
-            #if distance_from_home < 100:			#If near home, run for safety
-            #    theta = atan2(dx,dy)
-            #    mx = self.speed * sin(theta)
-            #    my = self.speed * cos(theta)
-            #    return
-
+            #if not self.aicooldown:
             player = Player_list[0]				#Otherwise, look for player to follow.
             if not player.id == "Player_Basic": return
             dx = self.x - player.x
             dy = self.y - player.y
-            distance_from_player = sqrt(dx*dx+dy*dy)
-            if (distance_from_player<10):		#Keep some distance from player to avoid crowding.
+            self.distance_from_player = sqrt(dx*dx+dy*dy)
+            
+            if (self.distance_from_player<10):		#Keep some distance from player to avoid crowding.
+                player = Player_list[0]				#Otherwise, look for player to follow.
+                if not player.id == "Player_Basic": return
                 self.mx=self.my = 0
                 self.health=0
                 player.crew = player.crew + 1
                 if player.crew > 30:
-                    player.handle.score += 100
+                    score += 100
                     player.crew = 30
                 player.upgrade()
                 return
-            if (distance_from_player<200):		#If player near: follow
+            if (self.distance_from_player<200):		#If player near: follow
                 ai.charge(self,player)
                 return
                    						#If player far:
-            ai.wander(self)				#Seek player or other NPCs (Preference to player)
-								#Flee bullets and enemies.
+            if not (self.aicooldown):
+                ai.wander(self)				#Seek player or other NPCs (Preference to player)
+                self.aicooldown = 30
+								#Flee bullets and enemies.wwwwwwwww
                     
 
     def agro_ai(self, player):
         if player is None:
             return
-        #if self.is_on_screen():
-        nearest = 1000
-        Target = Player_list[0]
-        for player in Player_list:				#Select nearest target
-            dx = self.x - player.x
-            dy = self.y - player.y
-            distance_from_player = sqrt(dx*dx+dy*dy)
-            if (distance_from_player < nearest): 
-                nearest = distance_from_player
-                Target = player
+        if not (self.aicooldown):
+            nearest = 1000
+            self.Target = Player_list[0]
+            for player in Player_list:				#Select nearest target
+                dx = self.x - player.x
+                dy = self.y - player.y
+                self.distance_from_player = sqrt(dx*dx+dy*dy)
+                if (self.distance_from_player < nearest): 
+                    nearest = self.distance_from_player
+                    self.Target = player
+            self.aicooldown = 120
             #if (distance_from_player<400):			#If player or NPC is near: Charge
-        ai.charge(self,Target)					#Agro range: 400
+        ai.charge(self,self.Target)					#Agro range: 400
         return
         #ai.wander(self)					#Else, Seek targets, Spread out & avoid danger. 
         #return
@@ -479,23 +479,25 @@ class GameObject:
         if player is None:
             return
         #if self.is_on_screen():
-        nearest = 1000
-        Target = Player_list[0]
-        for player in Player_list:					#Select nearest target
-            dx = self.x - player.x
-            dy = self.y - player.y
-            distance_from_player = sqrt(dx*dx+dy*dy)
-            if (distance_from_player < nearest): 
-                nearest = distance_from_player
-                Target = player
+        if not (self.aicooldown):
+            nearest = 1000
+            self.Target = Player_list[0]
+            for player in Player_list:					#Select nearest target
+                dx = self.x - player.x
+                dy = self.y - player.y
+                self.distance_from_player = sqrt(dx*dx+dy*dy)
+                if (self.distance_from_player < nearest): 
+                    nearest = self.distance_from_player
+                    self.Target = player
+            self.aicooldown = 120
 
-        if (distance_from_player < 150 + random.randrange(100)):	#If target in range, attempt to attack
+        if (self.distance_from_player < 150 + random.randrange(100)):	#If target in range, attempt to attack
             if self.attack('Bullet_Basic',player.x-50+random.randrange(100),player.y-50+random.randrange(100)): 
                 sound.pistol.play()
-            ai.flee(self, Target)					#Hold distance
+            ai.flee(self, self.Target)					#Hold distance
             return
             #if (distance_from_player<400):					#If target in Agro range, approach
-        ai.charge(self,Target)
+        ai.charge(self,self.Target)
         return
         #ai.wander(self)								#Else, Seek targets, Spread out & avoid danger. 							
         #return

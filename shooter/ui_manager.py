@@ -1,5 +1,6 @@
 import pyglet
 import shooter.obj
+from shooter import config
 
 ###
 # A manager to draw just UI concerns, like points, lives, etc.
@@ -29,6 +30,8 @@ class UiManager:
 
         self.crew_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.drive_label.x, y = self.drive_label.y - UiManager.SPACE_BETWEEN_LINES)
+ 
+        if not (config.get('debugging')): return
 
         self.debug1 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.drive_label.x, y = UiManager.SPACE_BETWEEN_LINES)
@@ -46,7 +49,7 @@ class UiManager:
 
 
     def draw(self, player):
-        self.health_label.text = "Health: {0}".format(player.health)
+        self.health_label.text = "Health: {0}".format(int(player.health))
         self.health_label.draw()
 
         self.score_label.text = "Score: {0}".format(shooter.obj.score)
@@ -65,11 +68,13 @@ class UiManager:
         else: self.drive_label.text = "Drive Charge: {0}%".format(player.drive / 100)
         self.drive_label.draw()
 
-        self.debug3.text = "#NPC: {0}".format(len(obj.Player_list)-1)
+        if not (config.get('debugging')): return
+
+        self.debug3.text = "#NPC: {0}".format(len(shooter.obj.Player_list)-1)
         self.debug3.draw()
-        self.debug2.text = "#Enemy: {0}".format(len(obj.Enemy_list))
+        self.debug2.text = "#Enemy: {0}".format(len(shooter.obj.Enemy_list))
         self.debug2.draw()
-        self.debug1.text = "#Bullets: {0}".format(len(obj.Bullet_list))
+        self.debug1.text = "#Bullets: {0}".format(len(shooter.obj.Bullet_list))
         self.debug1.draw()
 
 

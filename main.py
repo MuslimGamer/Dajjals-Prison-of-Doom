@@ -74,7 +74,10 @@ def create_background():
         # assume up to 300x300
         x = random.randrange(obj.GAME_WIDTH - 300)
         y = random.randrange(obj.GAME_HEIGHT - 300)
-        obj.Backgrounds_list.append(background.Background(planet, x, y))
+        planet_sprite =background.Background(planet, x, y)
+        planet_sprite.sprite.scale = 0.5                          #Planet sprite scaling. Larger planets obstructs game view
+        obj.Backgrounds_list.append(planet_sprite)
+        
 
 def start_game():
     global game_started
@@ -95,6 +98,7 @@ def start_game():
     Screen_handler.draw_ui = True
 
 def game_over():
+    obj.Player_list[:]=[]
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
     

@@ -13,7 +13,8 @@ Bullet_Subclass = {
 class Bullet(GameObject):
     def __init__(self, owner, prototype):
         GameObject.__init__(self, owner, 'Bullet', prototype)
-        self.sound = pyglet.media.Player
+
+
 
         #self.explosion = pyglet.media.load("sounds/explosion.wav", streaming = False)
         self.on_death = lambda: Bullet_Subclass[self.id].on_death(self)
@@ -21,6 +22,5 @@ class Bullet(GameObject):
 
     def update(self):
         self.health -= 1
-        self.mx = sin(self.theta) * self.speed
-        self.my = cos(self.theta) * self.speed
+        
         Bullet_Subclass[self.id].update(self)
