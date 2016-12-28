@@ -100,9 +100,11 @@ def start_game():
     Screen_handler.draw_ui = True
 
 def game_over():
+    #print("Game over, hot shot")
     obj.Player_list[:]=[]
     over = Object_handler.spawn("Misc", "Game Over", 0, 0)
     center(over)
+    sound.game_over.play()
     
     # TODO: encapsulate
     Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
