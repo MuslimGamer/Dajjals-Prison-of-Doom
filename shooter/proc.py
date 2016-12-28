@@ -143,26 +143,26 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             if not(player.id == "Player_Basic"):return
 
             if config.get("control_style") == "relative":
-                thrust = self.is_pressed(key.S) * -0.01 + self.is_pressed(key.W) * 0.05
-                player.theta += (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*2*pi/180
+                thrust = self.is_pressed(key.S) * -0.03 + self.is_pressed(key.W) * 0.1
+                player.theta += (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*0.1
 
                 player.mx += thrust * cos(player.theta)
                 player.my += thrust * -1*sin(player.theta)
 
-                if (sqrt(player.mx*player.mx+player.my*player.my)>player.speed):
-                    player.mx = player.mx*.9
-                    player.my = player.my*.9
-                player.mx = player.mx *0.99 
+                #if (sqrt(player.mx*player.mx+player.my*player.my)>player.speed):
+                #    player.mx = player.mx*.9
+                #    player.my = player.my*.9
+                player.mx = player.mx *0.99
                 player.my = player.my *0.99
             
             else:
-                player.mx = self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1
-                player.my = self.is_pressed(key.S) * -1 + self.is_pressed(key.W) * 1
+                player.mx = (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*player.speed
+                player.my = (self.is_pressed(key.S) * -1 + self.is_pressed(key.W) * 1)*player.speed
 
                 if not (abs(player.mx) + abs(player.my) == 1):
                 # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
-                    player.mx = player.mx * 0.707 * player.speed
-                    player.my = player.my * 0.707 * player.speed
+                    player.mx = player.mx * 0.707
+                    player.my = player.my * 0.707
 
             if config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
                 debug.ask_and_process_cheat_code(player)

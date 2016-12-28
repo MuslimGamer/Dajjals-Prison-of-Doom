@@ -1,6 +1,9 @@
 from shooter import sound
+from shooter import obj
+
 
 def init(bullet):
+
     pass
 
 def update(bullet):
@@ -9,9 +12,8 @@ def update(bullet):
     pass
 
 def on_death(bullet):
-    if bullet.is_on_screen:
+    if (bullet.x > 0 and bullet.x < obj.GAME_WIDTH and bullet.y > 0 and bullet.y < obj.GAME_HEIGHT):
         bullet.handle.spawn('Misc',"Hit",bullet.x,bullet.y)
         sound.enemy_hit.play()
-    pass
 
 
