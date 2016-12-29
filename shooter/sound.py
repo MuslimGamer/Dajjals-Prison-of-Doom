@@ -1,6 +1,7 @@
 import pyglet
 from shooter import config
 
+# Fixes a bug where audio doesn't work on Linux: prefer OpenAL over Pulse
 pyglet.options['audio'] = ('directsound', 'openal', 'pulse', 'silent')
 
 pistol = pyglet.media.load("sounds/pistol.wav", streaming = False)
@@ -11,6 +12,6 @@ rail = pyglet.media.load("sounds/rail.wav", streaming = False)
 rail_fire = pyglet.media.load("sounds/railfire.wav", streaming = False)
 pickup = pyglet.media.load("sounds/pickup-weapon.wav", streaming = False)
 weaponreload = pyglet.media.load("sounds/reload.wav", streaming = False)
+npc_pickup = pyglet.media.load("sounds/pickup-escape-pod.wav", streaming = False)
+game_over = pyglet.media.load("sounds/game-over.wav", streaming = False)
 
-
-        

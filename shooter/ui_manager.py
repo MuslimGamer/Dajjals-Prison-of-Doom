@@ -9,7 +9,7 @@ from shooter import config
 
 class UiManager:
     SPACE_BETWEEN_LINES = 24
-    RIGHT_PADDING = 120
+    RIGHT_PADDING = 130
     LEFT_PADDING = 20
     
     FONT_NAME = "Orbitron"
@@ -61,11 +61,13 @@ class UiManager:
             self.ammo_label.text = "{0} bullets".format(player.shots_left)
         self.ammo_label.draw()
 
-        self.crew_label.text = "Crew: {0} / 30".format(player.crew)
+        self.crew_label.text = "Crew: {0} / {1}".format(player.crew, config.get("max_crew"))
         self.crew_label.draw()
 
-        if player.health < 5: self.drive_label.text = "Jump-Drive Disabled"
-        else: self.drive_label.text = "Drive Charge: {0}%".format(player.drive / 100)
+        if player.drive == 0:
+            self.drive_label.text = "Jump Drive Disabled"
+        else:
+            self.drive_label.text = "Jump Drive Charging: {0}%".format(player.drive / 100)
         self.drive_label.draw()
 
         if not (config.get('debugging')): return

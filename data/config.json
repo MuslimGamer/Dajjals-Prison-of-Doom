@@ -8,6 +8,32 @@
     "debugging": false,
     "enable_npc": true,
 
+    # When hit, this is the percent chance of losing a crew member
+    "chance_to_lose_crew_on_hit_percent": 33,
+    # Drive jumps by this % when already rescued the max number of NPCs, and rescue another one
+    "max_npcs_drive_boost": 10,
+    # Already got max number of NPCs, score jumps by this per NPC
+    "max_npcs_score_boost": 50,
+
+    "max_crew": 21,
+    "max_health": 5,
+    "ai_cooldown_seconds": 1, # AI recalculates every <this> seconds
+
+    # Ship upgrades every 3N crew members. The first upgrade is at crew = 3,
+    # the next at crew = 6, 9, 12, etc.
+    "upgrades": {
+        "emergency_repairs_repair_rate": 0.001,
+        "engineering_crew_speed_multiplier": 1.2,
+        "tactics_crew_attack_rate": 1.2,
+        "gunner_crew_reload_rate": 1.2,
+        "repair_crew_repair_rate": 0.003,
+        "engine_tuning_speed_multiplier": 1.5,
+        "weapons_tuning_attack_rate": 1.5,
+        "ammo_management_reload_rate": 1.5,
+        "advanced_engine_tuning_speed_multiplier": 1.8,
+        "advanced_ammo_management_reload_rate": 2
+    },
+
     # Guns! Each gun needs a pair of four attributes.
     "pistol_bullets":  15,                      #How many bullets / clip
     "pistol_burst": 1,				#How many bullets / shot

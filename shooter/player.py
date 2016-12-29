@@ -45,16 +45,16 @@ class Player(obj.GameObject):
         self.reloadrate = self.stock_reload
         self.__gun.reload_time_seconds = self.__gun.stock_reload_time_seconds
         self.__gun._cooldown_time_seconds = self.__gun.stock_cooldown_time_seconds
-        if self.crew > 3:self.repair = 0.001				#Emergency repairs
-        if self.crew > 5:self.speed = self.stock_speed * 1.2		#Engineering crew
-        if self.crew > 8:self.attackrate = 1.2				#Tactics crew
-        if self.crew > 11:self.reloadrate = 1.2				#Gunner crew
-        if self.crew > 15:self.repair = 0.003				#Repair crew
-        if self.crew > 18:self.speed = self.stock_speed * 1.5		#Engines tuning
-        if self.crew > 20:self.attackrate = 1.5				#Weapons tuning 
-        if self.crew > 24:self.reloadrate = 1.5				#Ammo management.
-        if self.crew > 28:self.speed = self.stock_speed *1.8		#Advanced Engine tuning
-        if self.crew > 30:self.reloadrate = 2				#Advanced Ammo Management
+        if self.crew >= 3: self.repair = config.get('upgrades')["emergency_repairs_repair_rate"]
+        if self.crew >= 6: self.speed = self.stock_speed * config.get('upgrades')["engineering_crew_speed_multiplier"]
+        if self.crew >= 9: self.attackrate = config.get('upgrades')["tactics_crew_attack_rate"]
+        if self.crew >= 12: self.reloadrate = config.get('upgrades')["gunner_crew_reload_rate"]
+        if self.crew >= 15: self.repair = config.get('upgrades')["repair_crew_repair_rate"]
+        if self.crew >= 18: self.speed = self.stock_speed * config.get('upgrades')["engine_tuning_speed_multiplier"]
+        if self.crew >= 21: self.attackrate = config.get('upgrades')["weapons_tuning_attack_rate"]
+        if self.crew >= 24: self.reloadrate = config.get('upgrades')["ammo_management_reload_rate"]
+        if self.crew >= 27: self.speed = self.stock_speed * config.get('upgrades')["advanced_engine_tuning_speed_multiplier"]
+        if self.crew >= 30: self.reloadrate = config.get('upgrades')["advanced_ammo_management_reload_rate"]
         
         self.__gun.reload_time_seconds = self.__gun.reload_time_seconds / self.reloadrate
         self.__gun._cooldown_time_seconds = self.__gun._cooldown_time_seconds / self.attackrate

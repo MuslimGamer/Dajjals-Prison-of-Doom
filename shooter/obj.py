@@ -8,7 +8,6 @@ from shooter import file_watcher
 from shooter import sound
 from shooter import ai
 
-
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 from shooter.weapons import gun, shotgun, rocket
 
@@ -148,9 +147,9 @@ class Object_handler:      #Should I remove this class and just have the various
                 self.spawn_enemy(EnemyID, position_generate_x[side],position_generate_y[side])
                 spawned += 1
             else: 
-                if config.get("enable_npc") and len(Player_list) <=3:
+                if config.get("enable_npc") and len(Player_list) <=3 and len(Enemy_list) > 0:
                     self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
-                spawned += 1
+                    spawned += 1
             self.NextEnemy = random.randrange(4)
 
             if(self.NextEnemy>0):
@@ -189,12 +188,15 @@ class Object_handler:      #Should I remove this class and just have the various
 
         for player in Player_list:
             if player.id == "Player_Basic":
+                # every tick, regenerate health
                 player.health += player.repair
-               
-                if player.health > 5: 
-                    player.drive +=1
-                    player.health = 5   
-            else: player.ai()
+                if player.health > config.get("max_health"): 
+                    player.health = config.get("max_health")
+                # If we're a full crew, repair the jump drive
+                if player.crew == config.get("max_crew"):
+                    player.drive += 1
+            else:
+                player.ai()
 
             player.update()
             player.move()
@@ -241,7 +243,6 @@ class GameObject:
         self.theta = 0
 
         #Behavior management attributes
-        #self.ai = json_data['Behavior']				#AI reference	- See proc.py
         self.speed = json_data['Speed']
         self.cost = json_data['Cost']
         self._health = json_data['Health']			#Hits to remove || frames until timeout
@@ -321,9 +322,9 @@ class GameObject:
         
 
     def Circle_collision(self, Target_object):
-        if (self.id == Target_object.parent):return 0
+        if (self.id == Target_object.parent):
+            return 0
 
-    
         #Simple collision detection for rotating sprites.
         #Abstract circle is appoximated around sprite bounding the maximum sprite overlap area during rotation.
         #Calculated radius of this circle is accumulated from 2 test objects to detect range of collision
@@ -349,10 +350,10 @@ class GameObject:
                 self.my += Target_object.my *(Target_object.size/self.size)
 
                 if(self.id == "Player_Basic"):
-                    if not (random.randrange(3)):			#If hit, 1-3 chance of losing crew
+                    #If hit, % chance of losing crew
+                    if random.randrange(100) < config.get("chance_to_lose_crew_on_hit_percent"):
                         self.crew -= 1
                         if not (self.crew): self.crew = 1		#Preserve atleast 1 crew member.
-                   
 
             return 1   #Hit detected
         return 0       #No Hit Detected
@@ -384,8 +385,6 @@ class GameObject:
 
     def move(self):
         #Function name move is misleading: Function responsible for processing movement, rotation & object maintainance
-        #if(self.mx!=0)or(self.my!=0):
-        
         self.x = self.x + self.mx
         self.y = self.y + self.my
 
@@ -415,7 +414,7 @@ class GameObject:
         if self.cooldown:
             self.cooldown = self.cooldown - 1
         if self.aicooldown:
-            self.aicooldown -=1
+            self.aicooldown -= 1
 
 
     def is_on_screen(self):
@@ -425,6 +424,7 @@ class GameObject:
     #Standard behavior, rush player, attack location
 
     def npc_ai(self, player):
+        global score
         if player is None or self.health == 0:
             return
         if self.is_on_screen():
@@ -435,24 +435,28 @@ class GameObject:
             dy = self.y - player.y
             self.distance_from_player = sqrt(dx*dx+dy*dy)
             
-            if (self.distance_from_player<10):		#Keep some distance from player to avoid crowding.
+            if (self.distance_from_player < 10):		#Keep some distance from player to avoid crowding.
                 player = Player_list[0]				#Otherwise, look for player to follow.
                 if not player.id == "Player_Basic": return
                 self.mx=self.my = 0
-                self.health=0
+                self.health = 0
+                sound.npc_pickup.play()
+
                 player.crew = player.crew + 1
-                if player.crew > 30:
-                    score += 100
-                    player.crew = 30
+                if player.crew > config.get("max_crew"):
+                    player.crew = config.get("max_crew")
+                    score += config.get("max_npcs_score_boost")
+                    player.drive += 100 * config.get("max_npcs_drive_boost")
                 player.upgrade() 
                 return
-            if (self.distance_from_player<200):		#If player near: follow
+
+            if (self.distance_from_player < 200):		#If player near: follow
                 ai.charge(self,player)
                 return
                    						#If player far:
             if not (self.aicooldown):
                 ai.wander(self)				#Seek player or other NPCs (Preference to player)
-                self.aicooldown = 30
+                self.aicooldown = config.get("ai_cooldown_seconds") * 30
 								#Flee bullets and enemies.wwwwwwwww
                     
 
@@ -470,12 +474,8 @@ class GameObject:
                     nearest = self.distance_from_player
                     self.Target = player
             self.aicooldown = 120
-            #if (distance_from_player<400):			#If player or NPC is near: Charge
         ai.charge(self,self.Target)					#Agro range: 400
         return
-        #ai.wander(self)					#Else, Seek targets, Spread out & avoid danger. 
-        #return
-
 
     #Coward behavior, maintain distance, attack location
     def coward_ai(self, player):
@@ -499,24 +499,21 @@ class GameObject:
                 sound.pistol.play()
             ai.flee(self, self.Target)					#Hold distance
             return
-            #if (distance_from_player<400):					#If target in Agro range, approach
         ai.charge(self,self.Target)
         return
-        #ai.wander(self)								#Else, Seek targets, Spread out & avoid danger. 							
-        #return
 
 
+    # "virtual" method. Subclasses override it.
     def update(self):
-        # "virtual" method. Subclasses override it.
         pass
 
+    # "virtual" method. Subclasses override it.
     def on_death(self):
- 
        pass
 
 
 
-#Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
+    #Object is a tempoarary effect (Eg Explosion sprite). Decrease health as counter until removal.
     def misc_ai(self, player):
         if (self.health > 0):
             self.health = self.health - 1
@@ -548,15 +545,12 @@ class GameObject:
         self.x = player.x +sword_attack_radius * sin(self.theta)    #Apply position immediately so factors in collision detection
         self.y = player.y + sword_attack_radius * cos(self.theta)  
 
-    #if left button pressed, calc theta, rotation, then update sprite 
-        pass
+        #if left button pressed, calc theta, rotation, then update sprite 
 
     def bullet_ai(self,player):
-
         pass
 
     def rocket_ai(self,player):
-
         pass
 
 
@@ -597,20 +591,4 @@ class GameObject:
             ai_action[self.ai_type](None) # We don't have a player right now
 
 
-# Prototypes of enemies, the player, bullets, and misc stuff (splash screens, explosions, etc.)
-
-
-#prototypes_json = {		#Define object_type dictionary. Used to parse objects into correct list for later referencing.
-#    'Enemy': obj_enemy,			#Object type Enemy.	(Add arbitary enemy times later)
-#    'Player': obj_player,		#Object type Player.	(Future potential for multiple player types or upgrades?)
-#    'Bullet': obj_bullet,		#Object type Bullet.	(Future potential for various projectiles?)
-#    'Misc': obj_misc			#Object type Misc.	(Intended for graphical effects, Eg enemy dies spawn Explosion object)
-#}
-
 from shooter.bullets.bullet import Bullet
-
-
-
-
-
-
