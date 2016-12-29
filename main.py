@@ -124,17 +124,7 @@ def frame_callback(dt):
     if not Screen_handler.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial:
             Object_handler.update()
 
-    if game_started:
-        for player in obj.Player_list:                 			#If player reaches boundry of screen
-            # TODO: consider replacing with walls that border the map (perhaps off-screen ones)
-            if player.x > Screen_handler.width - player.img.width:
-                player.x = Screen_handler.width - player.img.width    #Push them back by previous movement.
-            if player.x < 0:
-                player.x = 0
-            if player.y > Screen_handler.height - player.img.height:
-                player.y = Screen_handler.height - player.img.height
-            if player.y < 0:
-                player.y = 0
+
 
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)

@@ -9,6 +9,8 @@ explosion = pyglet.media.load("sounds/explosion.wav", streaming = False)
 enemy_hit = pyglet.media.load("sounds/hitenemy.wav", streaming = False)
 rail = pyglet.media.load("sounds/rail.wav", streaming = False)
 rail_fire = pyglet.media.load("sounds/railfire.wav", streaming = False)
+pickup = pyglet.media.load("sounds/pickup-weapon.wav", streaming = False)
+weaponreload = pyglet.media.load("sounds/reload.wav", streaming = False)
 
 
         

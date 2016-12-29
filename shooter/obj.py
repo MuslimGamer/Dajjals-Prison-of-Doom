@@ -316,6 +316,7 @@ class GameObject:
             }
 
             self.switch(PickupType[Target_object.id])
+            sound.pickup.play()
             Target_object.health = 0
         
 

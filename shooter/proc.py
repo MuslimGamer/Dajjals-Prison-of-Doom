@@ -135,19 +135,21 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         if (not self.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial and len(shooter.obj.Player_list) > 0):
             player = shooter.obj.Player_list[0]
             if not(player.id == "Player_Basic"):return
+            player.mousex = self.mouse_x
+            player.mousey = self.mouse_y
 
             if config.get("control_style") == "relative":
-                thrust = self.is_pressed(key.S) * -0.03 + self.is_pressed(key.W) * 0.1
-                player.theta += (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*0.1
+                player.commandy = self.is_pressed(key.S) * -0.03 + self.is_pressed(key.W) * 0.1
+                player.commandx = (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*0.1
 
-                player.mx += thrust * cos(player.theta)
-                player.my += thrust * -1*sin(player.theta)
+                #player.mx += thrust * cos(player.theta)
+                #player.my += thrust * -1*sin(player.theta)
 
                 #if (sqrt(player.mx*player.mx+player.my*player.my)>player.speed):
                 #    player.mx = player.mx*.9
                 #    player.my = player.my*.9
-                player.mx = player.mx *0.99
-                player.my = player.my *0.99
+                #player.mx = player.mx *0.99
+                #player.my = player.my *0.99
             
             else:
                 player.mx = (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*player.speed

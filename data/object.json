@@ -33,7 +33,7 @@
       "ID": "Player_Basic",
       "Health": 3,
       "Img": "images/triangle.png",
-      "Size": 1,
+      "Size": 0.7,
       "Speed": 3,
       "Behavior": "NULL",
       "Cost": 0
@@ -166,6 +166,15 @@
       "Size": 0.3,
       "Speed": 0,
       "Behavior": "misc",
+      "Cost": 0
+    },
+    {
+      "ID": "Gun",
+      "Health": 5,
+      "Img": "images/ship/ship.png",
+      "Size": 0.5,
+      "Speed": 0,
+      "Behavior": "weapon",
       "Cost": 0
     },
     {

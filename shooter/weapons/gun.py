@@ -56,7 +56,8 @@ class Gun:
     def update(self):
         if self.__shots_left == 0 and not self.is_reloading():
             self.__shots_left = self.__total_shots
-            self.reload_sound.play
+            self.reload_sound.play()
+            #sound.weaponreload.play()
 
     def is_reloading(self):
         return self.shots_left == 0 and time.time() - self._last_shot <= self.reload_time_seconds
