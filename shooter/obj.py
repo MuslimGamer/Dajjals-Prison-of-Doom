@@ -420,6 +420,7 @@ class GameObject:
     #Standard behavior, rush player, attack location
 
     def npc_ai(self, player):
+        global score
         if player is None or self.health == 0:
             return
         if self.is_on_screen():

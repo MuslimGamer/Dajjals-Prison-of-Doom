@@ -9,7 +9,7 @@ from shooter import config
 
 class UiManager:
     SPACE_BETWEEN_LINES = 24
-    RIGHT_PADDING = 120
+    RIGHT_PADDING = 130
     LEFT_PADDING = 20
     
     FONT_NAME = "Orbitron"

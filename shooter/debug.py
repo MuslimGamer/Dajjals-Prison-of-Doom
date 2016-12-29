@@ -28,6 +28,15 @@ def spawn_enemies(player):
     for i in range(x):
         shooter.obj.Object_handler.instance.spawn_random(5)
 
+def spawn_npcs(player):
+    # Spawn in a RANGExRANGE area around the player
+    RANGE = 100
+    
+    for i in range(5 + random.randrange(5)):
+        x = player.x - RANGE/2 + random.randrange(RANGE)
+        y = player.y - RANGE/2 + random.randrange(RANGE)    
+        shooter.obj.Object_handler.instance.spawn("Player", "NPC_Basic", x, y)
+
 def lots_of_health(player):
     player.health = 999
 
@@ -41,5 +50,6 @@ cheats = {
     "pickup": spawn_pickup,
     "die": die,
     "rail": lambda p: p.switch("rail"),
-    "players": lambda p: print("P={1} and players: {0}".format(shooter.obj.Player_list, p))
+    "players": lambda p: print("P={1} and players: {0}".format(shooter.obj.Player_list, p)),
+    "rescue": spawn_npcs
 }
