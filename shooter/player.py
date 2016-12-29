@@ -86,3 +86,7 @@ class Player(obj.GameObject):
     @property
     def shots_left(self):
         return self.__gun.shots_left
+
+    @property
+    def has_won(self):
+        return self.drive >= 100 * 100 # 100% x 100

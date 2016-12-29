@@ -151,6 +151,15 @@
       "Cost": 0
     },
     {
+      "ID": "You Win",
+      "Health": 210,
+      "Img": "images/ui/you-win.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+    {
       "ID": "Explode",
       "Health": 5,
       "Img": "images/explode.png",

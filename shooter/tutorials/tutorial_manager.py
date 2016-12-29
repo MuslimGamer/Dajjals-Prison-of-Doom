@@ -1,7 +1,10 @@
 from enum import Enum
 from shooter.tutorials.story_and_controls import StoryAndControls
+from shooter.tutorials.you_win import YouWin
+import shooter.obj
 
-Tutorials = Enum("Tutorials", "Story_and_Controls")
+# Enum with two values
+Tutorials = Enum("Tutorials", "Story_and_Controls You_Win")
 
 # UI class that handles rendering context-sensitive tutorial stuff.
 # eg. renders the story and intro in the first game of the session.
@@ -32,5 +35,14 @@ def on_keypress(key, previously_pressed):
 # Called every draw. Draw stuff specific to the current tutorial.
 def draw():
     global _current_tutorial
+    
+    player = None
+    if len(shooter.obj.Player_list) > 0:
+        player = shooter.obj.Player_list[0]
+
     if _current_tutorial != None:
         _current_tutorial.draw()
+    # No tutorial, and victory conditions? Incite victory.
+    elif Tutorials.You_Win not in tutorials_shown and player != None and player.has_won:
+        _current_tutorial = YouWin(player)
+        player.health = 0 # die
