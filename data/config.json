@@ -9,6 +9,21 @@
     "enable_npc": true,
     "chance_to_lose_crew_on_hit_percent": 33,
 
+    # Ship upgrades every 3N crew members. The first upgrade is at crew = 3,
+    # the next at crew = 6, 9, 12, etc.
+    "upgrades": {
+        "emergency_repairs_repair_rate": 0.001,
+        "engineering_crew_speed_multiplier": 1.2,
+        "tactics_crew_attack_rate": 1.2,
+        "gunner_crew_reload_rate": 1.2,
+        "repair_crew_repair_rate": 0.003,
+        "engine_tuning_speed_multiplier": 1.5,
+        "weapons_tuning_attack_rate": 1.5,
+        "ammo_management_reload_rate": 1.5,
+        "advanced_engine_tuning_speed_multiplier": 1.8,
+        "advanced_ammo_management_reload_rate": 2
+    },
+
     # Guns! Each gun needs a pair of four attributes.
     "pistol_bullets":  15,                      #How many bullets / clip
     "pistol_burst": 1,				#How many bullets / shot
