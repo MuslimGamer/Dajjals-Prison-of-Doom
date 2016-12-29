@@ -7,6 +7,7 @@
     "control_style": "relative",
     "debugging": false,
     "enable_npc": true,
+    "chance_to_lose_crew_on_hit_percent": 33,
 
     # Guns! Each gun needs a pair of four attributes.
     "pistol_bullets":  15,                      #How many bullets / clip

@@ -346,10 +346,10 @@ class GameObject:
                 self.my += Target_object.my *(Target_object.size/self.size)
 
                 if(self.id == "Player_Basic"):
-                    if not (random.randrange(3)):			#If hit, 1-3 chance of losing crew
+                    #If hit, % chance of losing crew
+                    if random.randrange(100) < config.get("chance_to_lose_crew_on_hit_percent"):
                         self.crew -= 1
                         if not (self.crew): self.crew = 1		#Preserve atleast 1 crew member.
-                   
 
             return 1   #Hit detected
         return 0       #No Hit Detected
