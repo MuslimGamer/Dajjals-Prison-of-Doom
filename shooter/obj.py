@@ -413,7 +413,7 @@ class GameObject:
         if self.cooldown:
             self.cooldown = self.cooldown - 1
         if self.aicooldown:
-            self.aicooldown -=1
+            self.aicooldown -= 1
 
 
     def is_on_screen(self):
@@ -443,9 +443,9 @@ class GameObject:
 
                 player.crew = player.crew + 1
                 if player.crew > config.get("max_crew"):
-                    score += config.get("max_npcs_score_boost")
                     player.crew = config.get("max_crew")
-                    player.drive += config.get("max_npcs_drive_boost")
+                    score += config.get("max_npcs_score_boost")
+                    player.drive += 100 * config.get("max_npcs_drive_boost")
                 player.upgrade() 
                 return
 

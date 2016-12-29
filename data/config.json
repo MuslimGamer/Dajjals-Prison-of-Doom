@@ -10,7 +10,7 @@
 
     # When hit, this is the percent chance of losing a crew member
     "chance_to_lose_crew_on_hit_percent": 33,
-    # Drive jumps by this amount when already rescued the max number of NPCs, and rescue another one
+    # Drive jumps by this % when already rescued the max number of NPCs, and rescue another one
     "max_npcs_drive_boost": 10,
     # Already got max number of NPCs, score jumps by this per NPC
     "max_npcs_score_boost": 50,
