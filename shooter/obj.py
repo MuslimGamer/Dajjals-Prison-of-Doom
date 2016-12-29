@@ -188,10 +188,13 @@ class Object_handler:      #Should I remove this class and just have the various
 
         for player in Player_list:
             if player.id == "Player_Basic":
+                # every tick, regenerate health
                 player.health += player.repair
-                if player.health > 5: 
+                if player.health > config.get("max_health"): 
+                    player.health = config.get("max_health")
+                # If we're a full crew, repair the jump drive
+                if player.crew == config.get("max_crew"):
                     player.drive += 1
-                    player.health = 5   
             else:
                 player.ai()
 
@@ -439,9 +442,10 @@ class GameObject:
                 sound.npc_pickup.play()
 
                 player.crew = player.crew + 1
-                if player.crew > 30:
-                    score += 100
-                    player.crew = 30
+                if player.crew > config.get("max_crew"):
+                    score += config.get("max_npcs_score_boost")
+                    player.crew = config.get("max_crew")
+                    player.drive += config.get("max_npcs_drive_boost")
                 player.upgrade() 
                 return
 
@@ -451,7 +455,7 @@ class GameObject:
                    						#If player far:
             if not (self.aicooldown):
                 ai.wander(self)				#Seek player or other NPCs (Preference to player)
-                self.aicooldown = 30
+                self.aicooldown = config.get("ai_cooldown_seconds") * 30
 								#Flee bullets and enemies.wwwwwwwww
                     
 
