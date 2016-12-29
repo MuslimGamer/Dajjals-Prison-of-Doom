@@ -13,7 +13,7 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
 
         # Click already registers globally, no need to act        
         self.window.add_button('images/next-button.png', None)
-        self.window.add_button('images/skip-button.png', None)
+        self.window.add_button('images/skip-button.png', lambda: self.close())
         self.closed = False
 
     def draw(self):
@@ -31,13 +31,16 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
                 self.showing = "4"
                 self.window.show("Here come the Dajjal's war ships!", "captain")                
             else:
-               self.window.close()
-               self.closed = True
+               self.close()
 
     def on_click(self, button, x, y):
         for button in self.window.buttons:
             if x >= button.x and x <= button.x + button.width and y >= button.y and y <= button.y + button.height:
-                print("xlixked {0}, {1}; b goes from {2}, {3} to {4}, {5}".format(x, y, button.x, button.y, button.x + button.width, button.y + button.height))
-                callback = self.window.button_callbacks[button]
-                if callback != None:
-                    callback()
+                if button in self.window.button_callbacks:
+                    callback = self.window.button_callbacks[button]
+                    if callback != None:
+                        callback()
+
+    def close(self):
+        self.window.close()
+        self.closed = True
