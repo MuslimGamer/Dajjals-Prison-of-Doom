@@ -1,3 +1,4 @@
 The following assets were made available under the Creative Common Attribution 3.0 license (https://creativecommons.org/licenses/by/3.0/). We use these assets, which may include changes to the originals. All original material is copyrighted to the original creator. Assets include:
 
-- qubodup's voices: http://freesound.org/people/qubodup/sounds/168129/
+- "Male Voice: Short Positive Feedback Phrases" by qubodup: http://freesound.org/people/qubodup/sounds/168129/
+- "Shotgun Action" by IchBinjager: http://freesound.org/people/IchBinJager/sounds/272068/
