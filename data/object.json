@@ -33,18 +33,20 @@
       "ID": "Player_Basic",
       "Health": 3,
       "Img": "images/triangle.png",
-      "Size": 1,
+      "Size": 0.2,
       "Speed": 3,
       "Behavior": "NULL",
       "Cost": 0
-    },
+    }
+  ],
+   "NPC":[
     {
       "ID": "Deflect",
       "Health": 3,
       "Img": "images/shield.png",
       "Size": 1,
       "Speed": 3,
-      "Behavior": "sword",
+      "Behavior": "deflect",
       "Cost": 0
     },
     {
@@ -52,7 +54,7 @@
       "Health": 1,
       "Img": "images/bluetriangle.png",
       "Size": 0.5,
-      "Speed": 1,
+      "Speed": 2,
       "Behavior": "npc",
       "Cost": 1
     }
@@ -178,6 +180,15 @@
       "Cost": 0
     },
     {
+      "ID": "Gun",
+      "Health": 5,
+      "Img": "images/ship/ship.png",
+      "Size": 0.5,
+      "Speed": 0,
+      "Behavior": "weapon",
+      "Cost": 0
+    },
+    {
       "ID": "Rail_Fire",
       "Health": 45,
       "Img": "images/railfire.png",
@@ -228,6 +239,15 @@
       "ID": "Weapon_Rocket",
       "Health": 1000,
       "Img": "images/pickrock.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+   {
+      "ID": "Weapon_Rail",
+      "Health": 1000,
+      "Img": "images/pickrail.png",
       "Size": 1,
       "Speed": 0,
       "Behavior": "misc",

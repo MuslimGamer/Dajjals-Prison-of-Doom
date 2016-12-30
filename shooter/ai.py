@@ -9,7 +9,6 @@ def wander(enemy):								#Decide movements by location on gradient mesh.
     enemy.mx = enemy.speed* sin(theta)
     enemy.my = enemy.speed* cos(theta)
 
-
 def charge(enemy, target):
     if enemy.aicooldown &1: return
     dx = target.x - enemy.x
