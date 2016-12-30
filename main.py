@@ -4,6 +4,13 @@
 ## Main.py  -  Initialisation calls & Higher level functions ##
 ###############################################################
 
+# Support for PyInstaller --onefile. It creates an archive exe that
+# unpacks to a temp directory. We need to convince all our file I/O
+# to use that directoy as the application base dir. chdir is the
+# easiest way, if we use relative paths for everything else.
+if hasattr(sys, '_MEIPASS'):
+    os.chdir(sys._MEIPASS)
+
 import pyglet
 
 import glob
@@ -15,14 +22,6 @@ from math import atan2,atan, sin, cos, degrees, pi, sqrt
 import pyglet
 
 from shooter import sound
-
-# Support for PyInstaller --onefile. It creates an archive exe that
-# unpacks to a temp directory. We need to convince all our file I/O
-# to use that directoy as the application base dir. chdir is the
-# easiest way, if we use relative paths for everything else.
-if hasattr(sys, '_MEIPASS'):
-    os.chdir(sys._MEIPASS)
-
 from shooter import config
 from shooter import file_watcher
 
