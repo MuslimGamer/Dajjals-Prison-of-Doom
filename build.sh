@@ -15,3 +15,4 @@
 rm -rf build
 rm -rf dist
 pyinstaller main.spec
+cp credits.txt dist

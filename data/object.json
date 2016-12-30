@@ -5,7 +5,7 @@
       "Health": 1,
       "Img": "images/redbug.png",
       "Size": 1,
-      "Speed": 1,
+      "Speed": 2,
       "Behavior": "agro",
       "Cost": 1
     },
@@ -14,7 +14,7 @@
       "Health": 1,
       "Img": "images/fly.png",
       "Size": 0.5,
-      "Speed": 1,
+      "Speed": 2,
       "Behavior": "coward",
       "Cost": 2
     },
@@ -23,7 +23,7 @@
       "Health": 3,
       "Img": "images/crab.png",
       "Size": 2,
-      "Speed": 0.3,
+      "Speed": 0.6,
       "Behavior": "agro",
       "Cost": 3
     }
@@ -33,18 +33,20 @@
       "ID": "Player_Basic",
       "Health": 3,
       "Img": "images/triangle.png",
-      "Size": 1,
-      "Speed": 1.5,
+      "Size": 0.2,
+      "Speed": 3,
       "Behavior": "NULL",
       "Cost": 0
-    },
+    }
+  ],
+   "NPC":[
     {
       "ID": "Deflect",
       "Health": 3,
       "Img": "images/shield.png",
       "Size": 1,
-      "Speed": 1.5,
-      "Behavior": "sword",
+      "Speed": 3,
+      "Behavior": "deflect",
       "Cost": 0
     },
     {
@@ -52,7 +54,7 @@
       "Health": 1,
       "Img": "images/bluetriangle.png",
       "Size": 0.5,
-      "Speed": 0.5,
+      "Speed": 2,
       "Behavior": "npc",
       "Cost": 1
     }
@@ -63,7 +65,7 @@
       "Health": 100,
       "Img": "images/shot.png",
       "Size": 0.5,
-      "Speed": 10,
+      "Speed": 20,
       "Behavior": "bullet",
       "Cost": 300
     },
@@ -81,7 +83,7 @@
       "Health": 100,
       "Img": "images/rocket.png",
       "Size": 1,
-      "Speed": 10,
+      "Speed": 20,
       "Behavior": "rocket",
       "Cost": 5
     },
@@ -125,7 +127,7 @@
   "Misc": [
     {
       "ID": "MG Splash",
-      "Health": 120,
+      "Health": 60,
       "Img": "images/splash-mg.png",
       "Size": 1,
       "Speed": 0,
@@ -134,7 +136,7 @@
     },
     {
       "ID": "DG Splash",
-      "Health": 120,
+      "Health": 60,
       "Img": "images/splash-dg.png",
       "Size": 1,
       "Speed": 0,
@@ -143,8 +145,17 @@
     },
     {
       "ID": "Game Over",
-      "Health": 450,
-      "Img": "images/game-over.png",
+      "Health": 150,
+      "Img": "images/ui/game-over.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+    {
+      "ID": "You Win",
+      "Health": 180,
+      "Img": "images/ui/you-win.png",
       "Size": 1,
       "Speed": 0,
       "Behavior": "misc",
@@ -152,7 +163,7 @@
     },
     {
       "ID": "Explode",
-      "Health": 10,
+      "Health": 5,
       "Img": "images/explode.png",
       "Size": 5,
       "Speed": 0,
@@ -161,7 +172,7 @@
     },
     {
       "ID": "Hit",
-      "Health": 10,
+      "Health": 5,
       "Img": "images/explode.png",
       "Size": 0.3,
       "Speed": 0,
@@ -169,8 +180,17 @@
       "Cost": 0
     },
     {
+      "ID": "Gun",
+      "Health": 5,
+      "Img": "images/ship/ship.png",
+      "Size": 0.5,
+      "Speed": 0,
+      "Behavior": "weapon",
+      "Cost": 0
+    },
+    {
       "ID": "Rail_Fire",
-      "Health": 90,
+      "Health": 45,
       "Img": "images/railfire.png",
       "Size": 1,
       "Speed": 0,
@@ -179,7 +199,7 @@
     },
     {
       "ID": "Smoke",
-      "Health": 10,
+      "Health": 5,
       "Img": "images/smoke.png",
       "Size": 3,
       "Speed": 0,
@@ -219,6 +239,15 @@
       "ID": "Weapon_Rocket",
       "Health": 1000,
       "Img": "images/pickrock.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+   {
+      "ID": "Weapon_Rail",
+      "Health": 1000,
+      "Img": "images/pickrail.png",
       "Size": 1,
       "Speed": 0,
       "Behavior": "misc",

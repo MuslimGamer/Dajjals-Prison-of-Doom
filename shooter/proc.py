@@ -11,10 +11,11 @@ import random
 
 from pyglet.window import key, mouse
 from shooter import debug
-from shooter import obj
+import shooter.obj
 from shooter import config
 from shooter import file_watcher
 from shooter import ui_manager
+import shooter.tutorials.tutorial_manager
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
@@ -39,35 +40,34 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.draw_ui = True
         self.score_label = None # shouldn't be here, not every screen needs one
 
-        # TODO: scale when we have time!
-        # self.__window_Scale = self.__window.height / WINDOW_HEIGHT
-        #print(self.__window_Scale)
-
+        # Methods are all private because we need them declared before we push the handlers
         def on_mouse_press(x, y, button, modifiers):
             self.mouse_pressed(x,y,button)
-            pass #print("Mouse pressed")
+            if shooter.tutorials.tutorial_manager._current_tutorial != None:
+                shooter.tutorials.tutorial_manager._current_tutorial.on_click(button, x, y)
 
         def on_mouse_release(x,y,button, modifiers):
             self.mouse_released(button)
-            pass #print("Mouse released")
 
         def on_mouse_drag(x,y,dx,dy, buttons, modifiers):        
             self.mouse_dragged(x, y)
-            pass #print("Mouse dragged")
         
         def on_key_press(symbol, modifiers):
             if not symbol in self._currently_pressed:
                 self._currently_pressed.append(symbol)
 
+            # Call our one and only subscriber if he's there (tutorial manager)
+            if self.on_press_callback != None:
+                self.on_press_callback(symbol, self._currently_pressed)
+
             # game logic to execute when we press a key the first time only (not press+hold)
             if symbol == key.R: 
-                obj.Player_list[0].reload()
+                shooter.obj.Player_list[0].reload()
             elif symbol == key.P:
                 self.paused = not self.paused
                 ui_manager.paused = self.paused
             elif config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
-                debug.ask_and_process_cheat_code(obj.Player_list[0])
-
+                debug.ask_and_process_cheat_code(shooter.obj.Player_list[0])
 
         def on_key_release(symbol, modifiers):
             if symbol in self._currently_pressed:
@@ -76,22 +76,27 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         def on_draw():		#Kept seperate from processing callback, Frame rate not tied to simulation speed.
             self.__window.clear()
 
-            for bg in obj.Backgrounds_list:
+            for bg in shooter.obj.Backgrounds_list:
                 bg.sprite.draw()
-            for player in obj.Player_list:		#Render player sprite
+            for player in shooter.obj.Player_list:		#Render player sprite
                 player.sprite.draw()
-            for enemy in obj.Enemy_list:		#Render enemy sprites
+            for enemy in shooter.obj.Enemy_list:		#Render enemy sprites
                 enemy.sprite.draw()
-            for bullet in obj.Bullet_list:		#Render bullet sprites
+            for bullet in shooter.obj.Bullet_list:		#Render bullet sprites
                 bullet.sprite.draw()
-            for pickup in obj.Pickup_list:
+            for pickup in shooter.obj.Pickup_list:
                 pickup.sprite.draw()
-            for misc in obj.Misc_list:		#Render Misc sprites
+            for misc in shooter.obj.Misc_list:		#Render Misc sprites
                 misc.sprite.draw()
+            for NPC in shooter.obj.NPC_list:
+                NPC.sprite.draw()
                 
-            if self.draw_ui and len(obj.Player_list) >= 1:
+            if self.draw_ui and len(shooter.obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
-                if obj.Player_list[0].id == "Player_Basic":self.__ui_manager.draw(obj.Player_list[0])
+                if shooter.obj.Player_list[0].id == "Player_Basic":
+                    self.__ui_manager.draw(shooter.obj.Player_list[0])
+
+            shooter.tutorials.tutorial_manager.draw()
 
             if self.paused:
                 self.pause_sprite.draw()
@@ -105,11 +110,15 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
         self.__window.push_handlers(on_mouse_press,on_mouse_release,on_mouse_drag,on_draw,on_close,on_key_press, on_key_release)
 
+    def notify_on_press(self, method):
+        self.on_press_callback = method
 
     def mouse_pressed(self,x,y,button):
         self.mouse_x = x
         self.mouse_y = y
         self._currently_pressed.append(button)
+        if self.on_press_callback != None:
+            self.on_press_callback(button, self._currently_pressed)
 
     # Is a key being click+held?
     def mouse_dragged(self, x, y):
@@ -129,31 +138,31 @@ class Screen:			#Class handling window and window related functions (Draw, Event
     # this logic as long as these keys are held down. If you want something more event-driven,
     # add your code under on_key_press.
     def input(self): 
-        if (not self.paused and len(obj.Player_list) > 0):
-            player = obj.Player_list[0]
+        if (not self.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial and len(shooter.obj.Player_list) > 0):
+            player = shooter.obj.Player_list[0]
             if not(player.id == "Player_Basic"):return
+            player.mousex = self.mouse_x
+            player.mousey = self.mouse_y
 
             if config.get("control_style") == "relative":
-                thrust = self.is_pressed(key.S) * -0.01 + self.is_pressed(key.W) * 0.05
-                player.theta += (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*2*pi/180
+                player.commandy = self.is_pressed(key.S) * -0.1 + self.is_pressed(key.W) * 0.2
+                player.commandx = (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*0.12
 
-                player.mx += thrust * cos(player.theta)
-                player.my += thrust * -1*sin(player.theta)
+                #player.mx += thrust * cos(player.theta)
+                #player.my += thrust * -1*sin(player.theta)
 
-                if (sqrt(player.mx*player.mx+player.my*player.my)>player.speed):
-                    player.mx = player.mx*.9
-                    player.my = player.my*.9
-                player.mx = player.mx *0.99 
+                player.mx = player.mx *0.99
                 player.my = player.my *0.99
+
             
             else:
-                player.mx = self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1
-                player.my = self.is_pressed(key.S) * -1 + self.is_pressed(key.W) * 1
+                player.mx = (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*player.speed
+                player.my = (self.is_pressed(key.S) * -1 + self.is_pressed(key.W) * 1)*player.speed
 
                 if not (abs(player.mx) + abs(player.my) == 1):
                 # If both keys are down, don't move at 1.4x; move at ~sqrt(2)/2
-                    player.mx = player.mx * 0.707 * player.speed
-                    player.my = player.my * 0.707 * player.speed
+                    player.mx = player.mx * 0.707
+                    player.my = player.my * 0.707
 
             if config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
                 debug.ask_and_process_cheat_code(player)
@@ -161,23 +170,37 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             if self.is_pressed(key.R): 
                 player.reload()
 
+
             if (self.is_pressed(mouse.RIGHT)):
                 if config.get('melee_enabled'):
-                    if not (player.cooldown):  
-                        print("Deflect")                      
-                        shield = player.handle.spawn('Player',"Deflect",player.x,player.y)
-                        print(shld.id)
+
+
+                    if not (player.shield):  
+                        shield = player.handle.spawn('NPC',"Deflect",player.x,player.y)
+                        dx = self.mouse_x - player.x
+                        dy = self.mouse_y - player.y
+                        shield.theta = atan2(dx,dy)
+                        shooter.obj.NPC_list.append(shield)
+                        player.shield = 1
                     else:
-                        for deflect in obj.Player_list:
+                        for deflect in shooter.obj.NPC_list:
                             if deflect.id == "Deflect":
+
+                                # center on player
                                 dx = self.mouse_x - player.x
                                 dy = self.mouse_y - player.y
+                                deflect.health = 3
+                                # stay around player
                                 deflect.theta = atan2(dx,dy)			#Mathy goodness.
-                    player.cooldown = 10 #Maintain cooldown of melee attack if attack is continueing 
+                    #player.cooldown = 10 #Maintain cooldown of melee/shield if continuing 
                 else:
+                    # TODO: duplicate railgun code below (from elif self.is_pressed(mouse.LEFT)) here
+                    # If not, railgun just straight-out fires (doesn't charge) with right key if
+                    # melee is not enabled
                     player.fire(self.mouse_x, self.mouse_y) 
-            elif self.is_pressed(mouse.LEFT):      
-                for rail in obj.Bullet_list:
+            else: player.shield = 0
+            if self.is_pressed(mouse.LEFT) and player.shield == 0:      
+                for rail in shooter.obj.Bullet_list:
                     if rail.id == "Bullet_RailCharge":
                         dx = self.mouse_x - player.x
                         dy = self.mouse_y - player.y
