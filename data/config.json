@@ -15,6 +15,7 @@
     # Already got max number of NPCs, score jumps by this per NPC
     "max_npcs_score_boost": 50,
 
+
     "max_crew": 21,
     "max_health": 5,
     "ai_cooldown_seconds": 1, # AI recalculates every <this> seconds

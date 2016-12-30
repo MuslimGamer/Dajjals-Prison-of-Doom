@@ -88,6 +88,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 pickup.sprite.draw()
             for misc in shooter.obj.Misc_list:		#Render Misc sprites
                 misc.sprite.draw()
+            for NPC in shooter.obj.NPC_list:
+                NPC.sprite.draw()
                 
             if self.draw_ui and len(shooter.obj.Player_list) >= 1:
                 # First player is THE player to pass into the UI manager
@@ -143,8 +145,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             player.mousey = self.mouse_y
 
             if config.get("control_style") == "relative":
-                player.commandy = self.is_pressed(key.S) * -0.03 + self.is_pressed(key.W) * 0.1
-                player.commandx = (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*0.1
+                player.commandy = self.is_pressed(key.S) * -0.1 + self.is_pressed(key.W) * 0.2
+                player.commandx = (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*0.12
 
                 #player.mx += thrust * cos(player.theta)
                 #player.my += thrust * -1*sin(player.theta)
@@ -168,17 +170,26 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             if self.is_pressed(key.R): 
                 player.reload()
 
+
             if (self.is_pressed(mouse.RIGHT)):
                 if config.get('melee_enabled'):
-                    if not (player.cooldown):  
-                        shield = player.handle.spawn('Player',"Deflect",player.x,player.y)
-                        shooter.obj.Player_list.append(shield)
+
+
+                    if not (player.shield):  
+                        shield = player.handle.spawn('NPC',"Deflect",player.x,player.y)
+                        dx = self.mouse_x - player.x
+                        dy = self.mouse_y - player.y
+                        shield.theta = atan2(dx,dy)
+                        shooter.obj.NPC_list.append(shield)
+                        player.shield = 1
                     else:
-                        for deflect in shooter.obj.Player_list:
+                        for deflect in shooter.obj.NPC_list:
                             if deflect.id == "Deflect":
+
                                 # center on player
                                 dx = self.mouse_x - player.x
                                 dy = self.mouse_y - player.y
+                                deflect.health = 3
                                 # stay around player
                                 deflect.theta = atan2(dx,dy)			#Mathy goodness.
                     #player.cooldown = 10 #Maintain cooldown of melee/shield if continuing 
@@ -187,7 +198,8 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                     # If not, railgun just straight-out fires (doesn't charge) with right key if
                     # melee is not enabled
                     player.fire(self.mouse_x, self.mouse_y) 
-            elif self.is_pressed(mouse.LEFT):      
+            else: player.shield = 0
+            if self.is_pressed(mouse.LEFT) and player.shield == 0:      
                 for rail in shooter.obj.Bullet_list:
                     if rail.id == "Bullet_RailCharge":
                         dx = self.mouse_x - player.x

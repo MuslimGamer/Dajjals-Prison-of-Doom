@@ -11,6 +11,7 @@ class Gun:
     # reload_time => total time (seconds) to reload
     # cooldown_time (delay between two bullets (autofire rate)) is the bullet cost in object.json
     def __init__(self, gun_config_prefix):
+        self.type = gun_config_prefix
         self.__total_shots = config.get("{0}_bullets".format(gun_config_prefix))
         self.burst_shots = config.get("{0}_burst".format(gun_config_prefix))
         self.spread = config.get("{0}_spread".format(gun_config_prefix))
@@ -27,6 +28,7 @@ class Gun:
         self.pickup_sound = pyglet.media.StaticSource(pyglet.media.load("sounds/pickup-weapon.wav", streaming = False))
 
     def switch(self, gun_config_prefix):
+        self.type = gun_config_prefix
         self.__total_shots = config.get("{0}_bullets".format(gun_config_prefix))
         self.burst_shots = config.get("{0}_burst".format(gun_config_prefix))
         self.spread = config.get("{0}_spread".format(gun_config_prefix))
@@ -46,7 +48,8 @@ class Gun:
     # Returns true if we just fired a shot
     def fire(self):
         if self.__shots_left > 0 and time.time() - self._last_shot >= self._cooldown_time_seconds:
-            self.__shots_left -= 1
+            
+            if not (self.type=='rail'): self.__shots_left -= 1
             self._last_shot = time.time()
             self.pew.play()
             return True
@@ -57,7 +60,6 @@ class Gun:
         if self.__shots_left == 0 and not self.is_reloading():
             self.__shots_left = self.__total_shots
             self.reload_sound.play()
-            #sound.weaponreload.play()
 
     def is_reloading(self):
         return self.shots_left == 0 and time.time() - self._last_shot <= self.reload_time_seconds

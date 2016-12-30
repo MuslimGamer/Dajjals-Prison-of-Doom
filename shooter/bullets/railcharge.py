@@ -13,22 +13,35 @@ def init(rail):
 def update(rail):
 
     for player in shooter.obj.Player_list:
-
-        if rail.size < 2:rail.size += 0.003
-        rail.mx = 0.01 * sin(rail.theta)	#Apply small movement to ensure sword renders with correct rotation.
-        rail.my = 0.01 * cos(rail.theta)        #Position applied below instead of movement function so position updated before collsion detection
-        rail.sprite.rotation = rail.theta
+        if player.id == "Player_Basic":
+            #player.set_ammo(1)
+            print (str(player.x), str(player.y))
+            print (str(rail.x), str(rail.y))
+            #player.__gun.__shots_left=1
+            #Apply small movement to ensure sword renders with correct rotation.
+            #Position applied below instead of movement function so position updated before collsion detection
+            if rail.size < 2:rail.size += 0.003
+            rail.mx = 0.01 * sin(rail.theta)	
+            rail.my = 0.01 * cos(rail.theta)        
+            rail.sprite.rotation = rail.theta
 
         # +width/2, -height/2 makes the sword perfectly center on the player
-        rail.x = player.x - player.sprite.width/2 +player.radius *2* sin(rail.theta)    #Apply position immediately so factors in collision detection
-        rail.y = player.y - player.sprite.height/2 +player.radius *2* cos(rail.theta) 
-        return
+	#Apply position immediately so factors in collision detection
+            #rail.x = player.x - player.sprite.width/2 +player.radius *2* sin(rail.theta)    
+            #rail.y = player.y - player.sprite.height/2 +player.radius *2* cos(rail.theta) 
+            rail.x = player.x +player.radius * 1.5* sin(rail.theta)    
+            rail.y = player.y +player.radius * 1.5*cos(rail.theta) 
+            return
 
 
     pass
 
 def on_death(rail):
     sound.rail_fire.play()
+    
+    for player in shooter.obj.Player_list:
+        if player.id == "Player_Basic":
+            player.reload()   
 
     step_x = 0.01*sin(rail.theta)
     step_y = 0.01*cos(rail.theta)

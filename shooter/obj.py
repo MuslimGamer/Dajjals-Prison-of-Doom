@@ -18,6 +18,7 @@ obj_player=[]	#The one and only player prototype
 obj_bullet=[]
 obj_misc=[]
 obj_pickup=[]
+obj_NPC=[]
 
 Player_list=[]			#Active player list - Swap player objects for powerup effects
 Enemy_list= []			#Active enemy list
@@ -30,6 +31,7 @@ Backgrounds_list = []		#Active backgrounds list
 Type_lists = {
     'Enemy': Enemy_list,
     'Player': Player_list,
+    'NPC': NPC_list,
     'Bullet': Bullet_list,
     'Misc': Misc_list,
     'Pickup': Pickup_list,
@@ -41,7 +43,8 @@ prototypes_json = {			#Define object_type dictionary. Used to parse objects into
     'Player': obj_player,		#Object type Player.	(Future potential for multiple player types or upgrades?)
     'Bullet': obj_bullet,		#Object type Bullet.	(Future potential for various projectiles?)
     'Misc': obj_misc,			#Object type Misc.	(Intended for graphical effects, Eg enemy dies spawn Explosion object)
-    'Pickup': obj_pickup
+    'Pickup': obj_pickup,
+    'NPC': obj_NPC
 }	
 
 # Set by main.py
@@ -53,6 +56,7 @@ score = 0
 def load_prototype_data(raw_json):
     json_object = json.loads(raw_json)
     prototypes_json["Enemy"] = json_object["Enemies"]
+    prototypes_json["NPC"] = json_object["NPC"]
     prototypes_json["Player"] = json_object["Player"]
     prototypes_json["Bullet"] = json_object["Bullet"]
     prototypes_json["Misc"] = json_object["Misc"]
@@ -77,6 +81,7 @@ class Object_handler:      #Should I remove this class and just have the various
     def start(self):
 
         Player_list[:]=[]
+        NPC_list[:]=[]
         Enemy_list[:]=[]
         Bullet_list[:]=[]
         Misc_list[:]=[]
@@ -148,7 +153,7 @@ class Object_handler:      #Should I remove this class and just have the various
                 spawned += 1
             else: 
                 if config.get("enable_npc") and len(Player_list) <=3 and len(Enemy_list) > 0:
-                    self.spawn('Player',"NPC_Basic",position_generate_x[side],position_generate_y[side])
+                    self.spawn('NPC',"NPC_Basic",position_generate_x[side],position_generate_y[side])
                     spawned += 1
             self.NextEnemy = random.randrange(4)
 
@@ -168,6 +173,11 @@ class Object_handler:      #Should I remove this class and just have the various
                 player.Circle_collision(bullet)
             for enemy in Enemy_list:
                 player.Circle_collision(enemy)
+        for NPC in NPC_list:
+            for bullet in Bullet_list:
+                NPC.Circle_collision(bullet)
+            for enemy in Enemy_list:
+                NPC.Circle_collision(enemy)
         for enemy in Enemy_list:
             for bullet in Bullet_list:
                 enemy.Circle_collision(bullet)
@@ -177,6 +187,8 @@ class Object_handler:      #Should I remove this class and just have the various
 
         for enemy in Enemy_list:
             if enemy.health: enemy.ai()
+        for NPC in NPC_list:
+            NPC.ai()
         for bullet in Bullet_list:
             if bullet.health: bullet.ai()
         for misc in Misc_list:
@@ -187,19 +199,22 @@ class Object_handler:      #Should I remove this class and just have the various
 
 
         for player in Player_list:
-            if player.id == "Player_Basic":
-                # every tick, regenerate health
-                player.health += player.repair
-                if player.health > config.get("max_health"): 
-                    player.health = config.get("max_health")
-                # If we're a full crew, repair the jump drive
-                if player.crew == config.get("max_crew"):
-                    player.drive += 1
-            else:
-                player.ai()
+
+            # every tick, regenerate health
+            player.health += player.repair
+            if player.health > config.get("max_health"): 
+                player.health = config.get("max_health")
+            # If we're a full crew, repair the jump drive
+            if player.crew == config.get("max_crew"):
+                player.drive += 1
 
             player.update()
             player.move()
+
+        for NPC in NPC_list:
+            NPC.update()
+            NPC.move()
+
         for enemy in Enemy_list:
             enemy.update()
             enemy.move()
@@ -293,12 +308,13 @@ class GameObject:
         global score # obj.score
         score += self.cost
         if((random.randrange(100)<chance) and (len(Pickup_list)<3)):
-            Type = random.randrange(4)
+            Type = random.randrange(5)
             PickupType = {
                 0:"Weapon_Pistol",
                 1:"Weapon_Machine",
                 2:"Weapon_Shotgun",
-                3:"Weapon_Rocket"
+                3:"Weapon_Rocket",
+                4:"Weapon_Rail"
             }
             self.handle.spawn('Pickup',PickupType[Type],self.x, self.y)
 
@@ -313,7 +329,8 @@ class GameObject:
                 "Weapon_Pistol":"pistol",
                 "Weapon_Machine":"machine",
                 "Weapon_Shotgun":"shotgun",
-                "Weapon_Rocket":"rocket"
+                "Weapon_Rocket":"rocket",
+                "Weapon_Rail":"rail"
             }
 
             self.switch(PickupType[Target_object.id])
@@ -337,8 +354,14 @@ class GameObject:
             self.health = self.health - 1
             if (self.id == "Deflect"): 
                 theta = atan2(dx,dy)
-                bullet.mx = -1*bullet.speed*sin(theta)
-                bullet.my = -1*bullet.speed*cos(theta)
+                Target_object.mx = -1*Target_object.speed*sin(theta)
+                Target_object.my = -1*Target_object.speed*cos(theta)
+                if Target_object.type == "Bullet":
+
+                    Target_object.sprite.rotation = theta * 180/pi
+                    Target_object.theta = theta	
+                    Target_object.rotate()
+                return
             else: 
                 Target_object.health = 0
 
@@ -354,6 +377,7 @@ class GameObject:
                     if random.randrange(100) < config.get("chance_to_lose_crew_on_hit_percent"):
                         self.crew -= 1
                         if not (self.crew): self.crew = 1		#Preserve atleast 1 crew member.
+               
 
             return 1   #Hit detected
         return 0       #No Hit Detected
@@ -375,9 +399,13 @@ class GameObject:
         b = self.handle.spawn('Bullet',Attack_Type,self.x,self.y,Bullet)
         b.sprite.rotation = theta * 180/pi
         b.theta = theta	
-        b.parent = self.id
+
         b.mx = sin(b.theta) * b.speed
         b.my = cos(b.theta) * b.speed
+
+        b.rotate()
+
+        b.parent = self.id
 
         if(b.id == "Bullet_rocket"):self.on_death=lambda: self.explode()
         self.cooldown = b.cost     		#Apply cooldown from attack.
@@ -409,6 +437,7 @@ class GameObject:
         self.sprite.set_position(self.sprite_x,self.sprite_y)
 
         if self.health < 1:
+            self.on_death()
             Type_lists[self.type].remove(self)
         
         if self.cooldown:
@@ -427,36 +456,36 @@ class GameObject:
         global score
         if player is None or self.health == 0:
             return
-        if self.is_on_screen():
+        
             #if not self.aicooldown:
+        player = Player_list[0]				#Otherwise, look for player to follow.
+        if not player.id == "Player_Basic": return
+        dx = self.x - player.x
+        dy = self.y - player.y
+        self.distance_from_player = sqrt(dx*dx+dy*dy)
+            
+        if (self.distance_from_player < 10):		#Keep some distance from player to avoid crowding.
             player = Player_list[0]				#Otherwise, look for player to follow.
             if not player.id == "Player_Basic": return
-            dx = self.x - player.x
-            dy = self.y - player.y
-            self.distance_from_player = sqrt(dx*dx+dy*dy)
-            
-            if (self.distance_from_player < 10):		#Keep some distance from player to avoid crowding.
-                player = Player_list[0]				#Otherwise, look for player to follow.
-                if not player.id == "Player_Basic": return
-                self.mx=self.my = 0
-                self.health = 0
-                sound.npc_pickup.play()
+            self.mx=self.my = 0
+            self.health = 0
+            sound.npc_pickup.play()
 
-                player.crew = player.crew + 1
-                if player.crew > config.get("max_crew"):
-                    player.crew = config.get("max_crew")
-                    score += config.get("max_npcs_score_boost")
-                    player.drive += 100 * config.get("max_npcs_drive_boost")
-                player.upgrade() 
-                return
+            player.crew = player.crew + 1
+            if player.crew > config.get("max_crew"):
+                player.crew = config.get("max_crew")
+                score += config.get("max_npcs_score_boost")
+                player.drive += 100 * config.get("max_npcs_drive_boost")
+            player.upgrade() 
+            return
 
-            if (self.distance_from_player < 200):		#If player near: follow
-                ai.charge(self,player)
-                return
+        if (self.distance_from_player < 200):		#If player near: follow
+            ai.charge(self,player)
+            return
                    						#If player far:
-            if not (self.aicooldown):
-                ai.wander(self)				#Seek player or other NPCs (Preference to player)
-                self.aicooldown = config.get("ai_cooldown_seconds") * 30
+        if not (self.aicooldown):
+            ai.wander(self)				#Seek player or other NPCs (Preference to player)
+            self.aicooldown = config.get("ai_cooldown_seconds") * 30
 								#Flee bullets and enemies.wwwwwwwww
                     
 
@@ -473,6 +502,16 @@ class GameObject:
                 if (self.distance_from_player < nearest): 
                     nearest = self.distance_from_player
                     self.Target = player
+            for NPC in NPC_list:				#Select nearest target
+                if not (NPC.id == "Deflect"):
+                    dx = self.x - player.x
+                    dy = self.y - player.y
+                    self.distance_from_player = sqrt(dx*dx+dy*dy)
+                    if (self.distance_from_player < nearest): 
+                        nearest = self.distance_from_player
+                        self.Target = NPC
+
+
             self.aicooldown = 120
         ai.charge(self,self.Target)					#Agro range: 400
         return
@@ -492,7 +531,18 @@ class GameObject:
                 if (self.distance_from_player < nearest): 
                     nearest = self.distance_from_player
                     self.Target = player
+
+            for NPC in NPC_list:				#Select nearest target
+                if not (NPC.id == "Deflect"):
+                    dx = self.x - player.x
+                    dy = self.y - player.y
+                    self.distance_from_player = sqrt(dx*dx+dy*dy)
+                    if (self.distance_from_player < nearest): 
+                        nearest = self.distance_from_player
+                        self.Target = NPC
             self.aicooldown = 120
+
+        player = self.Target
 
         if (self.distance_from_player < 150 + random.randrange(100)):	#If target in range, attempt to attack
             if self.attack('Bullet_Basic',player.x-50+random.randrange(100),player.y-50+random.randrange(100)): 
@@ -522,8 +572,14 @@ class GameObject:
     def deflect_ai(self, player):
         if player is None:
             return
-        shield_radius = config.get("sword_attack_radius")
-        self.health = player.cooldown
+
+        ##player = Player_list[0]
+        #if not (player.id == "Player_Basic"):return
+        shield_radius = config.get("sword_attack_radius") * 2
+
+
+
+        self.health -=1
         self.mx = 0.01 * sin(self.theta)	#Apply small movement to ensure sword renders with correct rotation.
         self.my = 0.01 * cos(self.theta)        #Position applied below instead of movement function so position updated before collsion detection
         self.sprite.rotation = self.theta
@@ -532,35 +588,25 @@ class GameObject:
         self.x = player.x +shield_radius * sin(self.theta)    #Apply position immediately so factors in collision detection
         self.y = player.y + shield_radius * cos(self.theta)  
 
+
+
     def sword_ai(self, player):
-        if player is None:
-            return
-        sword_attack_radius = config.get("sword_attack_radius")
-        self.health = player.cooldown
-        self.mx = 0.01 * sin(self.theta)	#Apply small movement to ensure sword renders with correct rotation.
-        self.my = 0.01 * cos(self.theta)        #Position applied below instead of movement function so position updated before collsion detection
-        self.sprite.rotation = self.theta
-
-        # +width/2, -height/2 makes the sword perfectly center on the player
-        self.x = player.x +sword_attack_radius * sin(self.theta)    #Apply position immediately so factors in collision detection
-        self.y = player.y + sword_attack_radius * cos(self.theta)  
-
-        #if left button pressed, calc theta, rotation, then update sprite 
-
-    def bullet_ai(self,player):
         pass
 
-    def rocket_ai(self,player):
+    def bullet_ai(self, player):
+        pass
+
+    def rocket_ai(self, player):
         pass
 
 
 #No AI attached to this object - No decision making required on behalf of this object (EG Player or bullet)
-    def NULL_ai(self,player):
+    def NULL_ai(self, player):
         #raise(Exception("NULL AI?!"))
         pass
 
 #Undefined behavior referenced.
-    def error_ai(self,player):
+    def error_ai(self, player):
         raise(Exception('Error: AI has gone rouge'))
 
 
@@ -578,7 +624,7 @@ class GameObject:
             "NULL": self.NULL_ai,
             "misc": self.misc_ai
         }
-
+        
         # Misc and bullet AIs don't depend on the player. We have to run them
         # even if there is no player. Trust that the AIs are smart enough not
         # to throw if player is null (null-check, or don't get instantiated

@@ -21,6 +21,7 @@ class Player(obj.GameObject):
         self.repair = 0
         self.crew  = 1
         self.drive = 0
+        self.shield = 0
         self.stock_speed = self.speed
         self.stock_reload = 1
         self.stock_attack = 1
@@ -31,9 +32,17 @@ class Player(obj.GameObject):
         self.weaponseq = pyglet.image.ImageGrid(self.weaponimage,5,1)
         self.image = self.shipseq[6]
         self.imagebuff = self.shipseq[6]
+        
+
         self.sprite = pyglet.sprite.Sprite(self.image,self.x,self.y)
         self.radius = sqrt(self.sprite.height*self.sprite.height + self.sprite.width * self.sprite.width)/2
         self.theta_offset = atan2(self.sprite.height,self.sprite.width)
+        self.theta = 0
+
+        self.sprite_x = self.x - self.radius * sin(self.theta+self.theta_offset)	#Calculate centroid position given:
+        self.sprite_y = self.y - self.radius * cos(self.theta+self.theta_offset)
+        self.sprite.set_position(self.sprite_x,self.sprite_y)
+
 
 
 
@@ -63,11 +72,15 @@ class Player(obj.GameObject):
         self.__gun.switch(gun_config_prefix)
         self.upgrade()
 
+    def set_ammo(self, ammo):
+        self.__gun.__shots_left = ammo
+
     def reload(self):
         self.__gun.reload()
 
     def is_reloading(self):
         return self.__gun.is_reloading()
+
 
     def move(self):
         #Function name move is misleading: Function responsible for processing movement, rotation & object maintainance
@@ -142,10 +155,10 @@ class Player(obj.GameObject):
                 else: spread = 0
 								#Calculate attack vector w/Random scatter
                 theta = atan2(dy, dx)+ spread 
-                hyp = sqrt(dx*dx + dy*dy)
 
-                target_x = self.x + hyp*cos(theta)			#Calculate new attack location including scatter
-                target_y = self.y + hyp*sin(theta)
+                target_x = self.x + 100*cos(theta)			#Calculate new attack location including scatter
+                target_y = self.y + 100*sin(theta)
+
 
                 if config.get("control_style") == "relative":
                     self.mx += 0.5*cos(theta+pi)			#Recoil - Obey physics, It's the law.
