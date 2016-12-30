@@ -13,7 +13,7 @@ class Player(obj.GameObject):
         obj.GameObject.__init__(self, owner, 'Player', prototype)
         self.__gun = pistol.Pistol()
         self.repair = 0
-        self.crew  = 1
+        self.crew = 1
         self.drive = 0
         self.stock_speed = self.speed
         self.stock_reload = 1
@@ -57,9 +57,13 @@ class Player(obj.GameObject):
             for shot in range(self.__gun.burst_shots):  	#Repeat for number of bullets / shot.
                 dx = mouse_x - self.x				#Calculate shot vector
                 dy = mouse_y - self.y
-                if (self.__gun.spread): spread = random.randrange(-1*self.__gun.spread,self.__gun.spread,1) * pi/180 
-                else: spread = 0
-								#Calculate attack vector w/Random scatter
+
+                if (self.__gun.spread):
+                    spread = random.randrange(-1*self.__gun.spread,self.__gun.spread,1) * pi/180 
+                else:
+                    spread = 0
+				
+                #Calculate attack vector w/Random scatter
                 theta = atan2(dy, dx)+ spread 
                 hyp = sqrt(dx*dx + dy*dy)
 

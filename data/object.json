@@ -143,8 +143,8 @@
     },
     {
       "ID": "Game Over",
-      "Health": 210,
-      "Img": "images/game-over.png",
+      "Health": 150,
+      "Img": "images/ui/game-over.png",
       "Size": 1,
       "Speed": 0,
       "Behavior": "misc",
@@ -152,7 +152,7 @@
     },
     {
       "ID": "You Win",
-      "Health": 210,
+      "Health": 180,
       "Img": "images/ui/you-win.png",
       "Size": 1,
       "Speed": 0,

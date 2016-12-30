@@ -42,7 +42,7 @@ def draw():
 
     if _current_tutorial != None:
         _current_tutorial.draw()
+    # Has to be here to trigger even if the user doesn't press anything
     # No tutorial, and victory conditions? Incite victory.
     elif Tutorials.You_Win not in tutorials_shown and player != None and player.has_won:
         _current_tutorial = YouWin(player)
-        player.health = 0 # die

@@ -101,19 +101,25 @@ def start_game():
 
 def game_over():
     #print("Game over, hot shot")
-    old_player = obj.Player_list[0]
-    obj.Player_list[:]=[]
-    if old_player.has_won:
-        over = Object_handler.spawn("Misc", "You Win", 0, 0)
-        sound.you_win.play()
-    else:
-        over = Object_handler.spawn("Misc", "Game Over", 0, 0)
-        sound.game_over.play()
-    center(over)
-    
+    over = None
+    # Why do we get this with no players in the list after closing the victory tutorial screen?
+    if len(obj.Player_list) > 0:
+        old_player = obj.Player_list[0]
+        obj.Player_list[:]=[]
+        
+        if old_player.has_won:
+            over = Object_handler.spawn("Misc", "You Win", 0, 0)
+            sound.you_win.play()        
+        # Not victory? Defefat, then.
+        if over == None:
+            over = Object_handler.spawn("Misc", "Game Over", 0, 0)
+            sound.game_over.play()
+
+        center(over)
+        
     # TODO: encapsulate
     Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
-        x = over.x + 160, y = over.y - 32, font_size = 24)
+        x = over.x + 32, y = over.y - 32, font_size = 24)
 
     shooter.tutorials.tutorial_manager.is_first_game = False
 
@@ -123,6 +129,9 @@ def game_over():
 
 def frame_callback(dt):
     global game_started
+
+    if len(obj.Player_list) > 0 and obj.Player_list[0].has_won == True:
+        return
     
     if game_started:
         #Check user input

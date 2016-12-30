@@ -46,7 +46,7 @@ def die(player):
 
 def nearly_win(player):
     player.crew = shooter.config.get("max_crew")
-    player.drive = 99 * 100
+    player.drive = 100 * 100
 
 cheats = {
     "roketfiq": lots_of_health,
