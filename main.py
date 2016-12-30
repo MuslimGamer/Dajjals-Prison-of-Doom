@@ -4,6 +4,8 @@
 ## Main.py  -  Initialisation calls & Higher level functions ##
 ###############################################################
 
+import sys
+
 # Support for PyInstaller --onefile. It creates an archive exe that
 # unpacks to a temp directory. We need to convince all our file I/O
 # to use that directoy as the application base dir. chdir is the
@@ -16,7 +18,6 @@ import pyglet
 import glob
 import random
 import os
-import sys
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
 import pyglet
