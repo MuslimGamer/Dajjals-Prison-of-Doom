@@ -6,6 +6,7 @@ from math import atan2, sin, cos, pi, sqrt
 
 from shooter import config
 from shooter import obj
+from shooter import ui_manager
 from shooter.bullets import bullet
 from shooter.weapons import gun, pistol, machine, shotgun, rocket, rail
 
@@ -13,7 +14,7 @@ class Player(obj.GameObject):
         # call base class constructor
     def __init__(self, owner, prototype):
         obj.GameObject.__init__(self, owner, 'Player', prototype)
-        self.__gun = pistol.Pistol()
+        self.__gun = rocket.Rocket()
         self.commandx = 0
         self.commandy = 0
         self.mousex = 0
@@ -27,11 +28,11 @@ class Player(obj.GameObject):
         self.stock_attack = 1
         #self.image = pyglet.image.load(json_data['Img'])
         self.shipimage = pyglet.image.load('images/ship/ship.png')
-        self.shipseq = pyglet.image.ImageGrid(self.shipimage,7,1)
+        self.shipseq = pyglet.image.ImageGrid(self.shipimage,9,1)
         self.weaponimage = pyglet.image.load('images/ship/weapon.png')
         self.weaponseq = pyglet.image.ImageGrid(self.weaponimage,5,1)
-        self.image = self.shipseq[6]
-        self.imagebuff = self.shipseq[6]
+        self.image = self.shipseq[8]
+        self.imagebuff = self.shipseq[8]
         
 
         self.sprite = pyglet.sprite.Sprite(self.image,self.x,self.y)
@@ -106,17 +107,17 @@ class Player(obj.GameObject):
            
 
         if self.commandx == 0:
-            if self.commandy == 0:self.imagebuff = self.shipseq[6]	#Idle
-            if self.commandy > 0:self.imagebuff = self.shipseq[5]      	#Forward
-            if self.commandy < 0:self.imagebuff = self.shipseq[4]      	#Backward
+            if self.commandy == 0:self.imagebuff = self.shipseq[8]	#Idle
+            if self.commandy > 0:self.imagebuff = self.shipseq[7]      	#Forward
+            if self.commandy < 0:self.imagebuff = self.shipseq[6]      	#Backward
         elif self.commandx <0:
-            if self.commandy<0:self.imagebuff = self.shipseq[6]		#Left back
-            if self.commandy==0:self.imagebuff = self.shipseq[2]	#Left still
-            if self.commandy>0:self.imagebuff = self.shipseq[1]		#Left forward
+            if self.commandy<0:self.imagebuff = self.shipseq[1]		#Left back
+            if self.commandy==0:self.imagebuff = self.shipseq[5]	#Left still
+            if self.commandy>0:self.imagebuff = self.shipseq[3]		#Left forward
         elif self.commandx >0:
-            if self.commandy<0:self.imagebuff = self.shipseq[6]		#Right back
-            if self.commandy==0:self.imagebuff = self.shipseq[3]	#Right still
-            if self.commandy>0:self.imagebuff = self.shipseq[0]		#Right Forward
+            if self.commandy<0:self.imagebuff = self.shipseq[0]		#Right back
+            if self.commandy==0:self.imagebuff = self.shipseq[4]	#Right still
+            if self.commandy>0:self.imagebuff = self.shipseq[2]		#Right Forward
 
         if not (self.sprite.image == self.imagebuff):self.sprite.image = self.imagebuff
 
@@ -138,7 +139,9 @@ class Player(obj.GameObject):
         self.sprite.set_position(self.sprite_x,self.sprite_y)
 
         if self.health < 1:
-            obj.Type_lists[self.type].remove(self)
+            self.health = 0
+            #obj.Type_lists[self.type].remove(self)
+            #game_over()
         
         if self.cooldown:
             self.cooldown = self.cooldown - 1

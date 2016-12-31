@@ -92,6 +92,7 @@ def start_game():
 
     player = Object_handler.spawn('Player', "Player_Basic", Screen_handler.width / 2, Screen_handler.height / 2, Player)
     player.on_death = lambda: game_over()
+    player.move()  #Properly positions player sprite. Call prior to gameplay to avoid player sprite jumping on first movement bug.
 
     pyglet.clock.schedule_interval(Object_handler.spawn_random, 1)
     # Trigger first run of tutorial manager so we can show intro text

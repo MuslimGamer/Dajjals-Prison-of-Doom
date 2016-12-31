@@ -4,6 +4,7 @@ import pyglet
 
 from shooter import config
 from shooter import sound
+from shooter import ui_manager
 
 
 class Gun:

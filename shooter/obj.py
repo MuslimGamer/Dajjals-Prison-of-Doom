@@ -7,6 +7,7 @@ from shooter import config
 from shooter import file_watcher
 from shooter import sound
 from shooter import ai
+from shooter import ui_manager
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 from shooter.weapons import gun, shotgun, rocket
@@ -333,6 +334,7 @@ class GameObject:
                 "Weapon_Rail":"rail"
             }
 
+            #main.Screen_handler.__ui_manager.alert(self.x, self.y +100, "New weapon: " + PickupType[Target_object.id], 'White')
             self.switch(PickupType[Target_object.id])
             sound.pickup.play()
             Target_object.health = 0
@@ -357,6 +359,7 @@ class GameObject:
                 Target_object.mx = -1*Target_object.speed*sin(theta)
                 Target_object.my = -1*Target_object.speed*cos(theta)
                 if Target_object.type == "Bullet":
+                    Target_object.parent = "Player_Basic"
 
                     Target_object.sprite.rotation = theta * 180/pi
                     Target_object.theta = theta	
