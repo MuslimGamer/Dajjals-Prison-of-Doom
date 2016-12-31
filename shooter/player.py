@@ -14,7 +14,7 @@ class Player(obj.GameObject):
         # call base class constructor
     def __init__(self, owner, prototype):
         obj.GameObject.__init__(self, owner, 'Player', prototype)
-        self.__gun = pistol.Pistol()
+        self.__gun = rocket.Rocket()
         self.commandx = 0
         self.commandy = 0
         self.mousex = 0
@@ -140,8 +140,8 @@ class Player(obj.GameObject):
 
         if self.health < 1:
             self.health = 0
-            obj.Type_lists[self.type].remove(self)
-            game_over()
+            #obj.Type_lists[self.type].remove(self)
+            #game_over()
         
         if self.cooldown:
             self.cooldown = self.cooldown - 1

@@ -201,7 +201,7 @@
       "ID": "Smoke",
       "Health": 5,
       "Img": "images/smoke.png",
-      "Size": 3,
+      "Size": 1,
       "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
