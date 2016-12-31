@@ -20,7 +20,7 @@ class Player(obj.GameObject):
         self.mousex = 0
         self.mousey = 0
         self.repair = 0
-        self.crew  = 1
+        self.crew = 1
         self.drive = 0
         self.shield = 0
         self.stock_speed = self.speed
@@ -154,9 +154,13 @@ class Player(obj.GameObject):
             for shot in range(self.__gun.burst_shots):  	#Repeat for number of bullets / shot.
                 dx = mouse_x - self.x				#Calculate shot vector
                 dy = mouse_y - self.y
-                if (self.__gun.spread): spread = random.randrange(-1*self.__gun.spread,self.__gun.spread,1) * pi/180 
-                else: spread = 0
-								#Calculate attack vector w/Random scatter
+
+                if (self.__gun.spread):
+                    spread = random.randrange(-1*self.__gun.spread,self.__gun.spread,1) * pi/180 
+                else:
+                    spread = 0
+				
+                #Calculate attack vector w/Random scatter
                 theta = atan2(dy, dx)+ spread 
 
                 target_x = self.x + 100*cos(theta)			#Calculate new attack location including scatter
@@ -183,3 +187,7 @@ class Player(obj.GameObject):
     @property
     def shots_left(self):
         return self.__gun.shots_left
+
+    @property
+    def has_won(self):
+        return self.drive >= 100 * 100 # 100% x 100

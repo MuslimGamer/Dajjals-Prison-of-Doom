@@ -1,6 +1,7 @@
 import random
 
 import shooter.obj
+import shooter.config
 
 def process_generically(input):
     pass
@@ -43,6 +44,10 @@ def lots_of_health(player):
 def die(player):
     player.health = 0
 
+def nearly_win(player):
+    player.crew = shooter.config.get("max_crew")
+    player.drive = 100 * 100
+
 cheats = {
     "roketfiq": lots_of_health,
     "spawn": spawn_enemies,
@@ -51,5 +56,6 @@ cheats = {
     "die": die,
     "rail": lambda p: p.switch("rail"),
     "players": lambda p: print("P={1} and players: {0}".format(shooter.obj.Player_list, p)),
-    "rescue": spawn_npcs
+    "rescue": spawn_npcs,
+    "win": nearly_win
 }

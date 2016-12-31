@@ -14,10 +14,6 @@ def update(rail):
 
     for player in shooter.obj.Player_list:
         if player.id == "Player_Basic":
-            #player.set_ammo(1)
-            print (str(player.x), str(player.y))
-            print (str(rail.x), str(rail.y))
-            #player.__gun.__shots_left=1
             #Apply small movement to ensure sword renders with correct rotation.
             #Position applied below instead of movement function so position updated before collsion detection
             if rail.size < 2:rail.size += 0.003
@@ -26,9 +22,7 @@ def update(rail):
             rail.sprite.rotation = rail.theta
 
         # +width/2, -height/2 makes the sword perfectly center on the player
-	#Apply position immediately so factors in collision detection
-            #rail.x = player.x - player.sprite.width/2 +player.radius *2* sin(rail.theta)    
-            #rail.y = player.y - player.sprite.height/2 +player.radius *2* cos(rail.theta) 
+	    #Apply position immediately so factors in collision detection
             rail.x = player.x +player.radius * 1.5* sin(rail.theta)    
             rail.y = player.y +player.radius * 1.5*cos(rail.theta) 
             return
@@ -59,7 +53,6 @@ def on_death(rail):
         x += scale_step_x
         y += scale_step_y
         b1.move()
-        #b1.mx=b1.my = 0
         
 
 

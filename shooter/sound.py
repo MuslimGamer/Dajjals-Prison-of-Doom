@@ -14,4 +14,4 @@ pickup = pyglet.media.load("sounds/pickup-weapon.wav", streaming = False)
 weaponreload = pyglet.media.load("sounds/reload.wav", streaming = False)
 npc_pickup = pyglet.media.load("sounds/pickup-escape-pod.wav", streaming = False)
 game_over = pyglet.media.load("sounds/game-over.wav", streaming = False)
-
+you_win = pyglet.media.load("sounds/you-win.wav", streaming = False)
