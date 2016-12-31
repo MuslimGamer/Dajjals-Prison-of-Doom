@@ -14,7 +14,7 @@ class Player(obj.GameObject):
         # call base class constructor
     def __init__(self, owner, prototype):
         obj.GameObject.__init__(self, owner, 'Player', prototype)
-        self.__gun = rocket.Rocket()
+        self.__gun = pistol.Pistol()
         self.commandx = 0
         self.commandy = 0
         self.mousex = 0
