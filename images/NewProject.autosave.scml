@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r10" pixel_mode="1">
+    <folder id="0">
+        <file id="0" name="triangle.png" width="20" height="20" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="triangle.bmp" width="20" height="20" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="thrust.png" width="3" height="2" pivot_x="0" pivot_y="1"/>
+    </folder>
+    <entity id="0" name="entity_000">
+        <animation id="0" name="NewAnimation" length="1000" interval="100" l="-13" t="-10" r="9" b="9">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="78">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="0" z_index="4"/>
+                </key>
+                <key id="2" time="201">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="1" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="1" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="1" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="1" z_index="4"/>
+                </key>
+                <key id="3" time="302">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="2" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="2" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="2" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="2" z_index="4"/>
+                </key>
+                <key id="4" time="361">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="3" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="3" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="3" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="3" z_index="4"/>
+                </key>
+                <key id="5" time="435">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="4" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="4" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="4" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="4" z_index="4"/>
+                </key>
+                <key id="6" time="489">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="5" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="5" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="5" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="5" z_index="4"/>
+                </key>
+                <key id="7" time="548">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="6" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="6" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="6" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="6" z_index="4"/>
+                </key>
+                <key id="8" time="600">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="7" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="7" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="7" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="7" z_index="4"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="triangle">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-10" y="10"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="thrust">
+                <key id="0" time="78" spin="0">
+                    <object folder="0" file="2" x="3" y="6" a="0"/>
+                </key>
+                <key id="1" time="201" spin="0">
+                    <object folder="0" file="2" x="3" y="6"/>
+                </key>
+                <key id="2" time="302" spin="0">
+                    <object folder="0" file="2" x="3" y="6"/>
+                </key>
+                <key id="3" time="361" spin="0">
+                    <object folder="0" file="2" x="3" y="6" a="0"/>
+                </key>
+                <key id="4" time="435" spin="0">
+                    <object folder="0" file="2" x="3" y="6" a="0"/>
+                </key>
+                <key id="5" time="489" spin="0">
+                    <object folder="0" file="2" x="3" y="6" a="0"/>
+                </key>
+                <key id="6" time="548" spin="0">
+                    <object folder="0" file="2" x="3" y="6"/>
+                </key>
+                <key id="7" time="600" spin="0">
+                    <object folder="0" file="2" x="3" y="6" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="thrust_000">
+                <key id="0" time="78" spin="0">
+                    <object folder="0" file="2" x="3" y="-6" angle="0" scale_y="-1" a="0"/>
+                </key>
+                <key id="1" time="201" spin="0">
+                    <object folder="0" file="2" x="3" y="-6" angle="0" scale_y="-1"/>
+                </key>
+                <key id="2" time="302" spin="0">
+                    <object folder="0" file="2" x="3" y="-6" angle="0" scale_y="-1" a="0"/>
+                </key>
+                <key id="3" time="361" spin="0">
+                    <object folder="0" file="2" x="3" y="-6" angle="0" scale_y="-1"/>
+                </key>
+                <key id="4" time="435" spin="0">
+                    <object folder="0" file="2" x="3" y="-6" angle="0" scale_y="-1" a="0"/>
+                </key>
+                <key id="5" time="489" spin="0">
+                    <object folder="0" file="2" x="3" y="-6" angle="0" scale_y="-1" a="0"/>
+                </key>
+                <key id="6" time="548" spin="0">
+                    <object folder="0" file="2" x="3" y="-6" angle="0" scale_y="-1" a="0"/>
+                </key>
+                <key id="7" time="600" spin="0">
+                    <object folder="0" file="2" x="3" y="-6" angle="0" scale_y="-1"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="thrust_001">
+                <key id="0" time="78" spin="0">
+                    <object folder="0" file="2" x="-10" y="6" angle="0" scale_x="-1"/>
+                </key>
+                <key id="1" time="201" spin="0">
+                    <object folder="0" file="2" x="-10" y="6" angle="0" scale_x="-1" a="0"/>
+                </key>
+                <key id="2" time="302" spin="0">
+                    <object folder="0" file="2" x="-10" y="6" angle="0" scale_x="-1" a="0"/>
+                </key>
+                <key id="3" time="361" spin="0">
+                    <object folder="0" file="2" x="-10" y="6" angle="0" scale_x="-1"/>
+                </key>
+                <key id="4" time="435" spin="0">
+                    <object folder="0" file="2" x="-10" y="6" angle="0" scale_x="-1" a="0"/>
+                </key>
+                <key id="5" time="489" spin="0">
+                    <object folder="0" file="2" x="-10" y="6" angle="0" scale_x="-1"/>
+                </key>
+                <key id="6" time="548" spin="0">
+                    <object folder="0" file="2" x="-10" y="6" angle="0" scale_x="-1" a="0"/>
+                </key>
+                <key id="7" time="600" spin="0">
+                    <object folder="0" file="2" x="-10" y="6" angle="0" scale_x="-1" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="thrust_002">
+                <key id="0" time="78" spin="0">
+                    <object folder="0" file="2" x="-10" y="-6" angle="180"/>
+                </key>
+                <key id="1" time="201" spin="0">
+                    <object folder="0" file="2" x="-10" y="-6" angle="180" a="0"/>
+                </key>
+                <key id="2" time="302" spin="0">
+                    <object folder="0" file="2" x="-10" y="-6" angle="180"/>
+                </key>
+                <key id="3" time="361" spin="0">
+                    <object folder="0" file="2" x="-10" y="-6" angle="180" a="0"/>
+                </key>
+                <key id="4" time="435" spin="0">
+                    <object folder="0" file="2" x="-10" y="-6" angle="180"/>
+                </key>
+                <key id="5" time="489" spin="0">
+                    <object folder="0" file="2" x="-10" y="-6" angle="180" a="0"/>
+                </key>
+                <key id="6" time="548" spin="0">
+                    <object folder="0" file="2" x="-10" y="-6" angle="180" a="0"/>
+                </key>
+                <key id="7" time="600" spin="0">
+                    <object folder="0" file="2" x="-10" y="-6" angle="180" a="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

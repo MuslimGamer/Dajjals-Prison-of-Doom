@@ -15,7 +15,11 @@ class UiManager:
     FONT_NAME = "Orbitron"
     FONT_FILE = "fonts/Orbitron-Medium.ttf"
 
+    
+
     def __init__(self):
+
+        self.AlertTimeout = 0
         self.health_label = pyglet.text.Label('Health: ?', font_name = UiManager.FONT_NAME,
             x = shooter.obj.GAME_WIDTH - UiManager.RIGHT_PADDING, y = shooter.obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
 
@@ -30,6 +34,8 @@ class UiManager:
 
         self.crew_label = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.drive_label.x, y = self.drive_label.y - UiManager.SPACE_BETWEEN_LINES)
+
+        self.alert_label = pyglet.text.Label("",font_name = UiManager.FONT_NAME,x = 0,y=0, color=(0, 0, 0, 0), align='center')
  
         if not (config.get('debugging')): return
 
@@ -47,8 +53,27 @@ class UiManager:
         self.debug6 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.health_label.x-300, y = self.debug3.y)
 
+    def alert(self,x,y,message, colour, timeout):
+ 
+        Colour = {
+            'Red': (255,0,0,255),
+            'Green': (0,255,0,255),
+            'Blue': (0,0,255,255),
+            'White': (255,255,255,255)
+        }
+
+        self.alert_label.x = x
+        self.alert_label.y = y
+        self.alert_label.color=Colour[colour]
+        self.alert_label.text = message
+        self.AlertTimeout = timeout
 
     def draw(self, player):
+
+        if self.AlertTimeout:
+            self.alert_label.draw()
+            AlertTimeout -=1
+        
         self.health_label.text = "Health: {0}".format(int(player.health))
         self.health_label.draw()
 
