@@ -82,6 +82,7 @@ def create_background():
 def start_game():
     global game_started
     game_started = True
+    Screen_handler.notify_on_press(shooter.tutorials.tutorial_manager.on_keypress)
     
     # Clear everything on screen
     Object_handler.start()
@@ -139,13 +140,10 @@ def frame_callback(dt):
         Screen_handler.input()
 
     if not Screen_handler.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial:
-            Object_handler.update()
-
-
+        Object_handler.update()
 
 Object_handler = obj.Object_handler()
 Screen_handler = proc.Screen(GAME_WIDTH, GAME_HEIGHT)
-Screen_handler.notify_on_press(shooter.tutorials.tutorial_manager.on_keypress)
 
 file_watcher.watch('data/object.json', obj.load_prototype_data)
 
