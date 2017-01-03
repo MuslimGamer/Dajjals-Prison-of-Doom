@@ -4,6 +4,7 @@ from pyglet.window import mouse
 import shooter.obj
 import shooter.tutorials.speech_window
 import shooter.tutorials.base_tutorial
+import shooter.tutorials.tutorial_manager
 
 class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
     def __init__(self):
@@ -44,3 +45,5 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
     def close(self):
         self.window.close()
         self.closed = True
+        # Tutorial Manager: we're closed!
+        shooter.tutorials.tutorial_manager.on_keypress(None, [])

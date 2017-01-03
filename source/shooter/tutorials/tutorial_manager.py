@@ -28,7 +28,7 @@ def on_keypress(key, previously_pressed):
     if _current_tutorial != None:
         _current_tutorial.update(key)
         
-        if _current_tutorial.closed:
+        if _current_tutorial != None and _current_tutorial.closed:
             _current_tutorial = None
             is_showing_tutorial = False
 
