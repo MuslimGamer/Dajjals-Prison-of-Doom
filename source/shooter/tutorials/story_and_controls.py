@@ -12,8 +12,7 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
         self.window = shooter.tutorials.speech_window.SpeechWindow()
         self.window.show("More Muslim meat for my armies! I'll chase you to the ends of the galaxy!", "dajjal")
 
-        # Click already registers globally, no need to act        
-        self.window.add_button('images/next-button.png', None)
+        self.window.add_button('images/next-button.png', lambda: self.update(mouse.LEFT)) # advance
         self.window.add_button('images/skip-button.png', lambda: self.close())
         self.closed = False
 

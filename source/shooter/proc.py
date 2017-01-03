@@ -43,9 +43,11 @@ class Screen:			#Class handling window and window related functions (Draw, Event
 
         # Methods are all private because we need them declared before we push the handlers
         def on_mouse_press(x, y, button, modifiers):
-            self.mouse_pressed(x,y,button)
             if shooter.tutorials.tutorial_manager._current_tutorial != None:
                 shooter.tutorials.tutorial_manager._current_tutorial.on_click(button, x, y)
+            else:
+                self.mouse_pressed(x,y,button)
+                
 
         def on_mouse_release(x,y,button, modifiers):
             self.mouse_released(button)
@@ -127,7 +129,9 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.mouse_y = y
 
     def mouse_released(self, button):
-        self._currently_pressed.remove(button)
+        # Rare but possible: don't remove something that isn't there
+        if button in self._currently_pressed:
+            self._currently_pressed.remove(button)
     
     # Is a key currently being held down?
     def is_pressed(self, button):
@@ -141,16 +145,16 @@ class Screen:			#Class handling window and window related functions (Draw, Event
     def input(self): 
         if (not self.paused and not shooter.tutorials.tutorial_manager.is_showing_tutorial and len(shooter.obj.Player_list) > 0):
             player = shooter.obj.Player_list[0]
-            if not(player.id == "Player_Basic"):return
+
+            if not(player.id == "Player_Basic"):
+                return
+
             player.mousex = self.mouse_x
             player.mousey = self.mouse_y
 
             if config.get("control_style") == "relative":
                 player.commandy = self.is_pressed(key.S) * -0.1 + self.is_pressed(key.W) * 0.2
                 player.commandx = (self.is_pressed(key.A) * -1 + self.is_pressed(key.D) * 1)*0.12
-
-                #player.mx += thrust * cos(player.theta)
-                #player.my += thrust * -1*sin(player.theta)
 
                 player.mx = player.mx *0.99
                 player.my = player.my *0.99
@@ -175,7 +179,6 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             if (self.is_pressed(mouse.RIGHT)):
                 if config.get('melee_enabled'):
 
-
                     if not (player.shield):  
                         shield = player.handle.spawn('NPC',"Deflect",player.x,player.y)
                         dx = self.mouse_x - player.x
@@ -193,13 +196,14 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                                 deflect.health = 3
                                 # stay around player
                                 deflect.theta = atan2(dx,dy)			#Mathy goodness.
-                    #player.cooldown = 10 #Maintain cooldown of melee/shield if continuing 
                 else:
                     # TODO: duplicate railgun code below (from elif self.is_pressed(mouse.LEFT)) here
                     # If not, railgun just straight-out fires (doesn't charge) with right key if
                     # melee is not enabled
                     player.fire(self.mouse_x, self.mouse_y) 
-            else: player.shield = 0
+            else:
+                player.shield = 0
+
             if self.is_pressed(mouse.LEFT) and player.shield == 0:      
                 for rail in shooter.obj.Bullet_list:
                     if rail.id == "Bullet_RailCharge":
@@ -208,6 +212,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                         rail.theta = atan2(dx,dy)
                         rail.health = 20
                         return
+
                 player.fire(self.mouse_x, self.mouse_y)
 
     @property
