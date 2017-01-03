@@ -83,7 +83,7 @@ def start_game():
     global game_started
     game_started = True
     Screen_handler.notify_on_press(shooter.tutorials.tutorial_manager.on_keypress)
-    
+
     # Clear everything on screen
     Object_handler.start()
     Screen_handler.score_label = None
@@ -102,7 +102,11 @@ def start_game():
     Screen_handler.draw_ui = True
 
 def game_over():
-    #print("Game over, hot shot")
+    # kill the shield if it's there
+    shield = next((x for x in shooter.obj.NPC_list if x.id == "Deflect"), None)
+    if shield != None:
+        shield.health = 0    
+
     over = None
     # Why do we get this with no players in the list after closing the victory tutorial screen?
     if len(obj.Player_list) > 0:

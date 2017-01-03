@@ -127,7 +127,7 @@
   "Misc": [
     {
       "ID": "MG Splash",
-      "Health": 60,
+      "Health": 45,
       "Img": "images/splash-mg.png",
       "Size": 1,
       "Speed": 0,
@@ -136,7 +136,7 @@
     },
     {
       "ID": "DG Splash",
-      "Health": 60,
+      "Health": 45,
       "Img": "images/splash-dg.png",
       "Size": 1,
       "Speed": 0,
