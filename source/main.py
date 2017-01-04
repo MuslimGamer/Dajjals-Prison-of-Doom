@@ -115,13 +115,14 @@ def game_over():
         
         if old_player.has_won:
             over = Object_handler.spawn("Misc", "You Win", 0, 0)
-            sound.you_win.play()        
-        # Not victory? Defefat, then.
-        if over == None:
-            over = Object_handler.spawn("Misc", "Game Over", 0, 0)
-            sound.game_over.play()
+            sound.you_win.play()
+                    
+    # Not victory? Defefat, then.
+    if over == None:
+        over = Object_handler.spawn("Misc", "Game Over", 0, 0)
+        sound.game_over.play()
 
-        center(over)
+    center(over)
         
     # TODO: encapsulate
     Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
