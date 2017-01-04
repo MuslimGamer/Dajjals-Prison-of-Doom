@@ -172,10 +172,6 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             if config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
                 debug.ask_and_process_cheat_code(player)
 
-            if self.is_pressed(key.R): 
-                player.reload()
-
-
             if (self.is_pressed(mouse.RIGHT)):
                 if config.get('melee_enabled'):
 
