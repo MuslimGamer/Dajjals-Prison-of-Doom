@@ -89,7 +89,7 @@ class Object_handler:      #Should I remove this class and just have the various
         Pickup_list[:]=[]
         Backgrounds_list[:]=[]
         score = 0
-        self.SpawnBudget = 0
+        self.SpawnBudget = 4 # spawn an enemy quickly to start
         self.SpawnCost = 1
         self.SpawnIncome = 0.5
         self.NextEnemy = 0
@@ -306,8 +306,10 @@ class GameObject:
 
     def Loot(self,chance):
         self.handle.SpawnIncome += 0.1
+
         global score # obj.score
         score += self.cost
+
         if((random.randrange(100)<chance) and (len(Pickup_list)<3)):
             Type = random.randrange(5)
             PickupType = {
@@ -341,7 +343,13 @@ class GameObject:
         
 
     def Circle_collision(self, Target_object):
-        if (self.id == Target_object.parent):
+        if (self.id == Target_object.parent): # ???
+            return 0
+
+        # Make sure we're on screen. No dying off-screen allowed. Points confuse the player.
+        global GAME_WIDTH
+        global GAME_HEIGHT
+        if self.x < 0 or self.x > GAME_WIDTH or self.y < 0 or self.y > GAME_HEIGHT:
             return 0
 
         #Simple collision detection for rotating sprites.

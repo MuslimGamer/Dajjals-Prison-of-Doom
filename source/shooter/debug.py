@@ -38,9 +38,6 @@ def spawn_npcs(player):
         y = player.y - RANGE/2 + random.randrange(RANGE)    
         shooter.obj.Object_handler.instance.spawn("Player", "NPC_Basic", x, y)
 
-def lots_of_health(player):
-    player.health = 999
-
 def die(player):
     player.health = 0
 
@@ -49,7 +46,6 @@ def nearly_win(player):
     player.drive = 100 * 100
 
 cheats = {
-    "roketfiq": lots_of_health,
     "spawn": spawn_enemies,
     "ammo": lambda p: p.unlimited_ammo,
     "pickup": spawn_pickup,
