@@ -51,7 +51,7 @@ cheats = {
     "pickup": spawn_pickup,
     "die": die,
     "rail": lambda p: p.switch("rail"),
-    "players": lambda p: print("P={1} and players: {0}".format(shooter.obj.Player_list, p)),
     "rescue": spawn_npcs,
-    "win": nearly_win
+    "win": nearly_win,
+    "rpg": lambda p: p.switch("rocket")
 }
