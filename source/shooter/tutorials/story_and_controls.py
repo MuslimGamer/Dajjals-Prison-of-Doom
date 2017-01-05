@@ -33,14 +33,6 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
             else:
                self.close()
 
-    def on_click(self, button, x, y):
-        for button in self.window.buttons:
-            if x >= button.x and x <= button.x + button.width and y >= button.y and y <= button.y + button.height:
-                if button in self.window.button_callbacks:
-                    callback = self.window.button_callbacks[button]
-                    if callback != None:
-                        callback()
-
     def close(self):
         self.window.close()
         self.closed = True

@@ -9,6 +9,7 @@ class YouWin(shooter.tutorials.base_tutorial.BaseTutorial):
     def __init__(self, player):
         self.window = shooter.tutorials.speech_window.SpeechWindow()
         self.window.show("Argh! You may have escaped, but your bretheren will not be so lucky, Muslim meat!", "dajjal")
+        self.window.add_button('images/finish-button.png', lambda: self.close())
         self.closed = False
         self.player = player
 
