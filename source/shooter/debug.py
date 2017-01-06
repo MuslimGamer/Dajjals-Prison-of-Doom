@@ -47,5 +47,6 @@ cheats = {
     "rail": lambda p: p.switch("rail"),
     "rescue": spawn_npcs,
     "win": nearly_win,
-    "rpg": lambda p: p.switch("rocket")
+    "rpg": lambda p: p.switch("rocket"),
+    "shotty": lambda p: p.switch("shotgun")
 }
