@@ -64,7 +64,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 self.on_press_callback(symbol, self._currently_pressed)
 
             # game logic to execute when we press a key the first time only (not press+hold)
-            if symbol == key.R: 
+            if symbol == key.R and len(shooter.obj.Player_list) > 0: 
                 shooter.obj.Player_list[0].reload()
             elif symbol == key.P:
                 self.paused = not self.paused
