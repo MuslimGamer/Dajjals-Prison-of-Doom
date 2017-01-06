@@ -1,6 +1,8 @@
 import shooter.obj
+import shooter.sound
 from shooter.obj import GameObject
 from shooter.bullets import rocket, basic, melee, explode, railcharge
+
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 import pyglet
 
@@ -46,5 +48,8 @@ class Bullet(GameObject):
 
         if self.health < 1:
             shooter.obj.Type_lists[self.type].remove(self)
+            # Horrible, terrible hack: specific to railgun
+            if self.id == "Bullet_RailCharge":
+                shooter.sound.stop_rail()
         
 

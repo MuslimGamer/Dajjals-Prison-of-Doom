@@ -31,8 +31,6 @@ def update(rail):
     pass
 
 def on_death(rail):
-    sound.rail_fire.play()
-    
     for player in shooter.obj.Player_list:
         if player.id == "Player_Basic":
             player.reload()   
