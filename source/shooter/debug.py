@@ -24,11 +24,6 @@ def spawn_pickup(player):
     else:
         player.Loot(100)
 
-def spawn_enemies(player):
-    x = 3 + random.randrange(3)
-    for i in range(x):
-        shooter.obj.Object_handler.instance.spawn_random(5)
-
 def spawn_npcs(player):
     # Spawn in a RANGExRANGE area around the player
     RANGE = 100
@@ -46,7 +41,6 @@ def nearly_win(player):
     player.drive = 100 * 100
 
 cheats = {
-    "spawn": spawn_enemies,
     "ammo": lambda p: p.unlimited_ammo,
     "pickup": spawn_pickup,
     "die": die,

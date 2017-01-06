@@ -8,6 +8,7 @@ from shooter import file_watcher
 from shooter import sound
 from shooter import ai
 from shooter import ui_manager
+import shooter.tutorials.tutorial_manager
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 from shooter.weapons import gun, shotgun, rocket
@@ -114,9 +115,14 @@ class Object_handler:      #Should I remove this class and just have the various
         e.on_death = lambda: e.Loot(10)
         return e
 
-    def spawn_random(self,dt):
+    def spawn_random(self, dt, screen):
         spawned = 0
-        if not (config.get('enable_enemies')): return
+
+        if not (config.get('enable_enemies')):
+            return
+            
+        if screen.paused or shooter.tutorials.tutorial_manager.is_showing_tutorial:
+            return
 
         self.SpawnBudget += dt * self.SpawnIncome
         while(self.SpawnBudget >= self.SpawnCost):
@@ -336,7 +342,8 @@ class GameObject:
                 "Weapon_Rail":"rail"
             }
 
-            #main.Screen_handler.__ui_manager.alert(self.x, self.y +100, "New weapon: " + PickupType[Target_object.id], 'White')
+            # TODO: fix
+            # main.Screen_handler.__ui_manager.alert(self.x, self.y +100, "New weapon: " + PickupType[Target_object.id], 'White')
             self.switch(PickupType[Target_object.id])
             sound.pickup.play()
             Target_object.health = 0
