@@ -5,6 +5,7 @@ import shooter.obj
 import shooter.tutorials.speech_window
 import shooter.tutorials.base_tutorial
 import shooter.tutorials.tutorial_manager
+import shooter.config
 
 class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
     def __init__(self):
@@ -23,7 +24,8 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
         if self.check_input_to_advance(key):
             if self.showing == "1":
                 self.showing = "2"
-                self.window.show("Looks like the jump drive is offline. I'll need to rescue enough escape pods to repair the ship so we can jump to safety.", "captain")
+                max_pods = shooter.config.get("max_crew")
+                self.window.show("Looks like the jump drive is offline. I'll need to rescue {0} escape pods so we can repair the ship so we can jump to safety.".format(max_pods), "captain")
             elif self.showing == "2":
                 self.showing = "3"
                 self.window.show("Use WASD to operate the thrusters, and the mouse to aim and shoot. R reloads the guns.", "captain")
