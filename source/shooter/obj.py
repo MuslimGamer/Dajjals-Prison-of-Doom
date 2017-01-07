@@ -395,7 +395,9 @@ class GameObject:
                     if random.randrange(100) < config.get("chance_to_lose_crew_on_hit_percent"):
                         self.crew -= 1
                         if not (self.crew): self.crew = 1		#Preserve atleast 1 crew member.
-               
+
+            if self.type == "Player": # Target type is enemy or bullet; with bullet, the explosion sound overtakes.
+                sound.hurt.play()
 
             return 1   #Hit detected
         return 0       #No Hit Detected

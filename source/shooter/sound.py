@@ -15,6 +15,9 @@ weaponreload = pyglet.media.load("sounds/reload.wav", streaming = False)
 npc_pickup = pyglet.media.load("sounds/pickup-escape-pod.wav", streaming = False)
 game_over = pyglet.media.load("sounds/game-over.wav", streaming = False)
 you_win = pyglet.media.load("sounds/you-win.wav", streaming = False)
+hurt = pyglet.media.load("sounds/hurt.wav", streaming = False)
+
+# stoppable
 rail_player = pyglet.media.Player() 
 rail_player.queue(rail)
 
