@@ -35,7 +35,7 @@
         "advanced_ammo_management_reload_rate": 2
     },
 
-    # Guns! Each gun needs a pair of four attributes.
+    # Guns! Each gun needs a collection of attributes.
     "pistol_bullets":  15,                      #How many bullets / clip
     "pistol_burst": 1,				#How many bullets / shot
     "pistol_spread": 1,				#Weapon accuracy spread (Degrees)
@@ -46,7 +46,7 @@
 
     "shotgun_bullets": 4,
     "shotgun_burst": 5,
-    "shotgun_spread": 5,
+    "shotgun_spread": 10,
     "shotgun_reload_seconds": 3,
     "shotgun_cooldown_seconds": 1,
     "shotgun_bullet_type": "Bullet_Basic",	#Short range bullet
