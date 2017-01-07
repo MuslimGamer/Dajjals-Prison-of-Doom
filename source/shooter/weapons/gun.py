@@ -44,7 +44,8 @@ class Gun:
         self.pickup_sound.play
 
     def reload(self):
-        self.__shots_left = 0 # triggers auto-reload
+        if self.__shots_left < self.__total_shots:
+            self.__shots_left = 0 # triggers auto-reload
 
     # Returns true if we just fired a shot
     def fire(self):
