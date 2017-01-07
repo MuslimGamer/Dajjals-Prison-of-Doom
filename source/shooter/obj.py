@@ -202,8 +202,7 @@ class Object_handler:      #Should I remove this class and just have the various
             misc.ai()
 
         self.collision()    	#Attempting to add kick-back to collision.
-                      	#Collsion must be called after AI, but before move/update()
-
+                    #Collsion must be called after AI, but before move/update()
 
         for player in Player_list:
 
@@ -387,8 +386,9 @@ class GameObject:
             #Apply acceleration proportional to the ratio of mass of colliding objects.
             if self.health:
 
-                self.mx += Target_object.mx *(Target_object.size/self.size)
-                self.my += Target_object.my *(Target_object.size/self.size)
+                if config.get("apply_recoil") == True:
+                    self.mx += Target_object.mx *(Target_object.size/self.size)
+                    self.my += Target_object.my *(Target_object.size/self.size)
 
                 if(self.id == "Player_Basic"):
                     #If hit, % chance of losing crew
