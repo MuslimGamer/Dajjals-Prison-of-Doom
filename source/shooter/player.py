@@ -166,14 +166,13 @@ class Player(obj.GameObject):
                 target_x = self.x + 100*cos(theta)			#Calculate new attack location including scatter
                 target_y = self.y + 100*sin(theta)
 
-
-                if config.get("control_style") == "relative":
-                    self.mx += 0.5*cos(theta+pi)			#Recoil - Obey physics, It's the law.
-                    self.my += 0.5*sin(theta+pi)			#Conservation of energy.
-                else:
-
-                    self.mx += 2*cos(theta+pi)			#Recoil - Obey physics, It's the law.
-                    self.my += 2*sin(theta+pi)			#Conservation of energy.
+                if config.get("apply_recoil") == True:
+                    if config.get("control_style") == "relative":
+                        self.mx += 0.5*cos(theta+pi)			#Recoil - Obey physics, It's the law.
+                        self.my += 0.5*sin(theta+pi)			#Conservation of energy.
+                    else:
+                        self.mx += 2*cos(theta+pi)			#Recoil - Obey physics, It's the law.
+                        self.my += 2*sin(theta+pi)			#Conservation of energy.
 
                 self.attack(self.__gun.bullet_type, target_x, target_y)	#Spawn attack using randomly varied target location.
 

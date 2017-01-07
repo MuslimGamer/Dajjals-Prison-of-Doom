@@ -1,12 +1,13 @@
 {
-    "skip_splash_screens": true,
+    "skip_splash_screens": false,
     "enable_enemies": true,
     "melee_enabled": true,
     "sword_attack_radius": 30,
-    "enable_cheat_codes": true,
+    "enable_cheat_codes": false,
     "control_style": "relative",
     "debugging": false,
     "enable_npc": true,
+    "apply_recoil": false,
 
     # When hit, this is the percent chance of losing a crew member
     "chance_to_lose_crew_on_hit_percent": 33,
@@ -14,7 +15,6 @@
     "max_npcs_drive_boost": 10,
     # Already got max number of NPCs, score jumps by this per NPC
     "max_npcs_score_boost": 50,
-
 
     "max_crew": 21,
     "max_health": 5,
