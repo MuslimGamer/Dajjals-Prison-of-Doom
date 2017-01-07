@@ -1,9 +1,9 @@
 {
-    "skip_splash_screens": false,
+    "skip_splash_screens": true,
     "enable_enemies": true,
     "melee_enabled": true,
     "sword_attack_radius": 30,
-    "enable_cheat_codes": false,
+    "enable_cheat_codes": true,
     "control_style": "relative",
     "debugging": false,
     "enable_npc": true,

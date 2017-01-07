@@ -50,9 +50,10 @@ class Gun:
     # Returns true if we just fired a shot
     def fire(self):
         if self.__shots_left > 0 and time.time() - self._last_shot >= self._cooldown_time_seconds:
+
+            self.__shots_left -= 1
             
             if self.type != 'rail':
-                self.__shots_left -= 1
                 self.pew.play()
             else:
                 sound.play_rail()
