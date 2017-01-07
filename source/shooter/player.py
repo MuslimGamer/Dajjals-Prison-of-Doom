@@ -151,12 +151,19 @@ class Player(obj.GameObject):
     def fire(self, mouse_x, mouse_y):        
         if self.__gun.fire():   #Check gun is in condition to fire (Has bullets, has cooled down, etc)
 
+            i = 0
+            even_angle = 2 * self.__gun.spread / self.__gun.burst_shots
             for shot in range(self.__gun.burst_shots):  	#Repeat for number of bullets / shot.
                 dx = mouse_x - self.x				#Calculate shot vector
                 dy = mouse_y - self.y
 
                 if (self.__gun.spread):
-                    spread = random.randrange(-1*self.__gun.spread,self.__gun.spread,1) * pi/180 
+                    if config.get('even_bullet_spread') == True:
+                        # center bullet goes straight where you direct it.
+                        # create a fan from [-spread .. spread] that's evenly distributed
+                        spread = (-self.__gun.spread + (i * even_angle)) * pi/180
+                    else:
+                        spread = random.randrange(-1 * self.__gun.spread, self.__gun.spread) * pi/180 
                 else:
                     spread = 0
 				
@@ -175,6 +182,8 @@ class Player(obj.GameObject):
                         self.my += 2*sin(theta+pi)			#Conservation of energy.
 
                 self.attack(self.__gun.bullet_type, target_x, target_y)	#Spawn attack using randomly varied target location.
+
+                i += 1
 
 
     def update(self):

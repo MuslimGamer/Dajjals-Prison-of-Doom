@@ -1,13 +1,14 @@
 {
     "skip_splash_screens": false,
+    "enable_cheat_codes": false,
     "enable_enemies": true,
     "melee_enabled": true,
-    "sword_attack_radius": 30,
-    "enable_cheat_codes": false,
+    "sword_attack_radius": 30,    
     "control_style": "relative",
     "debugging": false,
     "enable_npc": true,
     "apply_recoil": false,
+    "even_bullet_spread": true,
 
     # When hit, this is the percent chance of losing a crew member
     "chance_to_lose_crew_on_hit_percent": 33,
