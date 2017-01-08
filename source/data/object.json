@@ -144,6 +144,15 @@
       "Cost": 0
     },
     {
+      "ID": "Titlescreen",
+      "Health": 100,
+      "Img": "images/ui/title.png",
+      "Size": 1,
+      "Speed": 0,
+      "Behavior": "misc",
+      "Cost": 0
+    },
+    {
       "ID": "Game Over",
       "Health": 150,
       "Img": "images/ui/game-over.png",

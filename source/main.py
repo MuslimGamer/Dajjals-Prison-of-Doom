@@ -51,7 +51,12 @@ game_started = False
 def show_dg_splash():
     splash = Object_handler.spawn("Misc", "DG Splash", 192, 48, splash_screen.SplashScreen)
     center(splash)
-    splash.on_death = lambda: start_game()
+    splash.on_death = lambda: show_titlescreen()
+
+def show_titlescreen():
+    image = Object_handler.spawn("Misc", "Titlescreen", 361, 113, splash_screen.SplashScreen)
+    center(image)
+    image.on_death = lambda: start_game()
 
 def center(game_obj):
     game_obj.x = (Screen_handler.width - game_obj.img.width) / 2
