@@ -89,7 +89,7 @@ class Object_handler:      #Should I remove this class and just have the various
         Pickup_list[:]=[]
         Backgrounds_list[:]=[]
         score = 0
-        self.SpawnBudget = 4 # spawn an enemy quickly to start
+        self.SpawnBudget = 0 # TODO: reset to 4 if you want enemies to spawn quickly on new-game
         self.SpawnCost = 1
         self.SpawnIncome = 0.5
         self.NextEnemy = 0
