@@ -9,6 +9,9 @@
     "enable_npc": true,
     "apply_recoil": false,
     "even_bullet_spread": true,
+    # When you kill enemies, how fast the spawn rate increases
+    # 10 is the default we used throughout development (pretty hardcore).
+    "difficulty_ramp_up": 5,
 
     # When hit, this is the percent chance of losing a crew member
     "chance_to_lose_crew_on_hit_percent": 33,

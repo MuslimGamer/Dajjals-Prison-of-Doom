@@ -309,7 +309,7 @@ class GameObject:
         self.sprite.scale = value
 
     def Loot(self,chance):
-        self.handle.SpawnIncome += 0.1
+        self.handle.SpawnIncome += (config.get("difficulty_ramp_up") / 100)
 
         global score # obj.score
         score += self.cost
@@ -465,7 +465,7 @@ class GameObject:
         self.sprite.set_position(self.sprite_x,self.sprite_y)
 
         if self.health < 1:
-            self.on_death()
+            self.heatlh = 0 # die
             Type_lists[self.type].remove(self)
         
         if self.cooldown:
