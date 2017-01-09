@@ -9,9 +9,8 @@ from shooter import sound
 from shooter import ai
 from shooter import ui_manager
 import shooter.tutorials.tutorial_manager
-
-from math import atan2,atan, sin, cos, degrees, pi, sqrt
 from shooter.weapons import gun, shotgun, rocket
+from shooter import proc
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
@@ -327,7 +326,8 @@ class GameObject:
             self.handle.spawn('Pickup',PickupType[Type],self.x, self.y)
 
 
-    def pickup(self, Target_object):    #Cheap and hacky - Copy pasted collsion detection and modify for pickup rather than damage. 
+    #Cheap and hacky - Copy pasted collsion detection and modify for pickup rather than damage. 
+    def pickup(self, Target_object):
 
         dx = self.x - Target_object.x
         dy = self.y - Target_object.y
@@ -341,8 +341,16 @@ class GameObject:
                 "Weapon_Rail":"rail"
             }
 
+            alert_name = PickupType[Target_object.id]
+            if alert_name == "machine":
+                alert_name = "Machine Gun"
+            elif alert_name == "rail":
+                alert_name = "Railgun"
+            elif alert_name == "rocket":
+                alert_name = "Rocket Launcher"
+
             # TODO: fix
-            # main.Screen_handler.__ui_manager.alert(self.x, self.y +100, "New weapon: " + PickupType[Target_object.id], 'White')
+            shooter.proc.Screen.instance.alert(self.x - (self.sprite.width / 2), self.y + (self.sprite.height / 2), alert_name.capitalize(), 'White')
             self.switch(PickupType[Target_object.id])
             sound.pickup.play()
             Target_object.health = 0

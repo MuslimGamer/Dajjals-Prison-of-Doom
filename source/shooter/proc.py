@@ -40,6 +40,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.draw_ui = True
         self.score_label = None # shouldn't be here, not every screen needs one
         self.on_press_callback = None
+        Screen.instance = self
 
         # Methods are all private because we need them declared before we push the handlers
         def on_mouse_press(x, y, button, modifiers):
@@ -219,12 +220,5 @@ class Screen:			#Class handling window and window related functions (Draw, Event
     def height(self):
         return self.__window.height
 
-
-
-
-
-
-        
-
-
-
+    def alert(self, x, y, text, color):
+        self.__ui_manager.alert(x, y, text, color)

@@ -53,7 +53,7 @@ class UiManager:
         self.debug6 = pyglet.text.Label("", font_name = UiManager.FONT_NAME,
             x = self.health_label.x-300, y = self.debug3.y)
 
-    def alert(self,x,y,message, colour, timeout):
+    def alert(self,x,y,message, colour, timeout = 90):
  
         Colour = {
             'Red': (255,0,0,255),
@@ -72,7 +72,7 @@ class UiManager:
 
         if self.AlertTimeout:
             self.alert_label.draw()
-            AlertTimeout -=1
+            self.AlertTimeout -=1
         
         self.health_label.text = "Health: {0}".format(int(player.health))
         self.health_label.draw()
