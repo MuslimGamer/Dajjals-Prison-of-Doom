@@ -174,7 +174,7 @@
       "ID": "Explode",
       "Health": 5,
       "Img": "images/explode.png",
-      "Size": 5,
+      "Size": 3,
       "Speed": 0,
       "Behavior": "misc",
       "Cost": 0
