@@ -25,7 +25,7 @@ class StoryAndControls(shooter.tutorials.base_tutorial.BaseTutorial):
             if self.showing == "1":
                 self.showing = "2"
                 max_pods = shooter.config.get("max_crew")
-                self.window.show("Looks like the jump drive is offline. I'll need to rescue {0} grey escape pods so we can repair the ship so we can jump to safety.".format(max_pods), "captain")
+                self.window.show("Looks like the jump drive is offline. I'll need to rescue {0} escape pods (blinking lights) so we can repair the ship so we can jump to safety.".format(max_pods), "captain")
             elif self.showing == "2":
                 self.showing = "3"
                 self.window.show("Use WASD to operate the thrusters, and the mouse to aim and shoot. R reloads the guns.", "captain")
