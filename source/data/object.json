@@ -13,7 +13,7 @@
       "ID": "Enemy_Coward",
       "Health": 1,
       "Img": "images/fly.png",
-      "Size": 0.5,
+      "Size": 1,
       "Speed": 2,
       "Behavior": "coward",
       "Cost": 2
