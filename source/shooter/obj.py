@@ -407,6 +407,7 @@ class GameObject:
 
             if self.type == "Player": # Target type is enemy or bullet; with bullet, the explosion sound overtakes.
                 sound.hurt.play()
+                shooter.proc.Screen.instance.alert(self.x - (self.sprite.width / 2), self.y + (self.sprite.height / 2), "-1", "Red")
 
             return 1   #Hit detected
         return 0       #No Hit Detected
