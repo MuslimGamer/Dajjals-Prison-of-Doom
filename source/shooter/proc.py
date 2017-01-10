@@ -10,7 +10,7 @@ import random
 
 
 from pyglet.window import key, mouse
-from shooter import debug
+import shooter.debug
 import shooter.obj
 from shooter import config
 from shooter import file_watcher
@@ -70,7 +70,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                 self.paused = not self.paused
                 ui_manager.paused = self.paused
             elif config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
-                debug.ask_and_process_cheat_code(shooter.obj.Player_list[0])
+                shooter.debug.ask_and_process_cheat_code(shooter.obj.Player_list[0])
 
         def on_key_release(symbol, modifiers):
             if symbol in self._currently_pressed:
@@ -171,7 +171,7 @@ class Screen:			#Class handling window and window related functions (Draw, Event
                     player.my = player.my * 0.707
 
             if config.get("enable_cheat_codes") == True and self.is_pressed(key.GRAVE):
-                debug.ask_and_process_cheat_code(player)
+                shooter.debug.ask_and_process_cheat_code(player)
 
             if (self.is_pressed(mouse.RIGHT)):
                 if config.get('melee_enabled'):

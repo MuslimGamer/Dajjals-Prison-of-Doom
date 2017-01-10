@@ -2,6 +2,7 @@ import random
 
 import shooter.obj
 import shooter.config
+#import shooter.npc
 
 def process_generically(input):
     pass
@@ -31,7 +32,7 @@ def spawn_npcs(player):
     for i in range(5 + random.randrange(5)):
         x = player.x - RANGE/2 + random.randrange(RANGE)
         y = player.y - RANGE/2 + random.randrange(RANGE)    
-        shooter.obj.Object_handler.instance.spawn("Player", "NPC_Basic", x, y)
+        shooter.obj.Object_handler.instance.spawn("NPC", "NPC_Basic", x, y, shooter.npc.Npc)
 
 def die(player):
     player.health = 0

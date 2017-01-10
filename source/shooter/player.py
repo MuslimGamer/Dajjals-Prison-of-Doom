@@ -5,15 +5,15 @@ import pyglet
 from math import atan2, sin, cos, pi, sqrt
 
 from shooter import config
-from shooter import obj
+import shooter.obj
 from shooter import ui_manager
 from shooter.bullets import bullet
 from shooter.weapons import gun, pistol, machine, shotgun, rocket, rail
 
-class Player(obj.GameObject):
+class Player(shooter.obj.GameObject):
         # call base class constructor
     def __init__(self, owner, prototype):
-        obj.GameObject.__init__(self, owner, 'Player', prototype)
+        shooter.obj.GameObject.__init__(self, owner, 'Player', prototype)
         self.__gun = pistol.Pistol()
         self.commandx = 0
         self.commandy = 0
@@ -33,7 +33,6 @@ class Player(obj.GameObject):
         self.weaponseq = pyglet.image.ImageGrid(self.weaponimage,5,1)
         self.image = self.shipseq[8]
         self.imagebuff = self.shipseq[8]
-        
 
         self.sprite = pyglet.sprite.Sprite(self.image,self.x,self.y)
         self.radius = sqrt(self.sprite.height*self.sprite.height + self.sprite.width * self.sprite.width)/2
@@ -43,10 +42,6 @@ class Player(obj.GameObject):
         self.sprite_x = self.x - self.radius * sin(self.theta+self.theta_offset)	#Calculate centroid position given:
         self.sprite_y = self.y - self.radius * cos(self.theta+self.theta_offset)
         self.sprite.set_position(self.sprite_x,self.sprite_y)
-
-
-
-
 
     def upgrade(self):
         self.repair = 0
@@ -91,10 +86,10 @@ class Player(obj.GameObject):
         self.y = self.y + self.my
 
         theta = self.theta
-        if self.x < 0: self.x = obj.GAME_WIDTH
-        if self.x > obj.GAME_WIDTH: self.x = 0
-        if self.y < 0: self.y = obj.GAME_HEIGHT
-        if self.y > obj.GAME_HEIGHT: self.y = 0
+        if self.x < 0: self.x = shooter.obj.GAME_WIDTH
+        if self.x > shooter.obj.GAME_WIDTH: self.x = 0
+        if self.y < 0: self.y = shooter.obj.GAME_HEIGHT
+        if self.y > shooter.obj.GAME_HEIGHT: self.y = 0
 
         if not config.get("control_style") == "relative":theta = atan2(-self.my,self.mx)
 
@@ -140,7 +135,7 @@ class Player(obj.GameObject):
 
         if self.health < 1:
             self.health = 0
-            #obj.Type_lists[self.type].remove(self)
+            #shooter.obj.Type_lists[self.type].remove(self)
             #game_over()
         
         if self.cooldown:

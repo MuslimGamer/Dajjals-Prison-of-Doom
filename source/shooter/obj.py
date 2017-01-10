@@ -10,7 +10,8 @@ from shooter import ai
 from shooter import ui_manager
 import shooter.tutorials.tutorial_manager
 from shooter.weapons import gun, shotgun, rocket
-from shooter import proc
+import shooter.proc
+#import shooter.npc
 
 from math import atan2,atan, sin, cos, degrees, pi, sqrt
 
@@ -99,9 +100,9 @@ class Object_handler:      #Should I remove this class and just have the various
         # Find an object x in the collection that matches the specified ID; defaults to None
         prototype = next((x for x in list_of_prototypes if x['ID'] == id), None)
         if as_type is None:
-            spawned = GameObject(self,object_type,prototype)
+            spawned = GameObject(self, object_type, prototype)
         else:
-            spawned = as_type(self,prototype)
+            spawned = as_type(self, prototype)
 
         spawned.x = spawned.centroid_x = x
         spawned.y = spawned.centroid_y = y
@@ -159,7 +160,7 @@ class Object_handler:      #Should I remove this class and just have the various
                 spawned += 1
             else: 
                 if config.get("enable_npc") and len(Player_list) <=3 and len(Enemy_list) > 0:
-                    self.spawn('NPC',"NPC_Basic",position_generate_x[side],position_generate_y[side])
+                    self.spawn('NPC',"NPC_Basic", position_generate_x[side], position_generate_y[side], Npc)
                     spawned += 1
             self.NextEnemy = random.randrange(4)
 
@@ -664,5 +665,6 @@ class GameObject:
         else:
             ai_action[self.ai_type](None) # We don't have a player right now
 
-
+# UGH.
 from shooter.bullets.bullet import Bullet
+from shooter.npc import Npc
