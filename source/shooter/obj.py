@@ -505,6 +505,7 @@ class GameObject:
             if player.crew > config.get("max_crew"):
                 player.crew = config.get("max_crew")
                 score += config.get("max_npcs_score_boost")
+                shooter.proc.Screen.instance.alert(self.x - (self.sprite.width / 2), self.y + (self.sprite.height / 2), "+{0}% drive".format(config.get("max_npcs_drive_boost")), "Yellow")
                 player.drive += 100 * config.get("max_npcs_drive_boost")
             player.upgrade() 
             return
