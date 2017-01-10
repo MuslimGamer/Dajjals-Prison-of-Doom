@@ -46,11 +46,11 @@ class Gun:
     def reload(self):
         if self.__shots_left < self.__total_shots:
             self.__shots_left = 0 # triggers auto-reload
+            self._last_shot = time.time() # total time to reload is from now, not last shot
 
     # Returns true if we just fired a shot
     def fire(self):
         if self.__shots_left > 0 and time.time() - self._last_shot >= self._cooldown_time_seconds:
-
             self.__shots_left -= 1
             
             if self.type != 'rail':
