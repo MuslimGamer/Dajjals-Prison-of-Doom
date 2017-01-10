@@ -37,7 +37,6 @@ class Screen:			#Class handling window and window related functions (Draw, Event
         self.pause_sprite.y = (height - self.pause_sprite.height) / 2
 
         self.__ui_manager = ui_manager.UiManager()
-        self.draw_ui = True
         self.score_label = None # shouldn't be here, not every screen needs one
         self.on_press_callback = None
         Screen.instance = self
@@ -95,10 +94,11 @@ class Screen:			#Class handling window and window related functions (Draw, Event
             for NPC in shooter.obj.NPC_list:
                 NPC.sprite.draw()
                 
-            if self.draw_ui and len(shooter.obj.Player_list) >= 1:
-                # First player is THE player to pass into the UI manager
-                if shooter.obj.Player_list[0].id == "Player_Basic":
-                    self.__ui_manager.draw(shooter.obj.Player_list[0])
+            # First player is THE player to pass into the UI manager
+            player = None
+            if len(shooter.obj.Player_list) > 0 and shooter.obj.Player_list[0].id == "Player_Basic":
+                player = shooter.obj.Player_list[0]
+            self.__ui_manager.draw(player)
 
             shooter.tutorials.tutorial_manager.draw()
 

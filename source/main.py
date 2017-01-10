@@ -104,8 +104,6 @@ def start_game():
     # Trigger first run of tutorial manager so we can show intro text
     shooter.tutorials.tutorial_manager.on_keypress(None, [])
 
-    Screen_handler.draw_ui = True
-
 def game_over():
     # kill the shield if it's there
     shield = next((x for x in shooter.obj.NPC_list if x.id == "Deflect"), None)

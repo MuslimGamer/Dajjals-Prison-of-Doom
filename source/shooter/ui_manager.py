@@ -19,6 +19,12 @@ class UiManager:
 
     def __init__(self):
 
+        # Persist these values even if the player dies
+        self.health = 0 
+        self.crew_count = 1
+        self.shots_left = 0
+        self.drive = 0
+
         self.AlertTimeout = 0
         self.health_label = pyglet.text.Label('Health: ?', font_name = UiManager.FONT_NAME,
             x = shooter.obj.GAME_WIDTH - UiManager.RIGHT_PADDING, y = shooter.obj.GAME_HEIGHT - UiManager.SPACE_BETWEEN_LINES)
@@ -74,25 +80,31 @@ class UiManager:
             self.alert_label.draw()
             self.AlertTimeout -=1
         
-        self.health_label.text = "Health: {0}".format(int(player.health))
+        if player != None:
+            self.health = player.health
+            self.crew_count = player.crew
+            self.shots_left = player.shots_left
+            self.drive = player.drive
+
+        self.health_label.text = "Health: {0}".format(int(self.health))
         self.health_label.draw()
 
         self.score_label.text = "Score: {0}".format(shooter.obj.score)
         self.score_label.draw()
 
-        if player.is_reloading():
+        if player != None and player.is_reloading():
             self.ammo_label.text = "Reloading!"
         else:
-            self.ammo_label.text = "{0} bullets".format(player.shots_left)
+            self.ammo_label.text = "{0} bullets".format(self.shots_left)
         self.ammo_label.draw()
 
-        self.crew_label.text = "Crew: {0} / {1}".format(player.crew, config.get("max_crew"))
+        self.crew_label.text = "Crew: {0} / {1}".format(self.crew_count, config.get("max_crew"))
         self.crew_label.draw()
 
-        if player.drive == 0:
+        if self.drive == 0:
             self.drive_label.text = "Jump Drive Disabled"
         else:
-            self.drive_label.text = "Jump Drive Charging: {0}%".format(player.drive / 100)
+            self.drive_label.text = "Jump Drive Charging: {0}%".format(self.drive / 100)
         self.drive_label.draw()
 
         if not (config.get('debugging')): return
