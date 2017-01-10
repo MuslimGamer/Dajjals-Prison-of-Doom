@@ -27,11 +27,11 @@
     # Ship upgrades every 3N crew members. The first upgrade is at crew = 3,
     # the next at crew = 6, 9, 12, etc.
     "upgrades": {
-        "emergency_repairs_repair_rate": 0.001,
+        "emergency_repairs_repair_rate": 0.002, # every 16 seconds
         "engineering_crew_speed_multiplier": 1.2,
         "tactics_crew_attack_rate": 1.2,
         "gunner_crew_reload_rate": 1.2,
-        "repair_crew_repair_rate": 0.003,
+        "repair_crew_repair_rate": 0.005, # every 7 seconds
         "engine_tuning_speed_multiplier": 1.5,
         "weapons_tuning_attack_rate": 1.5,
         "ammo_management_reload_rate": 1.5,
