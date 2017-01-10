@@ -1,5 +1,6 @@
 import json
 import random
+import math
 
 import pyglet
 
@@ -205,11 +206,17 @@ class Object_handler:      #Should I remove this class and just have the various
                     #Collsion must be called after AI, but before move/update()
 
         for player in Player_list:
-
             # every tick, regenerate health
+            old_health = math.floor(player.health)
+            # Increased by a visible whole number
             player.health += player.repair
+           
             if player.health > config.get("max_health"): 
                 player.health = config.get("max_health")
+
+            if math.floor(player.health) > old_health:
+                shooter.proc.Screen.instance.alert(player.x - (player.sprite.width / 2), player.y + (player.sprite.height / 2), "+1", "Green")
+
             # If we're a full crew, repair the jump drive
             if player.crew == config.get("max_crew"):
                 player.drive += 1
