@@ -215,7 +215,7 @@ class Object_handler:      #Should I remove this class and just have the various
                 player.health = config.get("max_health")
 
             if math.floor(player.health) > old_health:
-                shooter.proc.Screen.instance.alert(player.x - (player.sprite.width / 2), player.y + (player.sprite.height / 2), "+1", "Green")
+                shooter.proc.Screen.instance.alert(player.x - (player.sprite.width / 2), player.y + (player.sprite.height / 2), "Health +1", "Green")
 
             # If we're a full crew, repair the jump drive
             if player.crew == config.get("max_crew"):
@@ -414,7 +414,7 @@ class GameObject:
 
             if self.type == "Player": # Target type is enemy or bullet; with bullet, the explosion sound overtakes.
                 sound.hurt.play()
-                shooter.proc.Screen.instance.alert(self.x - (self.sprite.width / 2), self.y + (self.sprite.height / 2), "-1", "Red")
+                shooter.proc.Screen.instance.alert(self.x - (self.sprite.width / 2), self.y + (self.sprite.height / 2), "Health -1", "Red")
 
             return 1   #Hit detected
         return 0       #No Hit Detected
