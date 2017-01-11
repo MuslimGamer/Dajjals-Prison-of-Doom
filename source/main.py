@@ -131,6 +131,9 @@ def game_over():
     Screen_handler.score_label = pyglet.text.Label("Final Score: {0}".format(obj.score), font_name = ui_manager.UiManager.FONT_NAME, 
         x = over.x + 32, y = over.y - 32, font_size = 24)
 
+    # Clear latest alert
+    shooter.proc.Screen.instance.alert(0, 0, "", "White")
+
     shooter.tutorials.tutorial_manager.is_first_game = False
 
     pyglet.clock.unschedule(Object_handler.spawn_random)
