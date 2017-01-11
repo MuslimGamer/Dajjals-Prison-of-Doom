@@ -15,8 +15,8 @@ class UiManager:
     FONT_NAME = "Orbitron"
     FONT_FILE = "fonts/Orbitron-Medium.ttf"
 
+    show_ui = False
     
-
     def __init__(self):
 
         # Persist these values even if the player dies
@@ -86,43 +86,44 @@ class UiManager:
             self.shots_left = player.shots_left
             self.drive = player.drive
 
-        self.health_label.text = "Health: {0}".format(int(self.health))
-        self.health_label.draw()
+        if UiManager.show_ui == True:
+            self.health_label.text = "Health: {0}".format(int(self.health))
+            self.health_label.draw()
 
-        self.score_label.text = "Score: {0}".format(shooter.obj.score)
-        self.score_label.draw()
+            self.score_label.text = "Score: {0}".format(shooter.obj.score)
+            self.score_label.draw()
 
-        if player != None and player.is_reloading():
-            self.ammo_label.text = "Reloading!"
-        else:
-            self.ammo_label.text = "{0} bullets".format(self.shots_left)
-        self.ammo_label.draw()
+            if player != None and player.is_reloading():
+                self.ammo_label.text = "Reloading!"
+            else:
+                self.ammo_label.text = "{0} bullets".format(self.shots_left)
+            self.ammo_label.draw()
 
-        self.crew_label.text = "Crew: {0} / {1}".format(self.crew_count, config.get("max_crew"))
-        self.crew_label.draw()
+            self.crew_label.text = "Crew: {0} / {1}".format(self.crew_count, config.get("max_crew"))
+            self.crew_label.draw()
 
-        if self.drive == 0:
-            self.drive_label.text = "Jump Drive Disabled"
-        else:
-            self.drive_label.text = "Jump Drive Charging: {0}%".format(self.drive / 100)
-        self.drive_label.draw()
+            if self.drive == 0:
+                self.drive_label.text = "Jump Drive Disabled"
+            else:
+                self.drive_label.text = "Jump Drive Charging: {0}%".format(self.drive / 100)
+            self.drive_label.draw()
 
-        if not (config.get('debugging')): return
+            if not (config.get('debugging')): return
 
-        self.debug3.text = "#NPC: {0}".format(len(shooter.obj.Player_list)-1)
-        self.debug3.draw()
-        self.debug2.text = "#Enemy: {0}".format(len(shooter.obj.Enemy_list))
-        self.debug2.draw()
-        self.debug1.text = "#Bullets: {0}".format(len(shooter.obj.Bullet_list))
-        self.debug1.draw()
+            self.debug3.text = "#NPC: {0}".format(len(shooter.obj.Player_list)-1)
+            self.debug3.draw()
+            self.debug2.text = "#Enemy: {0}".format(len(shooter.obj.Enemy_list))
+            self.debug2.draw()
+            self.debug1.text = "#Bullets: {0}".format(len(shooter.obj.Bullet_list))
+            self.debug1.draw()
 
 
-        self.debug6.text = "Spawn Income: {0}".format(player.handle.SpawnIncome)
-        self.debug6.draw()
-        self.debug5.text = "Spawn Budget: {0}".format(player.handle.SpawnBudget)
-        self.debug5.draw()
-        self.debug4.text = "Spawn Cost: {0}".format(player.handle.SpawnCost)
-        self.debug4.draw()
+            self.debug6.text = "Spawn Income: {0}".format(player.handle.SpawnIncome)
+            self.debug6.draw()
+            self.debug5.text = "Spawn Budget: {0}".format(player.handle.SpawnBudget)
+            self.debug5.draw()
+            self.debug4.text = "Spawn Cost: {0}".format(player.handle.SpawnCost)
+            self.debug4.draw()
 
 pyglet.font.add_file(UiManager.FONT_FILE)
 pyglet.font.load(UiManager.FONT_NAME, bold=False)

@@ -87,6 +87,7 @@ def create_background():
 def start_game():
     global game_started
     game_started = True
+    ui_manager.UiManager.show_ui = True
     Screen_handler.notify_on_press(shooter.tutorials.tutorial_manager.on_keypress)
 
     # Clear everything on screen
