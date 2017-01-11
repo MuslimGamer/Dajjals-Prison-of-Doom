@@ -48,6 +48,10 @@ class SpeechWindow:
     def close(self):
         self.closed = True
 
+    def clear_buttons(self):
+        self.buttons.clear()
+        self.button_callbacks.clear()
+
     def add_button(self, image, callback):
         button = pyglet.sprite.Sprite(pyglet.image.load(image))        
         button.y = self.window.y + SpeechWindow.PADDING
