@@ -60,19 +60,19 @@ class Player(shooter.obj.GameObject):
             self.alert_if_necessary("+ Speed")
         if self.crew >= 9:
             self.attackrate = config.get('upgrades')["tactics_crew_attack_rate"]
-            self.alert_if_necessary("+ Attack Speed")
+            self.alert_if_necessary("+ Fire Rate")
         if self.crew >= 12:
             self.reloadrate = config.get('upgrades')["gunner_crew_reload_rate"]
             self.alert_if_necessary("+ Reload Speed")
         if self.crew >= 15:
             self.repair = config.get('upgrades')["repair_crew_repair_rate"]
-            self.alert_if_necessary("++ Repairing")
+            self.alert_if_necessary("+ Repairing")
         if self.crew >= 18:
             self.speed = self.stock_speed * config.get('upgrades')["engine_tuning_speed_multiplier"]
-            self.alert_if_necessary("++ Speed")
+            self.alert_if_necessary("+ Speed")
         if self.crew >= 21:
             self.attackrate = config.get('upgrades')["weapons_tuning_attack_rate"]
-            self.alert_if_necessary("++ Attack Speed")
+            self.alert_if_necessary("+ Fire Rate")
         # Crew is capped at 21
         #if self.crew >= 24:
         #    self.reloadrate = config.get('upgrades')["ammo_management_reload_rate"]
