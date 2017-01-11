@@ -25,11 +25,11 @@ def spawn_pickup(player):
     else:
         player.Loot(100)
 
-def spawn_npcs(player):
+def spawn_npcs(player, n):
     # Spawn in a RANGExRANGE area around the player
     RANGE = 100
     
-    for i in range(5 + random.randrange(5)):
+    for i in range(3 + random.randrange(n)):
         x = player.x - RANGE/2 + random.randrange(RANGE)
         y = player.y - RANGE/2 + random.randrange(RANGE)    
         shooter.obj.Object_handler.instance.spawn("NPC", "NPC_Basic", x, y, shooter.npc.Npc)
@@ -43,10 +43,11 @@ def nearly_win(player):
 
 cheats = {
     "ammo": lambda p: p.unlimited_ammo,
-    "pickup": spawn_pickup,
+    "pickup": lambda p: spawn_pickup(p),
+    "up": lambda p: spawn_npcs(p, 1),
     "die": die,
     "rail": lambda p: p.switch("rail"),
-    "rescue": spawn_npcs,
+    "rescue": lambda p: spawn_npcs(p, 8),
     "win": nearly_win,
     "rpg": lambda p: p.switch("rocket"),
     "shotty": lambda p: p.switch("shotgun")

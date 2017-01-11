@@ -9,6 +9,7 @@ import shooter.obj
 from shooter import ui_manager
 from shooter.bullets import bullet
 from shooter.weapons import gun, pistol, machine, shotgun, rocket, rail
+import shooter.proc
 
 class Player(shooter.obj.GameObject):
         # call base class constructor
@@ -42,6 +43,7 @@ class Player(shooter.obj.GameObject):
         self.sprite_x = self.x - self.radius * sin(self.theta+self.theta_offset)	#Calculate centroid position given:
         self.sprite_y = self.y - self.radius * cos(self.theta+self.theta_offset)
         self.sprite.set_position(self.sprite_x,self.sprite_y)
+        self.upgrades_alerted = [] # crew counts
 
     def upgrade(self):
         self.repair = 0
@@ -50,19 +52,46 @@ class Player(shooter.obj.GameObject):
         self.reloadrate = self.stock_reload
         self.__gun.reload_time_seconds = self.__gun.stock_reload_time_seconds
         self.__gun._cooldown_time_seconds = self.__gun.stock_cooldown_time_seconds
-        if self.crew >= 3: self.repair = config.get('upgrades')["emergency_repairs_repair_rate"]
-        if self.crew >= 6: self.speed = self.stock_speed * config.get('upgrades')["engineering_crew_speed_multiplier"]
-        if self.crew >= 9: self.attackrate = config.get('upgrades')["tactics_crew_attack_rate"]
-        if self.crew >= 12: self.reloadrate = config.get('upgrades')["gunner_crew_reload_rate"]
-        if self.crew >= 15: self.repair = config.get('upgrades')["repair_crew_repair_rate"]
-        if self.crew >= 18: self.speed = self.stock_speed * config.get('upgrades')["engine_tuning_speed_multiplier"]
-        if self.crew >= 21: self.attackrate = config.get('upgrades')["weapons_tuning_attack_rate"]
-        if self.crew >= 24: self.reloadrate = config.get('upgrades')["ammo_management_reload_rate"]
-        if self.crew >= 27: self.speed = self.stock_speed * config.get('upgrades')["advanced_engine_tuning_speed_multiplier"]
-        if self.crew >= 30: self.reloadrate = config.get('upgrades')["advanced_ammo_management_reload_rate"]
+        if self.crew >= 3:
+            self.repair = config.get('upgrades')["emergency_repairs_repair_rate"]
+            self.alert_if_necessary("+ Repairing")
+        if self.crew >= 6:
+            self.speed = self.stock_speed * config.get('upgrades')["engineering_crew_speed_multiplier"]
+            self.alert_if_necessary("+ Speed")
+        if self.crew >= 9:
+            self.attackrate = config.get('upgrades')["tactics_crew_attack_rate"]
+            self.alert_if_necessary("+ Attack Speed")
+        if self.crew >= 12:
+            self.reloadrate = config.get('upgrades')["gunner_crew_reload_rate"]
+            self.alert_if_necessary("+ Reload Speed")
+        if self.crew >= 15:
+            self.repair = config.get('upgrades')["repair_crew_repair_rate"]
+            self.alert_if_necessary("++ Repairing")
+        if self.crew >= 18:
+            self.speed = self.stock_speed * config.get('upgrades')["engine_tuning_speed_multiplier"]
+            self.alert_if_necessary("++ Speed")
+        if self.crew >= 21:
+            self.attackrate = config.get('upgrades')["weapons_tuning_attack_rate"]
+            self.alert_if_necessary("++ Attack Speed")
+        # Crew is capped at 21
+        #if self.crew >= 24:
+        #    self.reloadrate = config.get('upgrades')["ammo_management_reload_rate"]
+        #    self.alert_if_necessary("++ Reload Speed")
+        #if self.crew >= 27:
+        #    self.speed = self.stock_speed * config.get('upgrades')["advanced_engine_tuning_speed_multiplier"]
+        #    self.alert_if_necessary("+++ Speed")
+        #if self.crew >= 30:
+        #    self.reloadrate = config.get('upgrades')["advanced_ammo_management_reload_rate"]
+        #    self.alert_if_necessary("+++ Reload Speed")
         
         self.__gun.reload_time_seconds = self.__gun.reload_time_seconds / self.reloadrate
         self.__gun._cooldown_time_seconds = self.__gun._cooldown_time_seconds / self.attackrate
+
+    # convenience method
+    def alert_if_necessary(self, message):
+        if not message in self.upgrades_alerted:
+            shooter.proc.Screen.instance.alert(self.x - (self.sprite.width / 2), self.y + (self.sprite.height / 2), message, "Yellow")
+            self.upgrades_alerted.append(message)
 
     def switch(self,gun_config_prefix):
         self.__gun.switch(gun_config_prefix)
@@ -80,7 +109,6 @@ class Player(shooter.obj.GameObject):
 
     def move(self):
         #Function name move is misleading: Function responsible for processing movement, rotation & object maintainance
-        #if(self.mx!=0)or(self.my!=0):
         
         self.x = self.x + self.mx
         self.y = self.y + self.my
@@ -93,13 +121,8 @@ class Player(shooter.obj.GameObject):
 
         if not config.get("control_style") == "relative":theta = atan2(-self.my,self.mx)
 
-
-
         thrust = self.commandy
         self.theta += self.commandx
-
-
-           
 
         if self.commandx == 0:
             if self.commandy == 0:self.imagebuff = self.shipseq[8]	#Idle
@@ -119,12 +142,8 @@ class Player(shooter.obj.GameObject):
         self.mx += thrust * cos(self.theta)
         self.my += thrust * -1*sin(self.theta)
 
-                #if (sqrt(player.mx*player.mx+player.my*player.my)>player.speed):
-                #    player.mx = player.mx*.9
-                #    player.my = player.my*.9
         self.mx = self.mx *0.99
         self.my = self.my *0.99
-
 
         self.sprite.rotation = theta*180/pi	#Sprite rotation in degrees, while trig functions return radians (Like real maths)
 
@@ -135,13 +154,9 @@ class Player(shooter.obj.GameObject):
 
         if self.health < 1:
             self.health = 0
-            #shooter.obj.Type_lists[self.type].remove(self)
-            #game_over()
         
         if self.cooldown:
             self.cooldown = self.cooldown - 1
-
-
 
     def fire(self, mouse_x, mouse_y):        
         if self.__gun.fire():   #Check gun is in condition to fire (Has bullets, has cooled down, etc)
