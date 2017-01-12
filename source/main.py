@@ -54,7 +54,7 @@ def show_dg_splash():
     splash.on_death = lambda: show_titlescreen()
 
 def show_titlescreen():
-    image = Object_handler.spawn("Misc", "Titlescreen", 361, 113, splash_screen.SplashScreen)
+    image = Object_handler.spawn("Misc", "Titlescreen", 0, 0, splash_screen.SplashScreen)
     center(image)
     image.on_death = lambda: start_game()
 
