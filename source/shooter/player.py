@@ -176,6 +176,11 @@ class Player(shooter.obj.GameObject):
                         spread = random.randrange(-1 * self.__gun.spread, self.__gun.spread) * pi/180 
                 else:
                     spread = 0
+
+                # NOT the best generic solution (the above fix for even shotgun spreads screwed this up)
+                # However, lowest risk (chance of breaking something else) -- release went out yesterday
+                if self.__gun.type == "machine":
+                    spread = random.randrange(-1 * self.__gun.spread, self.__gun.spread) * pi/180
 				
                 #Calculate attack vector w/Random scatter
                 theta = atan2(dy, dx)+ spread 
